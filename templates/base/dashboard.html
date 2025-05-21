@@ -19,6 +19,7 @@
 	************* -->
     <link rel="stylesheet" href="{% static 'assets/fonts/remix/remixicon.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/main.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.bootstrap5.min.css">
 
     <!-- *************
 		************ Vendor Css Files *************
@@ -232,8 +233,16 @@
 <script src="{% static 'assets/vendor/rating/raty.js' %}"></script>
 <script src="{% static 'assets/vendor/rating/raty-custom.js' %}"></script>
 
+{#Datatable#}
+<script src="https://cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.1/js/dataTables.bootstrap5.min.js"></script>
+
 <!-- Custom JS files -->
 <script src="{% static 'assets/js/custom.js' %}"></script>
+
+<script>
+    let table = new DataTable('.myTable');
+</script>
 </body>
 
 </html>
