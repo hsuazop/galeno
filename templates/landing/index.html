@@ -1,14 +1,982 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Pagina de Inicio
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+    <head>
+        <!-- Meta Tags -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="keywords" content="control de pacientes, sistema médico, Galeno, salud, citas médicas, historial clínico, especialistas">
+    <meta name="description" content="Galeno es un sistema médico completo para gestionar pacientes, citas, diagnósticos y recetas de todas las especialidades.">
+    <meta name="copyright" content="&copy; 2025 Galeno System">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<br>
+		<!-- Title -->
+           <title>Galeno - Sistema Médico</title>
 
-<a href="dashboard/login">ingresar como medico</a>
-</body>
+		<!-- Favicon -->
+        <link rel="icon" href="{% static 'landing/img/favicon.png' %}">
+
+		<!-- Google Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+		<!-- Nice Select CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/nice-select.css' %}">
+        <!-- Font Awesome CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/font-awesome.min.css' %}">
+        <!-- icofont CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/icofont.css' %}">
+        <!-- Slicknav -->
+        <link rel="stylesheet" href="{% static 'landing/css/slicknav.min.css' %}">
+        <!-- Owl Carousel CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/owl-carousel.css' %}">
+        <!-- Datepicker CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/datepicker.css' %}">
+        <!-- Animate CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/animate.min.css' %}">
+        <!-- Magnific Popup CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/magnific-popup.css' %}">
+
+        <!-- Medipro CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/normalize.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/style.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/responsive.css' %}">
+
+        <!-- Color CSS -->
+        <link rel="stylesheet" href="{% static 'landing/css/color/color1.css' %}">
+
+		<!--<link rel="stylesheet" href="css/color/color2.css">-->
+		<!--<link rel="stylesheet" href="css/color/color3.css">-->
+		<!--<link rel="stylesheet" href="css/color/color4.css">-->
+		<!--<link rel="stylesheet" href="css/color/color5.css">-->
+		<!--<link rel="stylesheet" href="css/color/color6.css">-->
+		<!--<link rel="stylesheet" href="css/color/color7.css">-->
+		<!--<link rel="stylesheet" href="css/color/color8.css">-->
+		<!--<link rel="stylesheet" href="css/color/color9.css">-->
+		<!--<link rel="stylesheet" href="css/color/color10.css">-->
+		<!--<link rel="stylesheet" href="css/color/color11.css">-->
+		<!--<link rel="stylesheet" href="css/color/color12.css">-->
+
+		<link rel="stylesheet" href="#" id="colors">
+
+    </head>
+    <body>
+
+		<!-- Header Area -->
+		<header class="header">
+			<!-- Topbar -->
+			<div class="topbar">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-6 col-md-5 col-12">
+							<!-- Contact -->
+							<ul class="top-link">
+								<li><a href="#">About</a></li>
+								<li><a href="#">Doctors</a></li>
+								<li><a href="#">Contact</a></li>
+
+							</ul>
+							<!-- End Contact -->
+						</div>
+						<div class="col-lg-6 col-md-7 col-12">
+							<!-- Top Contact -->
+							<ul class="top-contact">
+								<li><i class="fa fa-phone"></i>+880 1234 56789</li>
+								<li><i class="fa fa-envelope"></i><a href="mailto:support@yourmail.com">support@galeno.com</a></li>
+                                <li><i class="fa fa-user"></i><a href="/ingresar">Ingresar</a></li>
+							</ul>
+							<!-- End Top Contact -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Topbar -->
+			<!-- Header Inner -->
+			<div class="header-inner">
+				<div class="container">
+					<div class="inner">
+						<div class="row">
+							<div class="col-lg-3 col-md-3 col-12">
+								<!-- Start Logo -->
+								<div class="logo">
+									<a href="index.html"><img src="{% static 'landing/img/logo-sinbg.png' %}" alt="#"></a>
+								</div>
+								<!-- End Logo -->
+								<!-- Mobile Nav -->
+								<div class="mobile-nav"></div>
+								<!-- End Mobile Nav -->
+							</div>
+							<div class="col-lg-7 col-md-9 col-12">
+								<!-- Main Menu -->
+								<div class="main-menu align-right">
+									<nav class="navigation">
+										<ul class="nav menu justify-content-end">
+											<li class="active"><a href="/">Inicio</a></li>
+
+											<li><a href="#">Medicos</a></li>
+
+
+{#											<li><a href="#">Services <i class="icofont-rounded-down"></i></a>#}
+{#												<ul class="dropdown">#}
+{#													<li><a href="service.html">Service</a></li>#}
+{#													<li><a href="service-details.html">Service Details</a></li>#}
+{#												</ul>#}
+{#											</li>#}
+{#											<li><a href="#">Pages <i class="icofont-rounded-down"></i></a>#}
+{#												<ul class="dropdown">#}
+{#													<li><a href="about.html">About Us</a></li>#}
+{#													<li><a href="appointment.html">Appointment</a></li>#}
+{#													<li><a href="time-table.html">Time Table</a></li>#}
+{#													<li><a href="testimonials.html">Testimonials</a></li>#}
+{#													<li><a href="pricing.html">Our Pricing</a></li>#}
+{#													<li><a href="register.html">Sign Up</a></li>#}
+{#													<li><a href="login.html">Login</a></li>#}
+{#													<li><a href="faq.html">Faq</a></li>#}
+{#													<li><a href="mail-success.html">Mail Success</a></li>#}
+{#													<li><a href="404.html">404 Error</a></li>#}
+{#												</ul>#}
+{#											</li>#}
+{#											<li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>#}
+{#												<ul class="dropdown">#}
+{#													<li><a href="blog-grid.html">Blog Grid</a></li>#}
+{#													<li><a href="blog-single.html">Blog Details</a></li>#}
+{#												</ul>#}
+{#											</li>#}
+											<li><a href="#contactanos">Contactanos</a></li>
+										</ul>
+									</nav>
+								</div>
+								<!--/ End Main Menu -->
+							</div>
+							<div class="col-lg-2 col-12">
+								<div class="get-quote">
+									<a href="/cita" class="btn">Cita!</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/ End Header Inner -->
+		</header>
+		<!-- End Header Area -->
+
+		<!-- Slider Area -->
+		<section class="slider">
+			<div class="hero-slider">
+				<!-- Start Single Slider -->
+				<div class="single-slider" style="background-image:url('{% static 'landing/img/slider3.jpg' %}')">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-7">
+								<div class="text">
+									<h1>El sistema <span>GALENO</span> integral para el control de tus pacientes <span> Confia!</span></h1>
+									<p>Ideal para médicos, especialistas, odontologos y nutricionista independientes y hospitales. Optimiza la gestión de tus pacientes y citas, cumpliendo con los más altos estándares de seguridad y protección de datos. </p>
+									<div class="button">
+										<a href="#" class="btn primary">Contactanos!</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End Single Slider -->
+				<!-- Start Single Slider -->
+				<div class="single-slider" style="background-image:url('{% static 'landing/img/slider.jpg' %}')">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-7">
+								<div class="text">
+									<h1>¿Qué es  <span>Galeno?</span></h1>
+									<p>Galeno es un sistema especializado para médicos y hospitales que permite llevar un control completo de los pacientes, sus citas y tratamientos, integrando funciones clave</p>
+									<div class="button">
+
+										<a href="#" class="btn primary">Agendamiento de citas online</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Start End Slider -->
+
+			</div>
+		</section>
+		<!--/ End Slider Area -->
+
+		<!-- Start Schedule Area -->
+		<section class="schedule">
+			<div class="container">
+				<div class="schedule-inner">
+					<div class="row">
+						<div class="col-lg-4 col-md-6 col-12 ">
+							<!-- single-schedule -->
+							<div class="single-schedule first">
+								<div class="inner">
+									<div class="icon">
+										<i class="fa fa-ambulance"></i>
+									</div>
+									<div class="single-content">
+										<span>info</span>
+										<h4>Galeno</h4>
+										<p>Historial Clínico Digital: Tus datos médicos siempre disponibles y seguros</p>
+										<a href="#">Ingresar<i class="fa fa-long-arrow-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6 col-12">
+							<!-- single-schedule -->
+							<div class="single-schedule middle">
+								<div class="inner">
+									<div class="icon">
+										<i class="icofont-prescription"></i>
+									</div>
+									<div class="single-content">
+										<span>info</span>
+										<h4>Llamado a la Acción</h4>
+										<p>¡Empieza a controlar la salud de tus pacientes con seguridad y eficiencia!.</p>
+										<a href="#">Prueba Gratis<i class="fa fa-long-arrow-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-12 col-12">
+							<!-- single-schedule -->
+							<div class="single-schedule last">
+								<div class="inner">
+									<div class="icon">
+										<i class="icofont-ui-clock"></i>
+									</div>
+									<div class="single-content">
+										<span>info</span>
+										<h4>Funcionalidades</h4>
+										<ul class="time-sidual">
+											<li class="day">Control y gestión de pacientes </li>
+											<li class="day">Historial clínico completo</li>
+{#											<li class="day">Generación de reportes e informes</li>#}
+										</ul>
+										<a href="#">Ingresa<i class="fa fa-long-arrow-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/End Start schedule Area -->
+
+		<!-- Start Feautes -->
+		<section class="Feautes section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section-title">
+							<h2>Galeno es el sistema ideal</h2>
+							<img src="{% static 'landing/img/favicon.png' %}" alt="#">
+
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-4 col-12">
+						<!-- Start Single features -->
+						<div class="single-features">
+							<div class="signle-icon">
+								<i class="icofont icofont-tooth"></i>
+
+							</div>
+							<h3>Odontólogos</h3>
+							<p>Controla citas, tratamientos dentales, presupuestos y fichas odontológicas</p>
+						</div>
+						<!-- End Single features -->
+					</div>
+					<div class="col-lg-4 col-12">
+						<!-- Start Single features -->
+						<div class="single-features">
+							<div class="signle-icon">
+								<i class="icofont icofont-medical-sign-alt"></i>
+							</div>
+							<h3>Médicos generales y especialistas</h3>
+							<p> Organiza tus consultas, especialidades, tratamientos y estadísticas específicas.</p>
+						</div>
+						<!-- End Single features -->
+					</div>
+					<div class="col-lg-4 col-12">
+						<!-- Start Single features -->
+						<div class="single-features last">
+							<div class="signle-icon">
+								<i class="icofont icofont-gym"></i>
+							</div>
+							<h3>Nutricionistas</h3>
+							<p>Registra planes alimenticios personalizados, evolución de cada paciente y seguimientos nutricionales.</p>
+						</div>
+						<!-- End Single features -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Feautes -->
+
+		<!-- Start Fun-facts -->
+		<div id="fun-facts" class="fun-facts section overlay">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3 col-md-6 col-12">
+						<!-- Start Single Fun -->
+						<div class="single-fun">
+							<i class="icofont icofont-home"></i>
+							<div class="content">
+								<span class="counter">3468</span>
+								<p>Medicos</p>
+							</div>
+						</div>
+						<!-- End Single Fun -->
+					</div>
+					<div class="col-lg-3 col-md-6 col-12">
+						<!-- Start Single Fun -->
+						<div class="single-fun">
+							<i class="icofont icofont-user-alt-3"></i>
+							<div class="content">
+								<span class="counter">557</span>
+								<p>Especialista</p>
+							</div>
+						</div>
+						<!-- End Single Fun -->
+					</div>
+					<div class="col-lg-3 col-md-6 col-12">
+						<!-- Start Single Fun -->
+						<div class="single-fun">
+							<i class="icofont-simple-smile"></i>
+							<div class="content">
+								<span class="counter">4379</span>
+								<p>Odontologos</p>
+							</div>
+						</div>
+						<!-- End Single Fun -->
+					</div>
+					<div class="col-lg-3 col-md-6 col-12">
+						<!-- Start Single Fun -->
+						<div class="single-fun">
+							<i class="icofont icofont-table"></i>
+							<div class="content">
+								<span class="counter">601</span>
+								<p>Nutricionista</p>
+							</div>
+						</div>
+						<!-- End Single Fun -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/ End Fun-facts -->
+
+		<!-- Start Why choose -->
+		<section class="why-choose section" >
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section-title">
+							<h2>Galeno optimiza tu tiempo</h2>
+							<img src="{% static 'landing/img/favicon.png' %}" alt="#">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 col-12">
+						<!-- Start Choose Left -->
+						<div class="choose-left">
+							<h3>¿Por qué elegir Galeno?</h3>
+							<p>Galeno no solo simplifica la administración diaria de tu consulta o clínica, sino que también mejora la experiencia del paciente, optimiza el tiempo del médico y garantiza el cumplimiento de los estándares de seguridad y protección de datos. </p>
+							<p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+							<div class="row">
+								<div class="col-lg-6">
+									<ul class="list">
+										<li><i class="fa fa-caret-right"></i>Optimiza tu tiempo </li>
+										<li><i class="fa fa-caret-right"></i>Mejora la experiencia del paciente.</li>
+										<li><i class="fa fa-caret-right"></i>Crecimiento asegurado.</li>
+									</ul>
+								</div>
+								<div class="col-lg-6">
+									<ul class="list">
+										<li><i class="fa fa-caret-right"></i>Sin complicaciones técnicas. </li>
+										<li><i class="fa fa-caret-right"></i>Control de recetas electrónicas.</li>
+										<li><i class="fa fa-caret-right"></i>Reportes y estadísticas.</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- End Choose Left -->
+					</div>
+					<div class="col-lg-6 col-12">
+						<!-- Start Choose Rights -->
+						<div class="choose-right">
+							<div class="video-image">
+								<!-- Video Animation -->
+								<div class="promo-video">
+									<div class="waves-block">
+										<div class="waves wave-1"></div>
+										<div class="waves wave-2"></div>
+										<div class="waves wave-3"></div>
+									</div>
+								</div>
+								<!--/ End Video Animation -->
+								<a href="https://www.youtube.com/watch?v=RFVXy6CRVR4" class="video video-popup mfp-iframe"><i class="fa fa-play"></i></a>
+							</div>
+						</div>
+						<!-- End Choose Rights -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Why choose -->
+
+		<!-- Start Call to action -->
+		<section class="call-action overlay" data-stellar-background-ratio="0.5" id="contactanos">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-12">
+						<div class="content">
+							<h2>Te gustaria probarlo? llama al +504 3272-2318</h2>
+							<p>Sistema basado en la web, accesible desde computadoras, tablets o smartphones, sin necesidad de instalaciones complicadas..</p>
+                            <p><a href="mailto: contacto@galeno.com">contacto@galeno.com</a></p>
+							<div class="button">
+								<a href="#" class="btn">Whatapp</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Call to action -->
+
+		<!-- Start portfolio -->
+{#		<section class="portfolio section" >#}
+{#			<div class="container">#}
+{#				<div class="row">#}
+{#					<div class="col-lg-12">#}
+{#						<div class="section-title">#}
+{#							<h2>We Maintain Cleanliness Rules Inside Our Hospital</h2>#}
+{#							<img src="img/section-img.png" alt="#">#}
+{#							<p>Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts</p>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#			<div class="container-fluid">#}
+{#				<div class="row">#}
+{#					<div class="col-lg-12 col-12">#}
+{#						<div class="owl-carousel portfolio-slider">#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#							<div class="single-pf">#}
+{#								<img src="https://via.placeholder.com/320x250" alt="#">#}
+{#								<a href="portfolio-details.html" class="btn">View Details</a>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#		</section>#}
+		<!--/ End portfolio -->
+
+		<!-- Start service -->
+		<section class="services section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section-title">
+							<h2>Módulos del Sistema</h2>
+							<img src="{% static 'landing/img/favicon.png' %}" alt="#">
+
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-4 col-md-6 col-12">
+						<!-- Start Single Service -->
+						<div class="single-service">
+							<i class="icofont icofont-people"></i>
+							<h4><a href="service-details.html">Gestión de Pacientes</a></h4>
+							<p>Administra toda la información de tus pacientes en un solo lugar. Desde datos personales, historial médico, hasta tratamientos y notas médicas. </p>
+						</div>
+						<!-- End Single Service -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-12">
+						<!-- Start Single Service -->
+						<div class="single-service">
+							<i class="icofont icofont-prescription"></i>
+							<h4><a href="service-details.html">Agenda Médica y Citas Online</a></h4>
+							<p>Permite a tus pacientes agendar citas directamente desde la página web. Controla tu disponibilidad. </p>
+						</div>
+						<!-- End Single Service -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-12">
+						<!-- Start Single Service -->
+						<div class="single-service">
+							<i class="icofont icofont-document-folder"></i>
+							<h4><a href="service-details.html">Control de Recetas Electrónicas</a></h4>
+							<p>Genera recetas electrónicas con tan solo unos clics. Después de la consulta, el sistema envía la receta directamente al correo electrónico. </p>
+						</div>
+						<!-- End Single Service -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-12">
+						<!-- Start Single Service -->
+						<div class="single-service">
+							<i class="icofont icofont-chart-histogram"></i>
+							<h4><a href="service-details.html">Reportes y Estadísticas</a></h4>
+							<p>isualiza informes detallados sobre el rendimiento de tu consulta: número de pacientes atendidos, citas realizadas, ingresos por consulta, tratamientos más frecuentes, etc. </p>
+						</div>
+						<!-- End Single Service -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-12">
+						<!-- Start Single Service -->
+						<div class="single-service">
+							<i class="icofont icofont-drawing-tablet"></i>
+							<h4><a href="service-details.html">Gestión Multi-Especialidad</a></h4>
+							<p>Galeno está diseñado para adaptarse a cualquier especialidad médica: médicos generales, especialistas, odontólogos, nutricionistas, ginecólogos, traumatólogos, entre otros. </p>
+						</div>
+						<!-- End Single Service -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-12">
+						<!-- Start Single Service -->
+						<div class="single-service">
+							<i class="icofont icofont-alarm"></i>
+							<h4><a href="service-details.html">Recordatorios Automáticos</a></h4>
+							<p> sistema envía alertas y recordatorios tanto a médicos como a pacientes: próximas citas, seguimientos, recetas pendientes, y evaluaciones. </p>
+						</div>
+						<!-- End Single Service -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End service -->
+
+		<!-- Start Testimonials -->
+		<section class="section testimonials overlay" data-stellar-background-ratio="0.5">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section-title">
+							<h2>What Our Patients Say About Our Medical Treatments</h2>
+							<img src="{% static 'landing/img/favicon.png' %}" alt="#">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-12">
+						<div class="owl-carousel testimonial-slider">
+							<!-- Start Single Testimonial -->
+							<div class="single-testimonial">
+								<img src="https://via.placeholder.com/55x55" alt="#">
+								<p>Desde que comenzamos a utilizar Galeno, la gestión de nuestros pacientes se ha vuelto mucho más eficiente. Mis pacientes pueden agendar sus citas en línea y reciben sus recetas directamente en su correo, lo que ha mejorado notablemente la atención que brindamos. ¡Recomendado para cualquier médico que quiera modernizar su consulta!. </p>
+								<h4 class="name"> Dr. Alejandro Ruiz – Médico General</h4>
+							</div>
+							<!-- End Single Testimonial -->
+							<!-- Start Single Testimonial -->
+							<div class="single-testimonial">
+								<img src="https://via.placeholder.com/55x55" alt="#">
+								<p>Galeno me ha permitido tener un control detallado de los tratamientos dentales de cada paciente. Además, los recordatorios automáticos han reducido considerablemente las inasistencias. El costo mensual es muy accesible y el sistema es sencillo de manejar, incluso para mi asistente.. </p>
+								<h4 class="name">Dra. Mariana López – Odontóloga</h4>
+							</div>
+							<!-- End Single Testimonial -->
+							<!-- Start Single Testimonial -->
+							<div class="single-testimonial">
+								<img src="https://via.placeholder.com/55x55" alt="#">
+								<p>Para mí, Galeno ha sido una herramienta fundamental. Llevo el historial nutricional de cada paciente, con sus evaluaciones, dietas y seguimientos de manera organizada. Poder acceder desde cualquier dispositivo me da la flexibilidad de atender tanto en consultorio como en línea.. </p>
+								<h4 class="name">Lic. Fernanda Gómez – Nutricionista</h4>
+							</div>
+							<!-- End Single Testimonial -->
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Testimonials -->
+
+
+
+		<!-- Pricing Table -->
+		<section class="pricing-table section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section-title">
+							<h2>"Ofrecemos el mejor tratamiento a un precio accesible</h2>
+							<img src="{% static 'landing/img/favicon.png' %}" alt="#">
+
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<!-- Single Table -->
+					<div class="col-lg-4 col-md-12 col-12">
+						<div class="single-table">
+							<!-- Table Head -->
+							<div class="table-head">
+								<div class="icon">
+									<i class="icofont icofont-medal"></i>
+								</div>
+								<h4 class="title">Básico</h4>
+								<div class="price">
+									<p class="amount">$15<span>/ Mensual</span></p>
+								</div>
+							</div>
+							<!-- Table List -->
+							<ul class="table-list">
+								<li><i class="icofont icofont-ui-check"></i>Gestión de Paciente</li>
+								<li><i class="icofont icofont-ui-check"></i>Control de Citas</li>
+								<li><i class="icofont icofont-ui-check"></i>Recetas Electrónicas</li>
+								<li><i class="icofont icofont-ui-check"></i>Multi-Especialidad</li>
+								<li class="cross"><i class="icofont icofont-ui-close"></i>Estadísticas Avanzadas</li>
+								<li class="cross"><i class="icofont icofont-ui-close"></i>Recordatorios Automáticos</li>
+								<li class="cross"><i class="icofont icofont-ui-close"></i>Módulo IA</li>
+							</ul>
+							<div class="table-bottom">
+								<a class="btn" href="#">Contratar</a>
+							</div>
+							<!-- Table Bottom -->
+						</div>
+					</div>
+					<!-- End Single Table-->
+					<!-- Single Table -->
+					<div class="col-lg-4 col-md-12 col-12">
+						<div class="single-table">
+							<!-- Table Head -->
+							<div class="table-head">
+								<div class="icon">
+									<i class="icofont icofont-medal-sport"></i>
+								</div>
+								<h4 class="title">Profesional</h4>
+								<div class="price">
+									<p class="amount">$20<span>/ Mensual</span></p>
+								</div>
+							</div>
+							<!-- Table List -->
+							<ul class="table-list">
+								<li><i class="icofont icofont-ui-check"></i>Gestión de Paciente</li>
+								<li><i class="icofont icofont-ui-check"></i>Control de Citas</li>
+								<li><i class="icofont icofont-ui-check"></i>Recetas Electrónicas</li>
+								<li><i class="icofont icofont-ui-check"></i>Multi-Especialidad</li>
+								<li><i class="icofont icofont-ui-check"></i>Estadísticas Avanzadas</li>
+								<li><i class="icofont icofont-ui-check"></i>Recordatorios Automáticos</li>
+								<li><i class="icofont icofont-ui-check"></i>Asistente con IA</li>
+
+							</ul>
+							<div class="table-bottom">
+								<a class="btn" href="#">Contratar</a>
+							</div>
+							<!-- Table Bottom -->
+						</div>
+					</div>
+					<!-- End Single Table-->
+					<!-- Single Table -->
+					<div class="col-lg-4 col-md-12 col-12">
+						<div class="single-table">
+							<!-- Table Head -->
+							<div class="table-head">
+								<div class="icon">
+									<i class="icofont-hospital"></i>
+								</div>
+								<h4 class="title">Hospitales & Clínicas</h4>
+                                <br>
+                                <br>
+                                <br>
+								<div class="price">
+									<p class="amount">Cotización Personalizada</p>
+								</div>
+							</div>
+                            <br>
+                            <br>
+
+                            <br>
+                            <p>Incluye todas las funciones. Tarifas especiales adaptadas a la cantidad de médicos, especialidades y volumen de pacientes.
+👉 ¡Contáctanos para una oferta personalizada!</p>
+							<!-- Table List -->
+                            <br>
+                            <br>
+							<div class="table-bottom">
+								<a class="btn" href="#">Contratar</a>
+							</div>
+							<!-- Table Bottom -->
+						</div>
+					</div>
+					<!-- End Single Table-->
+				</div>
+			</div>
+		</section>
+		<!--/ End Pricing Table -->
+
+
+
+		<!-- Start Appointment -->
+		<section class="appointment" id="#cita">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section-title">
+							<h2>Siempre estamos listos para ayudarte. Agenda una cita</h2>
+							<img src="{% static 'landing/img/favicon.png' %}" alt="#">
+
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 col-md-12 col-12">
+						<form class="form" action="#">
+							<div class="row">
+								<div class="col-lg-6 col-md-6 col-12">
+									<div class="form-group">
+										<input name="name" type="text" placeholder="Nombre">
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-12">
+									<div class="form-group">
+										<input name="email" type="email" placeholder="Correo">
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-12">
+									<div class="form-group">
+										<input name="phone" type="text" placeholder="Telefono">
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-12">
+									<div class="form-group">
+										<div class="nice-select form-control wide" tabindex="0"><span class="current">Department</span>
+											<ul class="list">
+												<li data-value="1" class="option selected ">Department</li>
+												<li data-value="2" class="option">Cardiac Clinic</li>
+												<li data-value="3" class="option">Neurology</li>
+												<li data-value="4" class="option">Dentistry</li>
+												<li data-value="5" class="option">Gastroenterology</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-12">
+									<div class="form-group">
+										<div class="nice-select form-control wide" tabindex="0"><span class="current">Doctor</span>
+											<ul class="list">
+												<li data-value="1" class="option selected ">Doctor</li>
+												<li data-value="2" class="option">Dr. Akther Hossain</li>
+												<li data-value="3" class="option">Dr. Dery Alex</li>
+												<li data-value="4" class="option">Dr. Jovis Karon</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-12">
+									<div class="form-group">
+										<input type="text" placeholder="Date" id="datepicker">
+									</div>
+								</div>
+								<div class="col-lg-12 col-md-12 col-12">
+									<div class="form-group">
+										<textarea name="message" placeholder="Escribe el mensage"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-5 col-md-4 col-12">
+									<div class="form-group">
+										<div class="button">
+											<button type="submit" class="btn">Realizar Cita</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-7 col-md-8 col-12">
+									<p>( Confirmaremos por un correo electronico )</p>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="col-lg-6 col-md-12 ">
+						<div class="appointment-image">
+							<img src="{% static 'landing/img/contact-img.png' %}" alt="#">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Appointment -->
+
+		<!-- Start Newsletter Area -->
+		<section class="newsletter section">
+			<div class="container">
+				<div class="row ">
+					<div class="col-lg-6  col-12">
+						<!-- Start Newsletter Form -->
+						<div class="subscribe-text ">
+							<h6>Suscríbete al boletín</h6>
+							<p>Recibe noticias, actualizaciones y consejos médicos directamente en tu correo. Mantente informado con Galeno.</p>
+
+						</div>
+						<!-- End Newsletter Form -->
+					</div>
+					<div class="col-lg-6  col-12">
+						<!-- Start Newsletter Form -->
+						<div class="subscribe-form ">
+							<form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+								<input name="EMAIL" placeholder="Correo" class="common-input" onfocus="this.placeholder = ''"
+									onblur="this.placeholder = 'Correo'" required="" type="email">
+								<button class="btn">Suscribir</button>
+							</form>
+						</div>
+						<!-- End Newsletter Form -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /End Newsletter Area -->
+
+		<!-- Footer Area -->
+		<footer id="footer" class="footer ">
+			<!-- Footer Top -->
+			<div class="footer-top">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-md-6 col-12">
+							<div class="single-footer">
+								<h2>Sobre Nosotros</h2>
+								<p>En Galeno, estamos comprometidos con transformar la gestión médica a través de tecnología eficiente, segura y accesible.</p>
+								<!-- Social -->
+
+								<!-- End Social -->
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-12">
+							<div class="single-footer f-link">
+								<h2>Enlaces</h2>
+								<div class="row">
+									<div class="col-lg-6 col-md-6 col-12">
+										<ul>
+											<li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Inicio</a></li>
+											<li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Medicos</a></li>
+										</ul>
+									</div>
+									<div class="col-lg-6 col-md-6 col-12">
+										<ul>
+											<li><a href="#contactanos"><i class="fa fa-caret-right" aria-hidden="true"></i>Contactanos</a></li>
+											<li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Cita</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-12">
+							<div class="single-footer">
+								<h2>Redes Sociales</h2>
+								<p>Nuestro objetivo es brindar una solución confiable.</p>
+								<ul class="social">
+									<li><a href="#"><i class="icofont-facebook"></i></a></li>
+									<li><a href="#"><i class="icofont-google-plus"></i></a></li>
+									<li><a href="#"><i class="icofont-twitter"></i></a></li>
+									<li><a href="#"><i class="icofont-vimeo"></i></a></li>
+									<li><a href="#"><i class="icofont-pinterest"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-12">
+							<div class="single-footer">
+								<h2>Suscríbete al boletín</h2>
+								<p>Recibe noticias, actualizaciones y consejos médicos directamente en tu correo. Mantente informado con Galeno,</p>
+								<form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+									<input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder = ''"
+										onblur="this.placeholder = 'Correo'" required="" type="email">
+									<button class="button"><i class="icofont icofont-paper-plane"></i></button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/ End Footer Top -->
+			<!-- Copyright -->
+			<div class="copyright">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-12">
+							<div class="copyright-content">
+								<p>© Copyright 2025  |  Derechos reservados <b>INNOLAW</b> </p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/ End Copyright -->
+		</footer>
+		<!--/ End Footer Area -->
+
+		<!-- jquery Min JS -->
+<script src="{% static 'landing/js/jquery.min.js' %}"></script>
+<!-- jquery Migrate JS -->
+<script src="{% static 'landing/js/jquery-migrate-3.0.0.js' %}"></script>
+<!-- jquery Ui JS -->
+<script src="{% static 'landing/js/jquery-ui.min.js' %}"></script>
+<!-- Easing JS -->
+<script src="{% static 'landing/js/easing.js' %}"></script>
+<!-- Color JS -->
+<script src="{% static 'landing/js/colors.js' %}"></script>
+<!-- Popper JS -->
+<script src="{% static 'landing/js/popper.min.js' %}"></script>
+<!-- Bootstrap Datepicker JS -->
+<script src="{% static 'landing/js/bootstrap-datepicker.js' %}"></script>
+<!-- Jquery Nav JS -->
+<script src="{% static 'landing/js/jquery.nav.js' %}"></script>
+<!-- Slicknav JS -->
+<script src="{% static 'landing/js/slicknav.min.js' %}"></script>
+<!-- ScrollUp JS -->
+<script src="{% static 'landing/js/jquery.scrollUp.min.js' %}"></script>
+<!-- Niceselect JS -->
+<script src="{% static 'landing/js/niceselect.js' %}"></script>
+<!-- Tilt Jquery JS -->
+<script src="{% static 'landing/js/tilt.jquery.min.js' %}"></script>
+<!-- Owl Carousel JS -->
+<script src="{% static 'landing/js/owl-carousel.js' %}"></script>
+<!-- counterup JS -->
+<script src="{% static 'landing/js/jquery.counterup.min.js' %}"></script>
+<!-- Steller JS -->
+<script src="{% static 'landing/js/steller.js' %}"></script>
+<!-- Wow JS -->
+<script src="{% static 'landing/js/wow.min.js' %}"></script>
+<!-- Magnific Popup JS -->
+<script src="{% static 'landing/js/jquery.magnific-popup.min.js' %}"></script>
+<!-- Bootstrap JS -->
+<script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+<!-- Main JS -->
+<script src="{% static 'landing/js/main.js' %}"></script>
+
+<!-- Counter Up CDN JS (Se mantiene con URL externa) -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+
+    </body>
 </html>

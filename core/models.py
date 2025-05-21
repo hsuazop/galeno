@@ -1,7 +1,8 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Paciente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente')
     nombre = models.CharField(max_length=255)
     apellido = models.CharField(max_length=255)
     fecha_nacimiento = models.DateField(blank=True, null=True)
@@ -16,15 +17,62 @@ class Paciente(models.Model):
         return f"{self.nombre} {self.apellido}"
 
 
+class Especialidad(models.Model):
+    nombre = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+
+class Hospital(models.Model):
+    nombre = models.CharField(max_length=255)
+    direccion = models.TextField(blank=True)
+    telefono = models.CharField(max_length=20, blank=True)
+    email = models.EmailField(blank=True)
+
+    def __str__(self):
+        return self.nombre
+
+
+
 class Medico(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='medico')
     nombre = models.CharField(max_length=255)
     apellido = models.CharField(max_length=255)
-    especialidad = models.CharField(max_length=255)
+    especialidad = models.ForeignKey(Especialidad, on_delete=models.SET_NULL, null=True, blank=True)
+    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)
     telefono = models.CharField(max_length=15, blank=True)
     email = models.EmailField(unique=True)
 
     def __str__(self):
         return f"Dr. {self.nombre} {self.apellido} - {self.especialidad}"
+
+
+class Asistente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='asistente')
+    medico = models.ManyToManyField(Medico, related_name='asistentes')
+    nombre = models.CharField(max_length=255)
+    apellido = models.CharField(max_length=255)
+    telefono = models.CharField(max_length=15, blank=True)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return f"Asistente {self.nombre} {self.apellido} de {self.medico}"
+
+class AgendaMedica(models.Model):
+    medico = models.ForeignKey('Medico', on_delete=models.CASCADE, related_name='agendas')
+    fecha = models.DateField()  # Día específico
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
+    disponible = models.BooleanField(default=True)
+    observaciones = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('medico', 'fecha', 'hora_inicio')  # No duplicar horarios en el mismo día
+
+    def __str__(self):
+        return f"Agenda de {self.medico} - {self.fecha} ({self.hora_inicio} - {self.hora_fin})"
+
 
 
 class Cita(models.Model):
