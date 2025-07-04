@@ -1,332 +1,384 @@
 {% load static %}
 <!doctype html>
 <html class="no-js" lang="zxx">
-    <head>
-        <!-- Meta Tags -->
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
- <meta name="keywords" content="control de pacientes, sistema médico, Galeno, salud, citas médicas, historial clínico, especialistas">
-    <meta name="description" content="Galeno es un sistema médico completo para gestionar pacientes, citas, diagnósticos y recetas de todas las especialidades.">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords"
+          content="control de pacientes, sistema médico, Galeno, salud, citas médicas, historial clínico, especialistas">
+    <meta name="description"
+          content="Galeno es un sistema médico completo para gestionar pacientes, citas, diagnósticos y recetas de todas las especialidades.">
     <meta name="copyright" content="&copy; 2025 Galeno System">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<!-- Title -->
-           <title>Galeno - Sistema Médico</title>
+    <!-- Title -->
+    <title>Galeno - Sistema Médico</title>
 
-		<!-- Favicon -->
-        <link rel="icon" href="{% static 'landing/img/favicon.png' %}">
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'landing/img/favicon.png' %}">
 
-		<!-- Google Fonts -->
-		<link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
+          rel="stylesheet">
 
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
-		<!-- Nice Select CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/nice-select.css' %}">
-        <!-- Font Awesome CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/font-awesome.min.css' %}">
-        <!-- icofont CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/icofont.css' %}">
-        <!-- Slicknav -->
-        <link rel="stylesheet" href="{% static 'landing/css/slicknav.min.css' %}">
-        <!-- Owl Carousel CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/owl-carousel.css' %}">
-        <!-- Datepicker CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/datepicker.css' %}">
-        <!-- Animate CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/animate.min.css' %}">
-        <!-- Magnific Popup CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/magnific-popup.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+    <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/nice-select.css' %}">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/font-awesome.min.css' %}">
+    <!-- icofont CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/icofont.css' %}">
+    <!-- Slicknav -->
+    <link rel="stylesheet" href="{% static 'landing/css/slicknav.min.css' %}">
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/owl-carousel.css' %}">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/datepicker.css' %}">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/animate.min.css' %}">
+    <!-- Magnific Popup CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/magnific-popup.css' %}">
 
-        <!-- Medipro CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/normalize.css' %}">
-        <link rel="stylesheet" href="{% static 'landing/style.css' %}">
-        <link rel="stylesheet" href="{% static 'landing/css/responsive.css' %}">
+    <!-- Medipro CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/style.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/responsive.css' %}">
 
-        <!-- Color CSS -->
-        <link rel="stylesheet" href="{% static 'landing/css/color/color1.css' %}">
+    <!-- Color CSS -->
+    <link rel="stylesheet" href="{% static 'landing/css/color/color1.css' %}">
 
-		<!--<link rel="stylesheet" href="css/color/color2.css">-->
-		<!--<link rel="stylesheet" href="css/color/color3.css">-->
-		<!--<link rel="stylesheet" href="css/color/color4.css">-->
-		<!--<link rel="stylesheet" href="css/color/color5.css">-->
-		<!--<link rel="stylesheet" href="css/color/color6.css">-->
-		<!--<link rel="stylesheet" href="css/color/color7.css">-->
-		<!--<link rel="stylesheet" href="css/color/color8.css">-->
-		<!--<link rel="stylesheet" href="css/color/color9.css">-->
-		<!--<link rel="stylesheet" href="css/color/color10.css">-->
-		<!--<link rel="stylesheet" href="css/color/color11.css">-->
-		<!--<link rel="stylesheet" href="css/color/color12.css">-->
+    <!--<link rel="stylesheet" href="css/color/color2.css">-->
+    <!--<link rel="stylesheet" href="css/color/color3.css">-->
+    <!--<link rel="stylesheet" href="css/color/color4.css">-->
+    <!--<link rel="stylesheet" href="css/color/color5.css">-->
+    <!--<link rel="stylesheet" href="css/color/color6.css">-->
+    <!--<link rel="stylesheet" href="css/color/color7.css">-->
+    <!--<link rel="stylesheet" href="css/color/color8.css">-->
+    <!--<link rel="stylesheet" href="css/color/color9.css">-->
+    <!--<link rel="stylesheet" href="css/color/color10.css">-->
+    <!--<link rel="stylesheet" href="css/color/color11.css">-->
+    <!--<link rel="stylesheet" href="css/color/color12.css">-->
 
-		<link rel="stylesheet" href="#" id="colors">
+    <link rel="stylesheet" href="#" id="colors">
 
-    </head>
-    <body>
+</head>
+<body>
 
-		<!-- Header Area -->
-		<header class="header">
-			<!-- Topbar -->
-			<div class="topbar">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-6 col-md-5 col-12">
-							<!-- Contact -->
-							<ul class="top-link">
-								<li><a href="#">About</a></li>
-								<li><a href="#">Doctors</a></li>
-								<li><a href="#">Contact</a></li>
-								<li><a href="#">FAQ</a></li>
-							</ul>
-							<!-- End Contact -->
-						</div>
-						<div class="col-lg-6 col-md-7 col-12">
-							<!-- Top Contact -->
-							<ul class="top-contact">
-								<li><i class="fa fa-phone"></i>+880 1234 56789</li>
-								<li><i class="fa fa-envelope"></i><a href="mailto:support@yourmail.com">support@galeno.com</a></li>
-							</ul>
-							<!-- End Top Contact -->
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Topbar -->
-			<!-- Header Inner -->
-			<div class="header-inner">
-				<div class="container">
-					<div class="inner">
-						<div class="row">
-							<div class="col-lg-3 col-md-3 col-12">
-								<!-- Start Logo -->
-								<div class="logo">
-									<a href="index.html"><img src="{% static 'landing/img/logo-sinbg.png' %}" alt="#"></a>
-								</div>
-								<!-- End Logo -->
-								<!-- Mobile Nav -->
-								<div class="mobile-nav"></div>
-								<!-- End Mobile Nav -->
-							</div>
-							<div class="col-lg-7 col-md-9 col-12">
-								<!-- Main Menu -->
-								<div class="main-menu align-right">
-									<nav class="navigation">
-										<ul class="nav menu justify-content-end">
-											<li class="active"><a href="/">Inicio</a></li>
+<!-- Header Area -->
+<header class="header">
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-5 col-12">
+                    <!-- Contact -->
+                    <ul class="top-link">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Doctors</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                    <!-- End Contact -->
+                </div>
+                <div class="col-lg-6 col-md-7 col-12">
+                    <!-- Top Contact -->
+                    <ul class="top-contact">
+                        <li><i class="fa fa-phone"></i>+880 1234 56789</li>
+                        <li><i class="fa fa-envelope"></i><a href="mailto:support@yourmail.com">support@galeno.com</a>
+                        </li>
+                    </ul>
+                    <!-- End Top Contact -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Topbar -->
+    <!-- Header Inner -->
+    <div class="header-inner">
+        <div class="container">
+            <div class="inner">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-12">
+                        <!-- Start Logo -->
+                        <div class="logo">
+                            <a href="index.html"><img src="{% static 'landing/img/logo-sinbg.png' %}" alt="#"></a>
+                        </div>
+                        <!-- End Logo -->
+                        <!-- Mobile Nav -->
+                        <div class="mobile-nav"></div>
+                        <!-- End Mobile Nav -->
+                    </div>
+                    <div class="col-lg-7 col-md-9 col-12">
+                        <!-- Main Menu -->
+                        <div class="main-menu align-right">
+                            <nav class="navigation">
+                                <ul class="nav menu justify-content-end">
+                                    <li class="active"><a href="/">Inicio</a></li>
 
-											<li><a href="#">Medicos</a></li>
-
-
-{#											<li><a href="#">Services <i class="icofont-rounded-down"></i></a>#}
-{#												<ul class="dropdown">#}
-{#													<li><a href="service.html">Service</a></li>#}
-{#													<li><a href="service-details.html">Service Details</a></li>#}
-{#												</ul>#}
-{#											</li>#}
-{#											<li><a href="#">Pages <i class="icofont-rounded-down"></i></a>#}
-{#												<ul class="dropdown">#}
-{#													<li><a href="about.html">About Us</a></li>#}
-{#													<li><a href="appointment.html">Appointment</a></li>#}
-{#													<li><a href="time-table.html">Time Table</a></li>#}
-{#													<li><a href="testimonials.html">Testimonials</a></li>#}
-{#													<li><a href="pricing.html">Our Pricing</a></li>#}
-{#													<li><a href="register.html">Sign Up</a></li>#}
-{#													<li><a href="login.html">Login</a></li>#}
-{#													<li><a href="faq.html">Faq</a></li>#}
-{#													<li><a href="mail-success.html">Mail Success</a></li>#}
-{#													<li><a href="404.html">404 Error</a></li>#}
-{#												</ul>#}
-{#											</li>#}
-{#											<li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>#}
-{#												<ul class="dropdown">#}
-{#													<li><a href="blog-grid.html">Blog Grid</a></li>#}
-{#													<li><a href="blog-single.html">Blog Details</a></li>#}
-{#												</ul>#}
-{#											</li>#}
-											<li><a href="contact.html">Contactanos</a></li>
-										</ul>
-									</nav>
-								</div>
-								<!--/ End Main Menu -->
-							</div>
-							<div class="col-lg-2 col-12">
-								<div class="get-quote">
-									<a href="#cita" class="btn">Cita!</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--/ End Header Inner -->
-		</header>
-		<!-- End Header Area -->
-
-        <!-- Breadcrumbs -->
-		<div class="breadcrumbs overlay">
-			<div class="container">
-				<div class="bread-inner">
-					<div class="row">
-						<div class="col-12">
-							<h2>Register</h2>
-							<ul class="bread-list">
-								<li><a href="index.html">Home</a></li>
-								<li><i class="icofont-simple-right"></i></li>
-								<li class="active">Register</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Breadcrumbs -->
-
-		<!-- Shop Register -->
-		<section class="register section">
-			<div class="container">
-				<div class="inner">
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="register-left">
-
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="register-form">
-								<h2>Register Here</h2>
-								<p>Already have an account ? <a href="login.html">Login Here</a></p>
-								<!-- Form -->
-								<form class="form" method="post" action="#">
-									<div class="row">
-										<div class="col-lg-6">
-											<div class="form-group">
-												<input type="text" name="name" placeholder="First Name" required="">
-											</div>
-										</div>
-										<div class="col-lg-6">
-											<div class="form-group">
-												<input type="text" name="name" placeholder="Last Name" required="">
-											</div>
-										</div>
-										<div class="col-lg-6">
-											<div class="form-group">
-												<input type="email" name="email" placeholder="Phone" required="">
-											</div>
-										</div>
-										<div class="col-lg-6">
-											<div class="form-group">
-												<input type="email" name="email" placeholder="Email" required="">
-											</div>
-										</div>
-										<div class="col-lg-6">
-											<div class="form-group">
-												<input type="password" name="password" placeholder="Password" required="">
-											</div>
-										</div>
-										<div class="col-lg-6">
-											<div class="form-group">
-												<input type="password" name="password" placeholder="Confirm Password" required="">
-											</div>
-										</div>
-										<div class="col-12">
-											<div class="form-group login-btn">
-												<button class="btn" type="submit">Login</button>
-											</div>
-											<div class="checkbox">
-												<label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox">Yes, I agree with all</label>
-											</div>
-											<a href="#" class="terms">Terms & Conditions</a>
-										</div>
-									</div>
-								</form>
-								<!--/ End Form -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!--/ End Register -->
+                                    <li><a href="#">Medicos</a></li>
 
 
-		<!-- Footer Area -->
-		<footer id="footer" class="footer ">
-			<!-- Footer Top -->
-			<div class="footer-top">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-3 col-md-6 col-12">
-							<div class="single-footer">
-								<h2>Sobre Nosotros</h2>
-								<p>En Galeno, estamos comprometidos con transformar la gestión médica a través de tecnología eficiente, segura y accesible.</p>
-								<!-- Social -->
+                                    {#											<li><a href="#">Services <i class="icofont-rounded-down"></i></a>#}
+                                    {#												<ul class="dropdown">#}
+                                    {#													<li><a href="service.html">Service</a></li>#}
+                                    {#													<li><a href="service-details.html">Service Details</a></li>#}
+                                    {#												</ul>#}
+                                    {#											</li>#}
+                                    {#											<li><a href="#">Pages <i class="icofont-rounded-down"></i></a>#}
+                                    {#												<ul class="dropdown">#}
+                                    {#													<li><a href="about.html">About Us</a></li>#}
+                                    {#													<li><a href="appointment.html">Appointment</a></li>#}
+                                    {#													<li><a href="time-table.html">Time Table</a></li>#}
+                                    {#													<li><a href="testimonials.html">Testimonials</a></li>#}
+                                    {#													<li><a href="pricing.html">Our Pricing</a></li>#}
+                                    {#													<li><a href="register.html">Sign Up</a></li>#}
+                                    {#													<li><a href="login.html">Login</a></li>#}
+                                    {#													<li><a href="faq.html">Faq</a></li>#}
+                                    {#													<li><a href="mail-success.html">Mail Success</a></li>#}
+                                    {#													<li><a href="404.html">404 Error</a></li>#}
+                                    {#												</ul>#}
+                                    {#											</li>#}
+                                    {#											<li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>#}
+                                    {#												<ul class="dropdown">#}
+                                    {#													<li><a href="blog-grid.html">Blog Grid</a></li>#}
+                                    {#													<li><a href="blog-single.html">Blog Details</a></li>#}
+                                    {#												</ul>#}
+                                    {#											</li>#}
+                                    <li><a href="contact.html">Contactanos</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!--/ End Main Menu -->
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        <div class="get-quote">
+                            <a href="{% url 'ingresar' %}" class="btn">Ingresar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ End Header Inner -->
+</header>
+<!-- End Header Area -->
 
-								<!-- End Social -->
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-12">
-							<div class="single-footer f-link">
-								<h2>Enlaces</h2>
-								<div class="row">
-									<div class="col-lg-6 col-md-6 col-12">
-										<ul>
-											<li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Inicio</a></li>
-											<li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Medicos</a></li>
-										</ul>
-									</div>
-									<div class="col-lg-6 col-md-6 col-12">
-										<ul>
-											<li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Contactanos</a></li>
-											<li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Cita</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-12">
-							<div class="single-footer">
-								<h2>Redes Sociales</h2>
-								<p>Nuestro objetivo es brindar una solución confiable.</p>
-								<ul class="social">
-									<li><a href="#"><i class="icofont-facebook"></i></a></li>
-									<li><a href="#"><i class="icofont-google-plus"></i></a></li>
-									<li><a href="#"><i class="icofont-twitter"></i></a></li>
-									<li><a href="#"><i class="icofont-vimeo"></i></a></li>
-									<li><a href="#"><i class="icofont-pinterest"></i></a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-12">
-							<div class="single-footer">
-								<h2>Suscríbete al boletín</h2>
-								<p>Recibe noticias, actualizaciones y consejos médicos directamente en tu correo. Mantente informado con Galeno,</p>
-								<form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
-									<input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder = ''"
-										onblur="this.placeholder = 'Correo'" required="" type="email">
-									<button class="button"><i class="icofont icofont-paper-plane"></i></button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--/ End Footer Top -->
-			<!-- Copyright -->
-			<div class="copyright">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-12">
-							<div class="copyright-content">
-								<p>© Copyright 2025  |  Derechos reservados <b>INNOLAW</b> </p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--/ End Copyright -->
-		</footer>
-		<!--/ End Footer Area -->
+<!-- Breadcrumbs -->
+<div class="breadcrumbs overlay" style="padding: 40px 0px">
+    <div class="container">
+        <div class="bread-inner">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Register</h2>
+                    <ul class="bread-list">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><i class="icofont-simple-right"></i></li>
+                        <li class="active">Registrarme</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Breadcrumbs -->
 
-		<!-- jquery Min JS -->
+<!-- Shop Register -->
+<section class="register section" id="formulario">
+    <div class="container">
+        <div class="inner">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="register-left">
+                        <img src="{% static 'landing/img/registrarse.png' %}" class="img-fluid" alt="registrarse">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="register-form">
+                        <h2>¡Regístrate en Galeno!</h2>
+
+
+                    <form class="form" method="post">
+    {% csrf_token %}
+    <div class="row">
+        <!-- Nombre -->
+        <div class="col-lg-6">
+            <div class="form-group">
+                <input type="text" name="nombre" placeholder="nombre" required
+                       value="{{ request.POST.nombre|default:'' }}">
+            </div>
+        </div>
+
+        <!-- Apellido -->
+        <div class="col-lg-6">
+            <div class="form-group">
+                <input type="text" name="apellido" placeholder="apellido" required
+                       value="{{ request.POST.apellido|default:'' }}">
+            </div>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="col-lg-6">
+            <div class="form-group">
+                <input type="text" name="telefono" placeholder="telefono" required
+                       value="{{ request.POST.telefono|default:'' }}">
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="col-lg-6">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="email" required
+                       value="{{ request.POST.email|default:'' }}">
+            </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="col-lg-6">
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Contraseña" required>
+            </div>
+        </div>
+
+        <!-- Confirmar contraseña -->
+        <div class="col-lg-6">
+            <div class="form-group">
+                <input type="password" name="password_confirm" placeholder="Confirmar contraseña" required>
+            </div>
+        </div>
+
+        <!-- Especialidad -->
+        <div class="col-12">
+            <div class="form-group">
+                <select name="especialidad_id" class="form-select">
+                    {% for e in especialidades %}
+                        <option value="{{ e.id }}"
+                            {% if request.POST.especialidad_id == e.id|stringformat:"s" %}selected{% endif %}>
+                            {{ e.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Términos y botón -->
+        <div class="col-12">
+            <div class="">
+                <input name="acepta_terminos" type="checkbox" {% if request.POST.acepta_terminos %}checked{% endif %}>
+                <label class="checkbox-inline" for="2">
+                    Sí, Estoy de acuerdo
+                </label>
+            </div>
+            <a href="{% static 'pdf/terminos_y_condiciones_galeno.pdf' %}" class="terms" target="_blank">Términos & Condiciones</a>
+    br
+            <div class="form-group login-btn mt-3">
+                <button class="btn" type="submit">Registrar</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+                        <!--/ End Form -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/ End Register -->
+
+
+<!-- Footer Area -->
+<footer id="footer" class="footer ">
+    <!-- Footer Top -->
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="single-footer">
+                        <h2>Sobre Nosotros</h2>
+                        <p>En Galeno, estamos comprometidos con transformar la gestión médica a través de tecnología
+                            eficiente, segura y accesible.</p>
+                        <!-- Social -->
+
+                        <!-- End Social -->
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="single-footer f-link">
+                        <h2>Enlaces</h2>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Inicio</a></li>
+                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Medicos</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Contactanos</a>
+                                    </li>
+                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Cita</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="single-footer">
+                        <h2>Redes Sociales</h2>
+                        <p>Nuestro objetivo es brindar una solución confiable.</p>
+                        <ul class="social">
+                            <li><a href="#"><i class="icofont-facebook"></i></a></li>
+                            <li><a href="#"><i class="icofont-google-plus"></i></a></li>
+                            <li><a href="#"><i class="icofont-twitter"></i></a></li>
+                            <li><a href="#"><i class="icofont-vimeo"></i></a></li>
+                            <li><a href="#"><i class="icofont-pinterest"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="single-footer">
+                        <h2>Suscríbete al boletín</h2>
+                        <p>Recibe noticias, actualizaciones y consejos médicos directamente en tu correo. Mantente
+                            informado con Galeno,</p>
+                        <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+                            <input name="email" placeholder="Email Address" class="common-input"
+                                   onfocus="this.placeholder = ''"
+                                   onblur="this.placeholder = 'Correo'" required="" type="email">
+                            <button class="button"><i class="icofont icofont-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ End Footer Top -->
+    <!-- Copyright -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="copyright-content">
+                        <p>© Copyright 2025 | Derechos reservados <b>INNOLAW</b></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ End Copyright -->
+</footer>
+<!--/ End Footer Area -->
+
+<!-- jquery Min JS -->
 <script src="{% static 'landing/js/jquery.min.js' %}"></script>
 <!-- jquery Migrate JS -->
 <script src="{% static 'landing/js/jquery-migrate-3.0.0.js' %}"></script>
@@ -367,6 +419,15 @@
 
 <!-- Counter Up CDN JS (Se mantiene con URL externa) -->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
-
-    </body>
+{#{% if messages %}#}
+{#<script>#}
+{#    window.onload = function() {#}
+{#        const form = document.getElementById("formulario");#}
+{#        if (form) {#}
+{#            form.scrollIntoView({ behavior: "smooth" });#}
+{#        }#}
+{#    }#}
+{#</script>#}
+{#{% endif %}#}
+</body>
 </html>

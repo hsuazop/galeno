@@ -1,0 +1,81 @@
+{% extends 'base/dashboard.html' %}
+{% load static %}
+{% block content-body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+
+<div class="mb-4 p-3 bg-light rounded border">
+  <strong class="d-block fs-5">{{ paciente.nombre }} {{ paciente.apellido }}</strong>
+  <small class="text-muted">
+    DNI: {{ paciente.dni }}
+    {% if edad %} &bull; Edad: {{ edad }} años{% endif %}
+  </small>
+</div>
+
+<h5 class="mb-3">Historial Clínico</h5>
+
+
+    <div class="accordion" id="historialCitas">
+        {% for cita in citas %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                    <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}">
+                        Cita del {{ cita.fecha_hora|date:"d/m/Y H:i" }}
+                    </button>
+                </h2>
+                <div id="collapse{{ forloop.counter }}"
+                     class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                    <div class="accordion-body">
+                        <p><strong>Motivo:</strong> {{ cita.motivo }}</p>
+                        <p><strong>Notas:</strong> {{ cita.notas_medico }}</p>
+                        {% if cita.evaluacionfisica %}
+                            <p><strong>Temperatura:</strong> {{ cita.evaluacionfisica.temperatura }} °C</p>
+                            <p><strong>Peso:</strong> {{ cita.evaluacionfisica.peso }} kg</p>
+                            <p><strong>Estatura:</strong> {{ cita.evaluacionfisica.estatura }} m</p>
+                            <p><strong>Presión arterial:</strong> {{ cita.evaluacionfisica.presion_arterial }}</p>
+                            <p><strong>Frecuencia cardiaca:</strong> {{ cita.evaluacionfisica.frecuencia_cardiaca }} bpm
+                            </p>
+                        {% endif %}
+                        {% if cita.diagnostico %}
+                            <p><strong>Diagnóstico:</strong> {{ cita.diagnostico.descripcion }}</p>
+                        {% endif %}
+                        {% if cita.receta %}
+                            <p><strong>Receta:</strong></p>
+                            <ul>
+                                {% for rm in cita.receta.medicamentos.all %}
+                                    <li>{{ rm.medicamento.nombre }} – {{ rm.dosis }}</li>
+                                {% endfor %}
+                            </ul>
+                            <p><strong>Recomendaciones:</strong> {{ cita.receta.recomendaciones_generales }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay citas registradas aún.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        function addMedicamento() {
+            const container = document.getElementById('medicamentos');
+            const row = document.createElement('div');
+            row.className = 'row mb-2';
+            row.innerHTML = `
+        <div class="col"><input name="medicamento" class="form-control" placeholder="Medicamento"></div>
+        <div class="col"><input name="dosis" class="form-control" placeholder="Dosis"></div>
+    `;
+            container.appendChild(row);
+        }
+    </script>
+
+{% endblock %}

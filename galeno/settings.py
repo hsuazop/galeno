@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_recaptcha',
     # Galeno
     'core',
 
@@ -140,6 +141,38 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# reCAPTCHA v3
+RECAPTCHA_PUBLIC_KEY = '6LfJK2wrAAAAAPGkkwXsfeW3WYQUwQaDJpiflOvY'
+RECAPTCHA_PRIVATE_KEY = '6LfJK2wrAAAAABsl1Ze-F9vfN3LTzra7GkGs_W33'
+RECAPTCHA_DEFAULT_ACTION = 'generic'
+RECAPTCHA_SCORE_THRESHOLD = 0.5  # Puedes ajustarlo
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Cambia a smtp.de.opalstack.com si tu servidor está en Alemania
+EMAIL_HOST = 'smtp.us.opalstack.com'
+
+EMAIL_PORT = 587              # TLS recomendado
+EMAIL_USE_TLS = True          # o EMAIL_USE_SSL = True si usas el puerto 465
+EMAIL_USE_SSL = False         # asegúrate de que sea falso si usas TLS (587)
+
+EMAIL_HOST_USER = 'galeno'  # 👈 SOLO el nombre del buzón, no el correo
+# Tus credenciales de Opalstack
+# EMAIL_HOST_USER = 'info@galenosoft.com'        # Tu correo completo
+EMAIL_HOST_PASSWORD = '0AS3YxIOlI0LXJl'        # Contraseña del buzón
+
+DEFAULT_FROM_EMAIL = 'info@galenosoft.com'
+
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',  # útil para usar con Bootstrap
+}
+
 
 #Import Settings
 try:

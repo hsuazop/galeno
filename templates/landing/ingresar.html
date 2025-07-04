@@ -153,7 +153,7 @@
                     </div>
                     <div class="col-lg-2 col-12">
                         <div class="get-quote">
-                            <a href="#cita" class="btn">Cita!</a>
+                            <a href="{% url 'ingresar' %}" class="btn">Ingresar</a>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,7 @@
 <!-- End Breadcrumbs -->
 
 <!-- Shop Login -->
-<section class="login section">
+<section class="login section" id="formulario">
     <div class="container">
         <div class="inner">
             <div class="row">
@@ -196,39 +196,39 @@
                 <div class="col-lg-6">
                     <div class="login-form">
                         <h2>Ingresar</h2>
-                        <p>No tienes cuenta? <a href="register.html">Registrarse aquí</a></p>
+                        <p>No tienes cuenta? <a href="{% url 'registrar' %}">Registrarse aquí</a></p>
                         <!-- Form -->
-                        <form class="form" method="post">
+                        <form class="form" method="post" >
                             {% csrf_token %}
                             {% if messages %}
-                              <ul>
-                                {% for message in messages %}
-                                  <li>{{ message }}</li>
-                                {% endfor %}
-                              </ul>
+                              {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} mt-2" role="alert">
+                                  {{ message }}
+                                </div>
+                              {% endfor %}
                             {% endif %}
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <input type="email" name="username" placeholder="Usuario o Correo">
+                                        <input type="email" name="username" placeholder="Usuario correo">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <input type="password" name="password" placeholder="Password">
+                                        <input type="password" name="password" placeholder="Contraseña">
                                     </div>
                                 </div>
 
                                 <div class="col-12">
                                     <div class="form-group login-btn">
-                                        <button class="btn" type="submit">Login</button>
+                                        <button class="btn" type="submit">Ingresar</button>
                                     </div>
-                                    <div class="checkbox">
-                                        <label class="checkbox-inline" for="2"><input name="news" id="2"
-                                                                                      type="checkbox">Remember
-                                            me</label>
-                                    </div>
-                                    <a href="#" class="lost-pass">Lost your password ?</a>
+{#                                    <div class="checkbox">#}
+{#                                        <label class="checkbox-inline" for="2"><input name="news" id="2"#}
+{#                                                                                      type="checkbox">Remember#}
+{#                                            me</label>#}
+{#                                    </div>#}
+{#                                    <a href="#" class="lost-pass">Lost your password ?</a>#}
                                 </div>
                             </div>
                         </form>
@@ -364,6 +364,15 @@
 
 <!-- Counter Up CDN JS (Se mantiene con URL externa) -->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
-
+{% if messages %}
+<script>
+    window.onload = function() {
+        const form = document.getElementById("formulario");
+        if (form) {
+            form.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+</script>
+{% endif %}
 </body>
 </html>

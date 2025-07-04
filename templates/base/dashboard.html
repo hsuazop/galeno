@@ -82,12 +82,12 @@
                         <h6 class="m-0">{{ request.user.medico.nombre }}</h6>
                     </div>
                     <div class="mx-3 my-2 d-grid">
-                        <a href="login.html" class="btn btn-danger">Cerrar Session</a>
+                        <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar Session</a>
                     </div>
                 </div>
             </div>
             <!-- Header user settings ends -->
-
+e
         </div>
         <!-- App header actions ends -->
 
@@ -116,29 +116,29 @@
                 <ul class="sidebar-menu">
 
                     <li class="active current-page">
-                        <a href="dashboard2.html">
+                        <a href="{% url 'dashboard_medico' %}">
                             <i class="ri-home-smile-2-line"></i>
                             <span class="menu-text">Panel Principal</span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="dashboard2.html">
+                         <a href="{% url 'crear_cita_con_paciente' %}">
                             <i class="ri-stethoscope-line"></i>
-                            <span class="menu-text">Consulta</span>
+                            <span class="menu-text">Crear Consulta</span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="dashboard2.html">
+                        <a href="{% url 'ver_citas_medico' %}">
                             <i class="ri-dossier-line"></i>
-                            <span class="menu-text">Citas</span>
+                            <span class="menu-text">Todas Consultas</span>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="dashboard2.html">
-                            <i class="ri-heart-pulse-line"></i>
-                            <span class="menu-text">Pacientes</span>
-                        </a>
-                    </li>
+{#                    <li class="">#}
+{#                        <a href="dashboard2.html">#}
+{#                            <i class="ri-heart-pulse-line"></i>#}
+{#                            <span class="menu-text">Pacientes</span>#}
+{#                        </a>#}
+{#                    </li>#}
 
 
                 </ul>

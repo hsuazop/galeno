@@ -67,44 +67,46 @@
                         <div class="table-responsive">
                             <table class="table truncate align-middle myTable">
                                 <thead>
+
                                 <tr>
-                                    <th width="30px">&nbsp;</th>
-                                    <th width="60px">User</th>
-                                    <th width="100px">Name</th>
-                                    <th width="100px">@</th>
-                                    <th width="100px">Designation</th>
-                                    <th width="100px">Views</th>
-                                    <th width="100px">Projects</th>
-                                    <th width="100px">Followers</th>
-                                    <th width="100px">Reviews</th>
-                                    <th width="100px">Actions</th>
+                                    <th>#</th>
+                                    <th></th>
+                                    <th>DNI</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Correo</th>
+
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <a href="#" class="me-1 icon-box sm bg-light rounded-circle">
-                                            <i class="ri-star-line lh-1"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <img src="{% static 'galeno/img/user2.png' %}" alt="Bootstrap Themes"
-                                             class="rounded-circle img-3x">
-                                    </td>
-                                    <td>Jill Dalton</td>
-                                    <td>@FreeDashboards</td>
-                                    <td>Fashion Artist</td>
-                                    <td>980</td>
-                                    <td>
-                                        <span class="badge bg-primary">9</span>
-                                    </td>
-                                    <td>600</td>
-                                    <td>26</td>
-                                    <td>
-                                        <button class="btn btn-primary">Historial</button>
-                                    </td>
-                                </tr>
+                                {% for paciente in pacientes %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            {% if paciente.genero == "M" %}
+                                                 <img src="{% static 'galeno/img/user4.png' %}" alt="Mujer" width="40">
+                                            {% elif paciente.genero == "F" %}
+                                                <img src="{% static 'galeno/img/user2.png' %}" alt="Mujer" width="40">
+                                            {% else %}
+                                                <img src="{% static 'img/default.png' %}" alt="Otro" width="40">
+                                            {% endif %}
+                                        </td>
 
+                                        <td>{{ paciente.dni }}</td>
+                                        <td>{{ paciente.nombre }}</td>
+                                        <td>{{ paciente.apellido }}</td>
+                                        <td>{{ paciente.email }}</td>
+                                        <td>
+                                          <a href="{% url 'ver_historial_paciente' paciente.id %}" class="btn btn-sm btn-info">Ver historial</a>
+                                        <a href="{% url 'ver_historial_paciente' paciente.id %}" class="btn btn-sm btn-success">Crear Consulta</a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                   <tr>
+                                        <td colspan="7" class="text-center">No hay citas registradas.</td>
+                                    </tr>
+                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
