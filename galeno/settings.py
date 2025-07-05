@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_recaptcha',
+    # 'django_recaptcha',
     # Galeno
     'core',
 
@@ -84,8 +84,14 @@ WSGI_APPLICATION = 'galeno.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': BASE_DIR / 'db.sqlite3',
+	'ENGINE': 'django.db.backends.postgresql',
+	'NAME': 'galeno',
+	'USER': 'hector',
+	'PASSWORD': 'suazo000000',
+	'HOST': '',
+	'PORT': '',
     }
 }
 
