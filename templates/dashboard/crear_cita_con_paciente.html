@@ -1,79 +1,84 @@
 {% extends 'base/dashboard.html' %}
 {% load static %}
 {% block content-body %}
-    <!-- Bootstrap y HTML base omitido por brevedad -->
-    <form method="post">
-  {% csrf_token %}
+<form method="post">
+    {% csrf_token %}
 
-  <h5>Datos del Paciente</h5>
-  <input name="nombre" class="form-control mb-2" placeholder="Nombre" required>
-  <input name="apellido" class="form-control mb-2" placeholder="Apellido" required>
-  <input name="fecha_nacimiento" type="date" class="form-control mb-2" required>
-  <select name="genero" class="form-control mb-2" required>
-    <option value="">Género</option>
-    <option value="M">Masculino</option>
-    <option value="F">Femenino</option>
-  </select>
-  <input name="dni" class="form-control mb-2" placeholder="DNI" required>
-  <input name="telefono" class="form-control mb-2" placeholder="Teléfono" required>
-  <input name="direccion" class="form-control mb-2" placeholder="Dirección" required>
-  <input name="email" type="email" class="form-control mb-2" placeholder="Correo electrónico" required>
+    <h5>Datos del Paciente</h5>
+    <input name="nombre" class="form-control mb-2" placeholder="Nombre" required>
+    <input name="apellido" class="form-control mb-2" placeholder="Apellido" required>
+    <input name="fecha_nacimiento" type="date" class="form-control mb-2" required>
 
-  <h5>Motivo de la Cita</h5>
-  <textarea name="motivo" class="form-control mb-2" required></textarea>
-  <textarea name="notas_medico" class="form-control mb-2" placeholder="Notas médicas (opcional)"></textarea>
+    <select name="genero" class="form-control mb-2" required>
+        <option value="">Género</option>
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+    </select>
 
-  <h5>Evaluación Física</h5>
-  <input name="temperatura" type="number" step="0.1" class="form-control mb-2" placeholder="Temperatura (°C)" required>
-  <input name="peso" type="number" step="0.01" class="form-control mb-2" placeholder="Peso (kg)" required>
-  <input name="estatura" type="number" step="0.01" class="form-control mb-2" placeholder="Estatura (m)" required>
-  <input name="presion_arterial" class="form-control mb-2" placeholder="Presión arterial" required>
-  <input name="frecuencia_cardiaca" type="number" class="form-control mb-2" placeholder="Frecuencia cardiaca (bpm)" required>
+    <input name="dni" class="form-control mb-2" placeholder="DNI" required>
+    <input name="email" type="email" class="form-control mb-2" placeholder="Correo electrónico">
 
-  <h5>Diagnóstico</h5>
-  <textarea name="diagnostico" class="form-control mb-2" required></textarea>
+    <input name="telefono" class="form-control mb-2" placeholder="Teléfono" >
+    <input name="direccion" class="form-control mb-2" placeholder="Dirección" >
 
-  <h5>Receta</h5>
-  <textarea name="recomendaciones" class="form-control mb-2" placeholder="Recomendaciones generales"></textarea>
 
-  <div id="medicamentos">
-    <div class="row mb-2">
-      <div class="col"><input name="medicamento" class="form-control" placeholder="Medicamento"></div>
-      <div class="col"><input name="dosis" class="form-control" placeholder="Dosis"></div>
-    </div>
-  </div>
-  <button type="button" class="btn btn-outline-secondary mb-3" onclick="addMedicamento()">Agregar medicamento</button>
-        <br>
-        <div style="text-align: right">
-    <button type="submit" class="btn btn-success">Guardar Cita</button>
+    <h5>Motivo de la Cita</h5>
+    <textarea name="motivo" class="form-control mb-2" required></textarea>
+    <textarea name="notas_medico" class="form-control mb-2" placeholder="Notas médicas (opcional)"></textarea>
+
+    <h5>Evaluación Física (opcional)</h5>
+    <input name="temperatura" class="form-control mb-2" placeholder="Temperatura (°C)">
+    <input name="peso" class="form-control mb-2" placeholder="Peso (kg)">
+    <input name="estatura" class="form-control mb-2" placeholder="Estatura (m)">
+    <input name="presion_arterial" class="form-control mb-2" placeholder="Presión arterial">
+    <input name="frecuencia_cardiaca" class="form-control mb-2" placeholder="Frecuencia cardiaca (bpm)">
+
+    <h5>Diagnóstico (opcional)</h5>
+    <textarea name="diagnostico" class="form-control mb-2" placeholder="Diagnóstico"></textarea>
+
+    <h5>Receta (opcional)</h5>
+    <textarea name="recomendaciones" class="form-control mb-2" placeholder="Recomendaciones generales"></textarea>
+
+    <div id="medicamentos">
+        <div class="row mb-2">
+            <div class="col">
+                <input name="medicamento[]" class="form-control" placeholder="Medicamento">
+            </div>
+            <div class="col">
+                <input name="dosis[]" class="form-control" placeholder="Dosis">
+            </div>
         </div>
+    </div>
 
+    <button type="button" class="btn btn-outline-secondary mb-3" onclick="addMedicamento()">Agregar medicamento</button>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Guardar Cita</button>
+    </div>
 </form>
 
 <script>
-function addMedicamento() {
-    const container = document.getElementById('medicamentos');
-    const row = document.createElement('div');
-    row.className = 'row mb-2';
-    row.innerHTML = `
-        <div class="col"><input name="medicamento" class="form-control" placeholder="Medicamento"></div>
-        <div class="col"><input name="dosis" class="form-control" placeholder="Dosis"></div>
-    `;
-    container.appendChild(row);
-}
+    function addMedicamento() {
+        const container = document.getElementById('medicamentos');
+        const row = document.createElement('div');
+        row.className = 'row mb-2';
+        row.innerHTML = `
+            <div class="col"><input name="medicamento[]" class="form-control" placeholder="Medicamento"></div>
+            <div class="col"><input name="dosis[]" class="form-control" placeholder="Dosis"></div>
+        `;
+        container.appendChild(row);
+    }
 </script>
 
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('input[type="number"]').forEach(input => {
-                input.addEventListener("input", () => {
-                    if (input.validity.badInput) {
-                        input.value = "";
-                    }
-                });
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener("input", () => {
+                if (input.validity.badInput) {
+                    input.value = "";
+                }
             });
         });
-    </script>
-
+    });
+</script>
 {% endblock %}

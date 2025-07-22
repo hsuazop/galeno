@@ -138,29 +138,32 @@ def crear_cita_con_paciente(request):
     medico = request.user.medico  # Asegúrate que sea un médico autenticado
 
     if request.method == 'POST':
-        dni = request.POST['dni']
-        email = request.POST['email']
+        dni = request.POST['dni'].strip()
+        email = request.POST['email'].strip()
 
         with transaction.atomic():
             # Verificar si el paciente ya existe
             paciente = Paciente.objects.filter(dni=dni).first()
             if not paciente:
-                # Crear usuario básico
-                user = User.objects.create(
-                    username=dni,
-                    first_name=request.POST['nombre'],
-                    last_name=request.POST['apellido']
+                # Crear usuario
+                username = email if email else dni
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    first_name=request.POST['nombre'].strip(),
+                    last_name=request.POST['apellido'].strip()
                 )
+
                 # Crear paciente
                 paciente = Paciente.objects.create(
                     user=user,
-                    nombre=request.POST['nombre'],
-                    apellido=request.POST['apellido'],
-                    fecha_nacimiento=request.POST['fecha_nacimiento'],
-                    genero=request.POST['genero'],
+                    nombre=request.POST['nombre'].strip(),
+                    apellido=request.POST['apellido'].strip(),
+                    fecha_nacimiento=request.POST.get('fecha_nacimiento'),
+                    genero=request.POST.get('genero'),
                     dni=dni,
-                    telefono=request.POST['telefono'],
-                    direccion=request.POST['direccion'],
+                    telefono=request.POST.get('telefono', '').strip(),
+                    direccion=request.POST.get('direccion', '').strip(),
                     email=email
                 )
 
@@ -169,53 +172,61 @@ def crear_cita_con_paciente(request):
                 paciente=paciente,
                 medico=medico,
                 fecha_hora=timezone.now(),
-                motivo=request.POST.get('motivo', ''),
-                notas_medico=request.POST.get('notas_medico', ''),
+                motivo=request.POST.get('motivo', '').strip(),
+                notas_medico=request.POST.get('notas_medico', '').strip(),
                 estado='Completada'
             )
 
-            # Evaluación física
-            EvaluacionFisica.objects.create(
-                cita=cita,
-                temperatura=request.POST.get('temperatura'),
-                peso=request.POST.get('peso'),
-                estatura=request.POST.get('estatura'),
-                presion_arterial=request.POST.get('presion_arterial'),
-                frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca')
-            )
+            # Evaluación física (solo si se ingresó algo)
+            if any([
+                request.POST.get('temperatura'),
+                request.POST.get('peso'),
+                request.POST.get('estatura'),
+                request.POST.get('presion_arterial'),
+                request.POST.get('frecuencia_cardiaca')
+            ]):
+                EvaluacionFisica.objects.create(
+                    cita=cita,
+                    temperatura=request.POST.get('temperatura', '').strip(),
+                    peso=request.POST.get('peso', '').strip(),
+                    estatura=request.POST.get('estatura', '').strip(),
+                    presion_arterial=request.POST.get('presion_arterial', '').strip(),
+                    frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', '').strip()
+                )
 
-            # Diagnóstico
-            Diagnostico.objects.create(
-                cita=cita,
-                descripcion=request.POST.get('diagnostico', '')
-            )
+            # Diagnóstico (si se ingresó)
+            diagnostico_texto = request.POST.get('diagnostico', '').strip()
+            if diagnostico_texto:
+                Diagnostico.objects.create(
+                    cita=cita,
+                    descripcion=diagnostico_texto
+                )
 
-            # Receta
-            receta = Receta.objects.create(
-                cita=cita,
-                recomendaciones_generales=request.POST.get('recomendaciones', '')
-            )
-
-            # Medicamentos
-            nombres = request.POST.getlist('medicamento')
+            # Receta y medicamentos
+            medicamentos = request.POST.getlist('medicamento')
             dosis_list = request.POST.getlist('dosis')
+            recomendaciones = request.POST.get('recomendaciones', '').strip()
 
-            for nombre, dosis in zip(nombres, dosis_list):
-                if nombre.strip():
-                    medicamento, _ = Medicamento.objects.get_or_create(nombre=nombre.strip())
-                    RecetaMedicamento.objects.create(
-                        receta=receta,
-                        medicamento=medicamento,
-                        dosis=dosis.strip()
-                    )
+            if any(nombre.strip() for nombre in medicamentos):
+                receta = Receta.objects.create(
+                    cita=cita,
+                    recomendaciones_generales=recomendaciones
+                )
+                for nombre, dosis in zip(medicamentos, dosis_list):
+                    nombre = nombre.strip()
+                    dosis = dosis.strip()
+                    if nombre:
+                        RecetaMedicamento.objects.create(
+                            receta=receta,
+                            medicamento=nombre,
+                            dosis=dosis
+                        )
 
-        # Mensaje personalizado
         messages.success(
             request,
             f"Cita registrada para {paciente.nombre} {paciente.apellido} el {cita.fecha_hora.strftime('%d/%m/%Y a las %I:%M %p')}."
         )
         return redirect('ver_historial_paciente', paciente_id=paciente.id)
-        # return HttpResponseRedirect(url)
 
     return render(request, 'dashboard/crear_cita_con_paciente.html')
 
