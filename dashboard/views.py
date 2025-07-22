@@ -30,7 +30,15 @@ def dashboard_paciente(request):
 def dashboard_medico(request):
     medico = request.user.medico  # gracias al related_name='medico'
     pacientes = Paciente.objects.filter(cita__medico=request.user.medico).distinct()
-    return render(request, 'dashboard/medico_dashboard.html', {'pacientes': pacientes})
+    # Total de pacientes registrados (con al menos una cita con este médico)
+    total_pacientes = Paciente.objects.filter(cita__medico=request.user.medico).distinct().count()
+
+    # Total de citas asignadas a este médico
+    total_citas = Cita.objects.filter(medico=request.user.medico).count()
+
+
+    return render(request, 'dashboard/medico_dashboard.html', { 'total_pacientes': total_pacientes,
+        'total_citas': total_citas, 'pacientes': pacientes})
 
 @login_required
 def dashboard_asistente(request):
@@ -50,62 +58,80 @@ def ver_historial_paciente(request, paciente_id):
 
 def crear_cita_paciente(request, paciente_id):
     paciente = get_object_or_404(Paciente, id=paciente_id)
-    medico = request.user.medico
+    medico = request.user.medico  # Asegúrate que Medico esté vinculado al user
 
     if request.method == 'POST':
+        motivo = request.POST.get('motivo', '').strip()
+
+        if not motivo:
+            messages.error(request, "El motivo de la cita es obligatorio.")
+            return redirect(request.path)
 
         with transaction.atomic():
             cita = Cita.objects.create(
                 paciente=paciente,
                 medico=medico,
                 fecha_hora=timezone.now(),
-                motivo=request.POST.get('motivo', ''),
-                notas_medico=request.POST.get('notas_medico', ''),
+                motivo=motivo,
+                notas_medico=request.POST.get('notas_medico', '').strip(),
                 estado='Completada'
             )
 
-            EvaluacionFisica.objects.create(
-                cita=cita,
-                temperatura=request.POST.get('temperatura'),
-                peso=request.POST.get('peso'),
-                estatura=request.POST.get('estatura'),
-                presion_arterial=request.POST.get('presion_arterial'),
-                frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca')
-            )
+            # Evaluación física (solo si algún campo tiene valor)
+            if any([
+                request.POST.get('temperatura'),
+                request.POST.get('peso'),
+                request.POST.get('estatura'),
+                request.POST.get('presion_arterial'),
+                request.POST.get('frecuencia_cardiaca')
+            ]):
+                EvaluacionFisica.objects.create(
+                    cita=cita,
+                    temperatura=request.POST.get('temperatura', '').strip(),
+                    peso=request.POST.get('peso', '').strip(),
+                    estatura=request.POST.get('estatura', '').strip(),
+                    presion_arterial=request.POST.get('presion_arterial', '').strip(),
+                    frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', '').strip()
+                )
 
-            Diagnostico.objects.create(
-                cita=cita,
-                descripcion=request.POST.get('diagnostico', '')
-            )
+            # Diagnóstico (opcional)
+            descripcion = request.POST.get('diagnostico', '').strip()
+            if descripcion:
+                Diagnostico.objects.create(
+                    cita=cita,
+                    descripcion=descripcion
+                )
 
-            receta = Receta.objects.create(
-                cita=cita,
-                recomendaciones_generales=request.POST.get('recomendaciones', '')
-            )
+            # Receta y medicamentos (opcional)
+            medicamentos = request.POST.getlist('medicamento[]')
+            dosis_list = request.POST.getlist('dosis[]')
+            recomendaciones = request.POST.get('recomendaciones', '').strip()
 
-            for nombre, dosis in zip(request.POST.getlist('medicamento'), request.POST.getlist('dosis')):
-                if nombre.strip():
-                    medicamento, _ = Medicamento.objects.get_or_create(nombre=nombre.strip())
-                    RecetaMedicamento.objects.create(
-                        receta=receta,
-                        medicamento=medicamento,
-                        dosis=dosis.strip()
-                    )
+            if any(m.strip() for m in medicamentos):
+                receta = Receta.objects.create(
+                    cita=cita,
+                    recomendaciones_generales=recomendaciones
+                )
+                for nombre, dosis in zip(medicamentos, dosis_list):
+                    nombre = nombre.strip()
+                    dosis = dosis.strip()
+                    if nombre:
+                        RecetaMedicamento.objects.create(
+                            receta=receta,
+                            medicamento=nombre,  # CharField, ya no es FK
+                            dosis=dosis
+                        )
 
-
-        # Agrega el mensaje
         messages.success(
             request,
             f"Cita registrada para {paciente.nombre} {paciente.apellido} el {cita.fecha_hora.strftime('%d/%m/%Y a las %I:%M %p')}."
         )
-        try:
-            return redirect('ver_historial_paciente', paciente_id=paciente.id)
-        except Exception as e:
-            return HttpResponse(f"Error en redirección: {e}")
+        return redirect('ver_historial_paciente', paciente_id=paciente.id)
 
+    # Mostrar últimas citas
+    # citas = Cita.objects.filter(paciente=paciente).order_by('-fecha_hora')[:3]
+    return render(request, 'dashboard/consulta_paciente.html', {'paciente': paciente})
 
-    citas = Cita.objects.filter(paciente=paciente).order_by('-fecha_hora')[:3]
-    return render(request, 'dashboard/consulta_paciente.html', {'paciente': paciente, 'citas': citas})
 
 
 def crear_cita_con_paciente(request):

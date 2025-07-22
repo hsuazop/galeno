@@ -122,6 +122,9 @@ def ingresar(request):
         username = request.POST['username']
         password = request.POST['password']
 
+        print(username)
+        print(password)
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:

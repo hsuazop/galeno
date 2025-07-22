@@ -16,7 +16,6 @@ from django.contrib.messages import constants as messages
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = 'django-insecure-ajhx_=(p2-kwj3l^ot25^1d@8pxprw_%49jr4d&o1fm@ubv=!6
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -78,23 +76,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'galeno.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': BASE_DIR / 'db.sqlite3',
-	'ENGINE': 'django.db.backends.postgresql',
-	'NAME': 'galeno',
-	'USER': 'hector',
-	'PASSWORD': 'suazo000000',
-	'HOST': '',
-	'PORT': '',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'galeno',
+        'USER': 'hector',
+        'PASSWORD': 'suazo000000',
+        'HOST': '',
+        'PORT': '',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -114,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -125,7 +120,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -141,7 +135,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -159,17 +152,16 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Cambia a smtp.de.opalstack.com si tu servidor está en Alemania
 EMAIL_HOST = 'smtp.us.opalstack.com'
 
-EMAIL_PORT = 587              # TLS recomendado
-EMAIL_USE_TLS = True          # o EMAIL_USE_SSL = True si usas el puerto 465
-EMAIL_USE_SSL = False         # asegúrate de que sea falso si usas TLS (587)
+EMAIL_PORT = 587  # TLS recomendado
+EMAIL_USE_TLS = True  # o EMAIL_USE_SSL = True si usas el puerto 465
+EMAIL_USE_SSL = False  # asegúrate de que sea falso si usas TLS (587)
 
 EMAIL_HOST_USER = 'galeno'  # 👈 SOLO el nombre del buzón, no el correo
 # Tus credenciales de Opalstack
 # EMAIL_HOST_USER = 'info@galenosoft.com'        # Tu correo completo
-EMAIL_HOST_PASSWORD = '0AS3YxIOlI0LXJl'        # Contraseña del buzón
+EMAIL_HOST_PASSWORD = '0AS3YxIOlI0LXJl'  # Contraseña del buzón
 
 DEFAULT_FROM_EMAIL = 'info@galenosoft.com'
-
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
@@ -179,9 +171,8 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',  # útil para usar con Bootstrap
 }
 
-
-#Import Settings
+# Import Settings
 try:
-    from myproject.local_settings import *
+    from local_settings import *
 except ImportError:
     pass

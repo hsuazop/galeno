@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
+
 
 class Paciente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente')
@@ -15,6 +17,15 @@ class Paciente(models.Model):
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
+
+    @property
+    def edad(self):
+        if self.fecha_nacimiento:
+            hoy = date.today()
+            return hoy.year - self.fecha_nacimiento.year - (
+                    (hoy.month, hoy.day) < (self.fecha_nacimiento.month, self.fecha_nacimiento.day)
+            )
+        return None
 
 
 class Especialidad(models.Model):
@@ -32,7 +43,6 @@ class Hospital(models.Model):
 
     def __str__(self):
         return self.nombre
-
 
 
 class Medico(models.Model):
@@ -59,6 +69,7 @@ class Asistente(models.Model):
     def __str__(self):
         return f"Asistente {self.nombre} {self.apellido} de {self.medico}"
 
+
 class AgendaMedica(models.Model):
     medico = models.ForeignKey('Medico', on_delete=models.CASCADE, related_name='agendas')
     fecha = models.DateField()  # Día específico
@@ -74,14 +85,14 @@ class AgendaMedica(models.Model):
         return f"Agenda de {self.medico} - {self.fecha} ({self.hora_inicio} - {self.hora_fin})"
 
 
-
 class Cita(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
-    fecha_hora = models.DateTimeField()
+    fecha_hora = models.DateTimeField(auto_now_add=True)
     motivo = models.TextField()
     notas_medico = models.TextField(blank=True)
-    estado = models.CharField(max_length=20, choices=[('Pendiente', 'Pendiente'), ('Completada', 'Completada'), ('Cancelada', 'Cancelada')], default='Pendiente')
+    estado = models.CharField(max_length=20, choices=[('Pendiente', 'Pendiente'), ('Completada', 'Completada'), ('Cancelada', 'Cancelada')],
+                              default='Completada')
 
     def __str__(self):
         return f"Cita de {self.paciente} con {self.medico} el {self.fecha_hora}"
@@ -89,14 +100,40 @@ class Cita(models.Model):
 
 class EvaluacionFisica(models.Model):
     cita = models.OneToOneField(Cita, on_delete=models.CASCADE)
-    temperatura = models.DecimalField(max_digits=4, decimal_places=1, help_text="Temperatura en °C")
-    peso = models.DecimalField(max_digits=5, decimal_places=2, help_text="Peso en kg")
-    estatura = models.DecimalField(max_digits=4, decimal_places=2, help_text="Estatura en metros")
-    presion_arterial = models.CharField(max_length=15, help_text="Ejemplo: 120/80 mmHg")
-    frecuencia_cardiaca = models.IntegerField(help_text="Frecuencia cardiaca en bpm")
+
+    temperatura = models.CharField(
+        max_length=1000,
+        help_text="Temperatura en °C (ej. 36.8)",
+        blank=True,
+        null=True
+    )
+    peso = models.CharField(
+        max_length=1000,
+        help_text="Peso en kg (ej. 72.5)",
+        blank=True,
+        null=True
+    )
+    estatura = models.CharField(
+        max_length=1000,
+        help_text="Estatura en metros (ej. 1.75)",
+        blank=True,
+        null=True
+    )
+    presion_arterial = models.CharField(
+        max_length=1500,
+        help_text="Ejemplo: 120/80 mmHg",
+        blank=True,
+        null=True
+    )
+    frecuencia_cardiaca = models.CharField(
+        max_length=1000,
+        help_text="Frecuencia cardiaca en bpm",
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
-        return f"Evaluación física de {self.cita.paciente}"
+        return f"Evaluación física para la cita del {self.cita.fecha_hora}"
 
 
 class Diagnostico(models.Model):
@@ -126,8 +163,17 @@ class Receta(models.Model):
 
 class RecetaMedicamento(models.Model):
     receta = models.ForeignKey(Receta, on_delete=models.CASCADE, related_name="medicamentos")
-    medicamento = models.ForeignKey(Medicamento, on_delete=models.CASCADE)
-    dosis = models.CharField(max_length=255, help_text="Ejemplo: 1 tableta cada 8 horas por 7 días")
+
+    # Ya no es ForeignKey, ahora es texto libre
+    medicamento = models.CharField(
+        max_length=1055,
+        help_text="Nombre del medicamento (ej. Amoxicilina 500mg)"
+    )
+
+    dosis = models.CharField(
+        max_length=1055,
+        help_text="Ejemplo: 1 tableta cada 8 horas por 7 días"
+    )
 
     def __str__(self):
         return f"{self.medicamento} - {self.dosis}"

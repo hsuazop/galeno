@@ -12,15 +12,21 @@
 
 
 
-<div class="mb-4 p-3 bg-light rounded border">
-  <strong class="d-block fs-5">{{ paciente.nombre }} {{ paciente.apellido }}</strong>
-  <small class="text-muted">
-    DNI: {{ paciente.dni }}
-    {% if edad %} &bull; Edad: {{ edad }} años{% endif %}
-  </small>
-</div>
+    <div class="mb-4 p-3 bg-light rounded border d-flex justify-content-between">
+        <div>
+            <strong class="d-block fs-5">{{ paciente.nombre }} {{ paciente.apellido }}</strong>
+            <small class="text-muted">
+                DNI: {{ paciente.dni }}
+                {% if edad %} &bull; Edad: {{ edad }} años{% endif %}
+            </small>
+        </div>
+        <div>
+<a href="{% url 'crear_cita' paciente.id %}" class="btn btn-sm btn-success">Crear Consulta</a>
+        </div>
 
-<h5 class="mb-3">Historial Clínico</h5>
+    </div>
+
+    <h5 class="mb-3">Historial Clínico</h5>
 
 
     <div class="accordion" id="historialCitas">
