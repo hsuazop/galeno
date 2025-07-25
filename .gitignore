@@ -104,3 +104,7 @@ GitHub.sublime-settings
 
 # PyCharm
 .idea/
+
+# Settings
+local_settings.py
+
