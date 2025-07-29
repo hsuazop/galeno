@@ -259,5 +259,5 @@ def ver_citas_medico(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')  # o cambia 'login' por la URL que desees redirigir
+    return redirect('ingresar')  # o cambia 'login' por la URL que desees redirigir
 
