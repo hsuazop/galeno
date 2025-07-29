@@ -133,6 +133,12 @@ e
                             <span class="menu-text">Todas Consultas</span>
                         </a>
                     </li>
+                    <li class="">
+                        <a href="{% url 'estadisticas_galeno' %}">
+                            <i class="ri-pie-chart-line"></i>
+                            <span class="menu-text">Estadisticas</span>
+                        </a>
+                    </li>
 {#                    <li class="">#}
 {#                        <a href="dashboard2.html">#}
 {#                            <i class="ri-heart-pulse-line"></i>#}
@@ -243,6 +249,10 @@ e
 <script>
     let table = new DataTable('.myTable');
 </script>
+
+{% block js %}
+	
+{% endblock %}
 </body>
 
 </html>

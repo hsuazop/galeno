@@ -1,0 +1,82 @@
+
+{% extends 'base/dashboard.html' %}
+{% load static %}
+{% block content-body %}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">📊 Estadísticas de Galeno</h2>
+
+    <div class="row text-center mb-4">
+        <div class="col-md-3">
+            <div class="card shadow p-3">
+                <h4>Pacientes</h4>
+                <p class="display-6">{{ total_pacientes }}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow p-3">
+                <h4>Citas</h4>
+                <p class="display-6">{{ total_citas }}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow p-3">
+                <h4>Pendientes</h4>
+                <p class="display-6 text-warning">{{ citas_pendientes }}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow p-3">
+                <h4>Completadas</h4>
+                <p class="display-6 text-success">{{ citas_completadas }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-3 shadow">
+                <div id="chart_citas_paciente" style="height: 400px;"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3 shadow">
+                <div id="chart_estado_citas" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+{% endblock %}
+{% block js %}
+	 <script>
+        google.charts.load('current', {'packages':['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            // Datos de citas por paciente
+            var dataPacientes = google.visualization.arrayToDataTable({{ data_citas_paciente|safe }});
+
+            var optionsPacientes = {
+                title: 'Citas por paciente',
+                chartArea: {width: '60%'},
+                hAxis: {title: 'Citas', minValue: 0},
+                vAxis: {title: 'Paciente'}
+            };
+
+            var chartPacientes = new google.visualization.BarChart(document.getElementById('chart_citas_paciente'));
+            chartPacientes.draw(dataPacientes, optionsPacientes);
+
+            // Datos de estado de citas
+            var dataEstado = google.visualization.arrayToDataTable({{ data_estado_citas|safe }});
+            var optionsEstado = {
+                title: 'Estado de citas',
+                is3D: true
+            };
+            var chartEstado = new google.visualization.PieChart(document.getElementById('chart_estado_citas'));
+            chartEstado.draw(dataEstado, optionsEstado);
+        }
+    </script>
+
+{% endblock %}

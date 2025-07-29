@@ -261,3 +261,42 @@ def logout_view(request):
     logout(request)
     return redirect('ingresar')  # o cambia 'login' por la URL que desees redirigir
 
+
+from django.db.models import Count
+def estadisticas_galeno(request):
+    # Totales
+    total_pacientes = Paciente.objects.count()
+    total_citas = Cita.objects.count()
+    citas_pendientes = Cita.objects.filter(estado="Pendiente").count()
+    citas_completadas = Cita.objects.filter(estado="Completada").count()
+
+    # Citas por paciente (los 10 primeros)
+    citas_por_paciente = (
+        Cita.objects.values("paciente__nombre", "paciente__apellido")
+        .annotate(total=Count("id"))
+        .order_by("-total")[:10]
+    )
+
+    # Datos para Google Charts
+    data_citas_paciente = [
+        ["Paciente", "Citas"]
+    ]
+    for item in citas_por_paciente:
+        nombre = f"{item['paciente__nombre']} {item['paciente__apellido']}"
+        data_citas_paciente.append([nombre, item["total"]])
+
+    data_estado_citas = [
+        ["Estado", "Cantidad"],
+        ["Pendientes", citas_pendientes],
+        ["Completadas", citas_completadas],
+    ]
+
+    context = {
+        "total_pacientes": total_pacientes,
+        "total_citas": total_citas,
+        "citas_pendientes": citas_pendientes,
+        "citas_completadas": citas_completadas,
+        "data_citas_paciente": data_citas_paciente,
+        "data_estado_citas": data_estado_citas,
+    }
+    return render(request, "dashboard/estadistica.html", context)

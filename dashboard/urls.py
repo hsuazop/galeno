@@ -12,5 +12,6 @@ urlpatterns = [
     path('medico/crear-cita/', crear_cita_con_paciente, name='crear_cita_con_paciente'),
     path('medico/citas/', ver_citas_medico, name='ver_citas_medico'),
     path('logout/', logout_view, name='logout'),
+    path('estadisticas/', estadisticas_galeno, name='estadisticas_galeno'),
 
 ]
