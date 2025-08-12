@@ -131,11 +131,11 @@ def ingresar(request):
             login(request, user)
 
             if hasattr(user, 'paciente'):
-                return redirect('dashboard_paciente')  # nombre de la URL para pacientes
+                return redirect('dashboard:dashboard_paciente')  # nombre de la URL para pacientes
             elif hasattr(user, 'medico'):
-                return redirect('dashboard_medico')    # nombre de la URL para médicos
+                return redirect('dashboard:dashboard_medico')    # nombre de la URL para médicos
             elif hasattr(user, 'asistente'):
-                return redirect('dashboard_asistente') # nombre de la URL para asistentes
+                return redirect('dashboard:dashboard_asistente') # nombre de la URL para asistentes
             else:
                 messages.error(request, "El usuario no tiene un rol asignado.")
                 return redirect('ingresar')

@@ -1,3 +1,5 @@
+from symtable import Class
+
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
@@ -9,10 +11,11 @@ class Paciente(models.Model):
     apellido = models.CharField(max_length=255)
     fecha_nacimiento = models.DateField(blank=True, null=True)
     genero = models.CharField(max_length=10, choices=[('M', 'Masculino'), ('F', 'Femenino')])
-    dni = models.CharField(max_length=50, blank=True)
+    dni = models.CharField(max_length=100)
     telefono = models.CharField(max_length=15, blank=True)
     direccion = models.TextField(blank=True)
     email = models.EmailField(unique=True, blank=True)
+    ciudad = models.CharField(max_length=100, blank=True)
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -46,13 +49,24 @@ class Hospital(models.Model):
 
 
 class Medico(models.Model):
+    class TipoLicencia(models.TextChoices):
+        PRUEBA = 'prueba', 'Prueba'
+        PAGADA = 'pagada', 'Pagada'
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='medico')
     nombre = models.CharField(max_length=255)
     apellido = models.CharField(max_length=255)
-    especialidad = models.ForeignKey(Especialidad, on_delete=models.SET_NULL, null=True, blank=True)
-    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)
+    especialidad = models.ForeignKey('Especialidad', on_delete=models.SET_NULL, null=True, blank=True)
+    hospital = models.ForeignKey('Hospital', on_delete=models.SET_NULL, null=True, blank=True)
     telefono = models.CharField(max_length=15, blank=True)
     email = models.EmailField(unique=True)
+
+    fecha_creacion = models.DateTimeField(auto_now_add=True)  # Fecha automática
+    tipo_licencia = models.CharField(
+        max_length=10,
+        choices=TipoLicencia.choices,
+        default=TipoLicencia.PRUEBA
+    )
 
     def __str__(self):
         return f"Dr. {self.nombre} {self.apellido} - {self.especialidad}"
@@ -86,13 +100,23 @@ class AgendaMedica(models.Model):
 
 
 class Cita(models.Model):
+    ESTADOS = [
+        ('Borrador', 'Borrador'),
+        ('Pendiente', 'Pendiente'),
+        ('Completada', 'Completada'),
+        ('Cancelada', 'Cancelada'),
+    ]
+
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     fecha_hora = models.DateTimeField(auto_now_add=True)
-    motivo = models.TextField()
+    motivo = models.TextField(blank=True)  # vacío al crear
     notas_medico = models.TextField(blank=True)
-    estado = models.CharField(max_length=20, choices=[('Pendiente', 'Pendiente'), ('Completada', 'Completada'), ('Cancelada', 'Cancelada')],
-                              default='Completada')
+    estado = models.CharField(
+        max_length=20,
+        choices=ESTADOS,
+        default='Borrador'
+    )
 
     def __str__(self):
         return f"Cita de {self.paciente} con {self.medico} el {self.fecha_hora}"
@@ -177,3 +201,9 @@ class RecetaMedicamento(models.Model):
 
     def __str__(self):
         return f"{self.medicamento} - {self.dosis}"
+
+
+class Medico_Paciente(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    fecha_emision = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,118 @@
+{% extends 'base/dashboard.html' %}
+{% load static %}
+{% block content-body %}
+    <div class="container py-3">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="mb-0">Nuevo paciente</h3>
+            <a href="#" class="btn btn-outline-secondary btn-sm">← Volver</a>
+        </div>
+
+        {# Mensajes (success/error) #}
+        {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" novalidate class="needs-validation">
+            {% csrf_token %}
+
+            <div class="row g-3">
+                <!-- 1a fila -->
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Nombre *</label>
+                    <input type="text" name="nombre" value="{{ form.nombre.value|default_if_none:'' }}"
+                           class="form-control {% if form.nombre.errors %}is-invalid{% endif %}" required>
+                    {% for e in form.nombre.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Apellido *</label>
+                    <input type="text" name="apellido" value="{{ form.apellido.value|default_if_none:'' }}"
+                           class="form-control {% if form.apellido.errors %}is-invalid{% endif %}" required>
+                    {% for e in form.apellido.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Fecha de nacimiento</label>
+                    <input type="date" name="fecha_nacimiento"
+                           value="{{ form.fecha_nacimiento.value|default_if_none:'' }}"
+                           class="form-control {% if form.fecha_nacimiento.errors %}is-invalid{% endif %}">
+                    {% for e in form.fecha_nacimiento.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <!-- 2a fila -->
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Género</label>
+                    {{ form.genero }}
+                    {% for e in form.genero.errors %}
+                        <div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">DNI *</label>
+                    <input type="text" name="dni" value="{{ form.dni.value|default_if_none:'' }}"
+                           class="form-control {% if form.dni.errors %}is-invalid{% endif %}" required>
+                    {% for e in form.dni.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" name="telefono" value="{{ form.telefono.value|default_if_none:'' }}"
+                           class="form-control {% if form.telefono.errors %}is-invalid{% endif %}">
+                    {% for e in form.telefono.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <!-- 3a fila -->
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Correo</label>
+                    <input type="email" name="email" value="{{ form.email.value|default_if_none:'' }}"
+                           class="form-control {% if form.email.errors %}is-invalid{% endif %}">
+                    {% for e in form.email.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Ciudad</label>
+                    <input type="text" name="ciudad" value="{{ form.ciudad.value|default_if_none:'' }}"
+                           class="form-control {% if form.ciudad.errors %}is-invalid{% endif %}">
+                    {% for e in form.ciudad.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label class="form-label">Dirección</label>
+                    <textarea name="direccion" rows="2"
+                              class="form-control {% if form.direccion.errors %}is-invalid{% endif %}">{{ form.direccion.value|default_if_none:'' }}</textarea>
+                    {% for e in form.direccion.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Guardar</button>
+                <button class="btn btn-outline-secondary" type="reset">Limpiar</button>
+            </div>
+        </form>
+    </div>
+
+    {# Helper para agregar clases a campos del form sin crispy #}
+    {% comment %} En tu proyecto podés usar un filtro "add_class" o usar directamente <select> manual {% endcomment %}
+{% endblock %}
+{% block js %}
+    <script>
+        document.addEventListener('input', (e) => {
+            if (['nombre', 'apellido', 'dni'].includes(e.target.name)) {
+                e.target.value = e.target.value.toUpperCase();
+            }
+        });
+    </script>
+{% endblock %}

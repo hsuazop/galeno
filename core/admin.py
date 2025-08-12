@@ -1,8 +1,5 @@
 from django.contrib import admin
-from .models import (
-    Paciente, Especialidad, Hospital, Medico, Asistente, AgendaMedica,
-    Cita, EvaluacionFisica, Diagnostico, Medicamento, Receta, RecetaMedicamento
-)
+from .models import *
 
 # ------------ Paciente ------------
 @admin.register(Paciente)
@@ -94,3 +91,13 @@ class RecetaAdmin(admin.ModelAdmin):
 class RecetaMedicamentoAdmin(admin.ModelAdmin):
     list_display = ('receta', 'medicamento', 'dosis')
     search_fields = ('medicamento__nombre', 'receta__cita__paciente__nombre')
+
+
+@admin.register(Medico_Paciente)
+class MedicoPacienteAdmin(admin.ModelAdmin):
+    list_display = ('id', 'medico', 'paciente', 'fecha_emision')
+    list_filter = ('medico', 'fecha_emision')
+    search_fields = (
+        'paciente__nombre', 'paciente__apellido', 'paciente__dni',
+        'medico__nombre', 'medico__apellido', 'medico__email'
+    )

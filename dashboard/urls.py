@@ -14,4 +14,17 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('estadisticas/', estadisticas_galeno, name='estadisticas_galeno'),
 
+
+
+
+    path('pacientes/crear/', crear_paciente, name='crear_paciente'),
+
+
+    path('citas/editar/medico/<int:paciente_id>/<int:cita_id>/', editar_cita_medico, name='editar_cita_medico'),
+    path('citas/editar/odontologo/<int:paciente_id>/<int:cita_id>/', editar_cita_odontologo, name='editar_cita_odontologo'),
+    path('citas/editar/psicologo/<int:paciente_id>/<int:cita_id>/', editar_cita_psicologo, name='editar_cita_psicologo'),
+    path('citas/editar/nutricionista/<int:paciente_id>/<int:cita_id>/', editar_cita_nutricionista, name='editar_cita_nutricionista'),
+
+
+
 ]

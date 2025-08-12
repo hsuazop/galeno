@@ -79,10 +79,10 @@
                 <div class="dropdown-menu dropdown-menu-end shadow-lg">
                     <div class="px-3 py-2">
                         <span class="small">Dr. </span>
-                        <h6 class="m-0">{{ request.user.medico.nombre }}</h6>
+                        <h6 class="m-0">{{ request.user.medico.nombre }} {{ request.user.medico.apellido }} {{ request.user.medico.email }} </h6>
                     </div>
                     <div class="mx-3 my-2 d-grid">
-                        <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar Session</a>
+                        <a href="{% url 'dashboard:logout' %}" class="btn btn-danger">Cerrar Session</a>
                     </div>
                 </div>
             </div>
@@ -106,6 +106,7 @@ e
                      alt="Hospital Admin Templates">
                 <div class="m-0">
                     <h5 class="mb-1 profile-name text-nowrap text-truncate">Dr. {{ request.user.medico.nombre }}</h5>
+                    <small>{{ request.user.medico.especialidad.nombre }}</small>
 
                 </div>
             </div>
@@ -116,25 +117,32 @@ e
                 <ul class="sidebar-menu">
 
                     <li class="active current-page">
-                        <a href="{% url 'dashboard_medico' %}">
+                        <a href="{% url 'dashboard:dashboard_medico' %}">
                             <i class="ri-home-smile-2-line"></i>
                             <span class="menu-text">Panel Principal</span>
                         </a>
                     </li>
                     <li class="">
-                         <a href="{% url 'crear_cita_con_paciente' %}">
+                         <a href="{% url 'dashboard:crear_paciente' %}">
+                            <i class="ri-user-add-fill"></i>
+                            <span class="menu-text">Crear Paciente</span>
+                        </a>
+                    </li>
+                    <li class="">
+                         <a href="{% url 'dashboard:crear_cita_con_paciente' %}">
                             <i class="ri-stethoscope-line"></i>
                             <span class="menu-text">Crear Consulta</span>
                         </a>
                     </li>
+
                     <li class="">
-                        <a href="{% url 'ver_citas_medico' %}">
+                        <a href="{% url 'dashboard:ver_citas_medico' %}">
                             <i class="ri-dossier-line"></i>
                             <span class="menu-text">Todas Consultas</span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="{% url 'estadisticas_galeno' %}">
+                        <a href="{% url 'dashboard:estadisticas_galeno' %}">
                             <i class="ri-pie-chart-line"></i>
                             <span class="menu-text">Estadisticas</span>
                         </a>
