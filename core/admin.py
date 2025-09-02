@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from core.models import *
 
 # ------------ Paciente ------------
 @admin.register(Paciente)
@@ -93,7 +93,7 @@ class RecetaMedicamentoAdmin(admin.ModelAdmin):
     search_fields = ('medicamento__nombre', 'receta__cita__paciente__nombre')
 
 
-@admin.register(Medico_Paciente)
+@admin.register(MedicoPaciente)
 class MedicoPacienteAdmin(admin.ModelAdmin):
     list_display = ('id', 'medico', 'paciente', 'fecha_emision')
     list_filter = ('medico', 'fecha_emision')
@@ -101,3 +101,27 @@ class MedicoPacienteAdmin(admin.ModelAdmin):
         'paciente__nombre', 'paciente__apellido', 'paciente__dni',
         'medico__nombre', 'medico__apellido', 'medico__email'
     )
+
+
+@admin.register(Odontograma)
+class OdontogramaAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'paciente',
+        'medico',
+        'cita',
+        'creado_en',
+        'actualizado_en',
+    )
+    list_filter = ('medico', 'creado_en', 'actualizado_en')
+    search_fields = (
+        'paciente__nombre',
+        'paciente__apellido',
+        'paciente__dni',
+        'medico__user__first_name',
+        'medico__user__last_name',
+        'cita__id',
+    )
+    ordering = ('-creado_en',)
+    readonly_fields = ('creado_en', 'actualizado_en')
+

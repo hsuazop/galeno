@@ -1,0 +1,486 @@
+{% extends 'base/dashboard.html' %}
+{% load static %}
+{% block content-body %}
+
+
+    <h5 class="mb-3">Datos del Paciente</h5>
+    <div class="p-4 bg-light rounded border">
+        <div class="row">
+            <div class="col-2 mb-3">
+                {#                    http://localhost:9000/dashboard/citas/editar/odontologo/16/44/#}
+                <img src="{% static "galeno/img/f587a50d-79f4-4ee8-b28e-c18343a4f822.png" %}" class="img-fluid" alt="">
+            </div>
+            <!-- Columna 1 -->
+            <div class="col-md-5 mb-3">
+                <p><strong>Nombre:</strong> {{ paciente.nombre }} {{ paciente.apellido }}</p>
+                <p><strong>DNI:</strong> {{ paciente.dni|default:"No registrado" }}</p>
+                {% if paciente.edad %}
+                    <p><strong>Edad:</strong> {{ paciente.edad }} años</p>
+                {% endif %}
+                {% if paciente.fecha_nacimiento %}
+                    <p><strong>Fecha de nacimiento:</strong> {{ paciente.fecha_nacimiento|date:"d/m/Y" }}</p>
+                {% endif %}
+                <p><strong>Género:</strong> {{ paciente.get_genero_display }}</p>
+            </div>
+
+            <!-- Columna 2 -->
+            <div class="col-md-5 mb-3">
+
+                <p><strong>Teléfono:</strong> {{ paciente.telefono|default:"No registrado" }}</p>
+                <p><strong>Correo electrónico:</strong> {{ paciente.email|default:"No registrado" }}</p>
+                <p><strong>Dirección:</strong> {{ paciente.direccion|default:"No registrada" }}</p>
+            </div>
+        </div>
+
+        <div class="text-muted text-end">
+            <small>Registrado el {{ paciente.fecha_registro|date:"d/m/Y H:i" }}</small>
+        </div>
+    </div>
+    <br>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="custom-tabs-container">
+                        <ul class="nav nav-tabs" id="customTab3" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="tab-oneAA" data-bs-toggle="tab" href="#oneAA" role="tab"
+                                   aria-controls="oneAA" aria-selected="true"><i class="ri-tent-line me-2"></i>
+                                    Historial
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-twoAA" data-bs-toggle="tab" href="#twoAA" role="tab"
+                                   aria-controls="twoAA" aria-selected="false" tabindex="-1"><i
+                                        class="ri-ancient-gate-line me-2"></i>
+                                    Odontograma
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-threeAA" data-bs-toggle="tab" href="#threeAA" role="tab"
+                                   aria-controls="threeAA" aria-selected="false" tabindex="-1"><i
+                                        class="ri-attachment-line me-2"></i>
+                                    RX y Documento
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-threeAA" data-bs-toggle="tab" href="#threeAA" role="tab"
+                                   aria-controls="threeAA" aria-selected="false" tabindex="-1"><i
+                                        class="ri-attachment-line me-2"></i>
+                                    Diagnostico y Tratamiento
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="customTabContent3">
+                            <div class="tab-pane fade show active" id="oneAA" role="tabpanel">
+                                <!-- Row starts -->
+                                <div class="row gx-3">
+                                    <div class="col-12">
+                                        <div class="accordion" id="historialCitas">
+                                            {% for cita in citas %}
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapse{{ forloop.counter }}">
+                                                            Cita del {{ cita.fecha_hora|date:"d/m/Y H:i" }}
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapse{{ forloop.counter }}"
+                                                         class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                                                        <div class="accordion-body">
+                                                            <p><strong>Motivo:</strong> {{ cita.motivo }}</p>
+                                                            <p><strong>Notas:</strong> {{ cita.notas_medico }}</p>
+                                                            {% if cita.evaluacionfisica %}
+                                                                <p>
+                                                                    <strong>Temperatura:</strong> {{ cita.evaluacionfisica.temperatura }}
+                                                                    °C</p>
+                                                                <p>
+                                                                    <strong>Peso:</strong> {{ cita.evaluacionfisica.peso }}
+                                                                    kg</p>
+                                                                <p>
+                                                                    <strong>Estatura:</strong> {{ cita.evaluacionfisica.estatura }}
+                                                                    m</p>
+                                                                <p><strong>Presión
+                                                                    arterial:</strong> {{ cita.evaluacionfisica.presion_arterial }}
+                                                                </p>
+                                                                <p><strong>Frecuencia
+                                                                    cardiaca:</strong> {{ cita.evaluacionfisica.frecuencia_cardiaca }}
+                                                                    bpm
+                                                                </p>
+                                                            {% endif %}
+                                                            {% if cita.diagnostico %}
+                                                                <p>
+                                                                    <strong>Diagnóstico:</strong> {{ cita.diagnostico.descripcion }}
+                                                                </p>
+                                                            {% endif %}
+                                                            {% if cita.receta %}
+                                                                <p><strong>Receta:</strong></p>
+                                                                <ul>
+                                                                    {% for rm in cita.receta.medicamentos.all %}
+                                                                        <li>{{ rm.medicamento.nombre }}
+                                                                            – {{ rm.dosis }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                                <p>
+                                                                    <strong>Recomendaciones:</strong> {{ cita.receta.recomendaciones_generales }}
+                                                                </p>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% empty %}
+                                                <p>No hay citas registradas aún.</p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Row ends -->
+                            </div>
+                            <div class="tab-pane fade" id="twoAA" role="tabpanel">
+
+
+                            </div>
+                            <div class="tab-pane fade" id="threeAA" role="tabpanel">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <h5>Motivo de la Cita</h5>
+                                    <textarea name="motivo" class="form-control mb-2" required></textarea>
+                                    <textarea name="notas_medico" class="form-control mb-2"
+                                              placeholder="Notas médicas (opcional)"></textarea>
+
+
+                                    <h5>Diagnóstico</h5>
+                                    <textarea name="diagnostico" class="form-control mb-2"
+                                              placeholder="Diagnóstico (opcional)"></textarea>
+
+                                    <h5>Receta</h5>
+                                    <textarea name="recomendaciones" class="form-control mb-2"
+                                              placeholder="Recomendaciones generales (opcional)"></textarea>
+
+                                    <div id="medicamentos">
+                                        <div class="row mb-2">
+                                            <div class="col">
+                                                <input name="medicamento[]" class="form-control"
+                                                       placeholder="Medicamento (opcional)">
+                                            </div>
+                                            <div class="col">
+                                                <input name="dosis[]" class="form-control"
+                                                       placeholder="Dosis (opcional)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary mb-3"
+                                                onclick="addMedicamento()">Agregar
+                                            medicamento
+                                        </button>
+
+                                        <button type="submit" class="btn btn-success">Guardar Cita</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {#    probando#}
+
+
+
+    <form id="form-odontograma" method="post">
+        {% csrf_token %}
+        <!-- campo oculto donde se guarda el JSON -->
+        <textarea id="odontograma-json" name="datos" hidden>{{ odontograma.json|default:"" }}</textarea>
+        <button id="btn-odonto-guardar" type="submit">Guardar</button>
+    </form>
+
+    <canvas id="canvas" width="648" height="800" style="border:1px solid #ccc"></canvas>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+    <base href="{% static 'odontograma/' %}">
+    <script src="{% static 'odontograma/js/engine.js' %}"></script>
+{#    <script>#}
+{#        document.addEventListener('DOMContentLoaded', function () {#}
+{#            const canvas = document.getElementById('canvas');#}
+{#            const form = document.getElementById('form-odontograma');#}
+{#            const outField = document.getElementById('odontograma-json');#}
+{##}
+{#            var engine = new Engine();#}
+{#            engine.setCanvas(canvas);#}
+{#            engine.init();#}
+{##}
+{#            // Eventos normales#}
+{#            canvas.addEventListener('mousedown', (e) => engine.onMouseClick(e));#}
+{#            canvas.addEventListener('mousemove', (e) => engine.onMouseMove(e));#}
+{#            window.addEventListener('keydown', (e) => engine.onButtonClick(e));#}
+{##}
+{#            // ===============================#}
+{#            // 👇 Precarga desde la vista#}
+{#            // ===============================#}
+{#            // Tu vista ya pasa odontograma_json_str como JSON válido#}
+{#            const initialData = {{ odontograma_json_str|safe }};#}
+{##}
+{#            if (Array.isArray(initialData) && initialData.length) {#}
+{#                let ok = 0, fail = 0;#}
+{##}
+{#                initialData.forEach(item => {#}
+{#                    const tooth = Number(item.tooth);#}
+{#                    const damage = Number(item.damage);#}
+{#                    const surface = (item.surface === undefined || item.surface === null || item.surface === "")#}
+{#                        ? 0#}
+{#                        : item.surface;#}
+{##}
+{#                    try {#}
+{#                        engine.setDamage(tooth, damage, surface);#}
+{#                        ok++;#}
+{#                    } catch (err) {#}
+{#                        console.warn("No se pudo aplicar daño:", item, err);#}
+{#                        fail++;#}
+{#                    }#}
+{#                });#}
+{##}
+{#                if (typeof engine.update === 'function') engine.update();#}
+{#                console.log(`Precarga terminada. OK=${ok}, Fallidos=${fail}`);#}
+{#            }#}
+{##}
+{#            // ===============================#}
+{#            // Guardar en el textarea antes del submit#}
+{#            // ===============================#}
+{#            function exportJSON() {#}
+{#                const payload = engine?.getData?.() ?? [];#}
+{#                if (outField) outField.value = JSON.stringify(payload);#}
+{#                return payload;#}
+{#            }#}
+{##}
+{#            form.addEventListener('submit', () => exportJSON());#}
+{#        });#}
+{#    </script>#}
+<script defer>
+window.addEventListener('DOMContentLoaded', () => {
+  // --- referencias DOM
+  const canvas   = document.getElementById('canvas');
+  const form     = document.getElementById('form-odontograma');
+  const outField = document.getElementById('odontograma-json');
+  const btnDump  = document.getElementById('btn-dump');
+
+  if (!canvas) { console.error('No se encontró #canvas'); return; }
+
+  // --- crear e inicializar engine ANTES de usarlo
+  const engine = new Engine();
+  engine.setCanvas(canvas);
+  engine.init();
+
+  // listeners opcionales
+  canvas.addEventListener('mousedown',  e => engine.onMouseClick?.(e));
+  canvas.addEventListener('mousemove',  e => engine.onMouseMove?.(e));
+  window.addEventListener('keydown',    e => engine.onButtonClick?.(e));
+
+  // util: de "14_M" -> "M"; de "0" -> 0
+  const getSurfaceCode = (s) => {
+    if (s === undefined || s === null || s === '' || s === 0 || s === '0') return 0;
+    const parts = String(s).split('_');
+    return parts.length === 2 ? parts[1] : String(s);
+  };
+
+  // intentar vista adulto por si aplica
+  try { engine.changeView?.(0); } catch {}
+  try { engine.changeView?.('adult'); } catch {}
+
+  // --- PRECARGA: viene de la vista como array literal
+  const initialData = {{ odontograma_json_str|default:"[]"|safe }};
+
+  if (Array.isArray(initialData) && initialData.length) {
+    let ok = 0, fail = 0;
+    initialData.forEach(item => {
+      const tooth   = Number(item.tooth);
+      const damage  = Number(item.damage);
+      const surface = getSurfaceCode(item.surface);
+      try {
+        // firma que funcionó en tus pruebas
+        engine.setDamage(tooth, damage, surface);
+        ok++;
+        console.log(`✔ setDamage(${tooth}, ${damage}, ${surface})`);
+      } catch (err) {
+        console.warn('✖ No se pudo aplicar daño:', { tooth, damage, surface, raw: item }, err);
+        fail++;
+      }
+    });
+    // repintar
+    try { engine.update?.(); } catch {}
+    try { engine.render?.(); } catch {}
+    try { engine.draw?.(); } catch {}
+    console.log(`Precarga terminada. OK=${ok}, Fallidos=${fail}`);
+  }
+
+  // --- GUARDAR: antes del submit mete el JSON en el textarea
+  function exportJSON() {
+    const payload = engine?.getData?.() ?? [];
+    if (outField) outField.value = JSON.stringify(payload);
+    console.log('JSON listo para POST:', outField?.value);
+    return payload;
+  }
+  form?.addEventListener('submit', () => exportJSON());
+
+  // --- botón de prueba
+  btnDump?.addEventListener('click', () => {
+    const payload = engine?.getData?.() ?? [];
+    console.log('----- ODONTOGRAMA DUMP -----');
+    console.log('Objeto JS:', payload);
+    try { console.log('JSON string:', JSON.stringify(payload)); } catch (e) {}
+  });
+});
+</script>
+
+<script>
+  // === utilidades de superficie ===
+  function extractSurfaceToken(s) {
+    // "0" => 0 (pieza completa)
+    if (s === undefined || s === null || s === '' || s === 0 || s === '0') return 0;
+    const parts = String(s).split('_');
+    return parts.length === 2 ? parts[1] : String(s);  // "14_M" => "M", "M" => "M"
+  }
+
+  function buildSurfaceCandidates(letter, constants) {
+    // Mapeo común por si el engine usa índices
+    const defaultIndexMap = { M: 1, D: 2, V: 3, L: 4, O: 5, P: 6 };
+
+    // Si hay constantes en el engine, intenta aprovecharlas
+    const byConstants = [];
+    if (constants) {
+      // Busca propiedades tipo SURFACE_* o mapas conocidos
+      Object.keys(constants).forEach(k => {
+        if (k.toUpperCase().includes(letter)) byConstants.push(constants[k]);
+      });
+      // Mapas típicos
+      if (constants.SURFACES && constants.SURFACES[letter] != null) {
+        byConstants.push(constants.SURFACES[letter]);
+      }
+      if (constants.SURFACE && constants.SURFACE[letter] != null) {
+        byConstants.push(constants.SURFACE[letter]);
+      }
+      if (constants.Surface && constants.Surface[letter] != null) {
+        byConstants.push(constants.Surface[letter]);
+      }
+    }
+
+    // Candidatos en orden de prueba:
+    const names = {
+      M: ['M', 'MESIAL'],
+      D: ['D', 'DISTAL'],
+      V: ['V', 'VESTIBULAR', 'BUCAL', 'FACIAL'],
+      L: ['L', 'LINGUAL'],         // en superiores algunos engines usan P=PALATINA
+      O: ['O', 'OCLUSAL'],
+      P: ['P', 'PALATINA'],
+    };
+
+    const candidates = [];
+
+    // 1) Lo que venga de constants
+    candidates.push(...byConstants);
+
+    // 2) Letra tal cual y nombres largos
+    (names[letter] || [letter]).forEach(v => candidates.push(v));
+
+    // 3) Índice por defecto
+    if (defaultIndexMap[letter] != null) candidates.push(defaultIndexMap[letter]);
+
+    // Quitar undefined/duplicados conservando orden
+    const seen = new Set(); const out = [];
+    for (const c of candidates) {
+      if (c === undefined || c === null || c === '') continue;
+      const key = typeof c + '|' + String(c);
+      if (!seen.has(key)) { seen.add(key); out.push(c); }
+    }
+    return out;
+  }
+
+  function applyOneMark(engine, tooth, damage, surfaceRaw) {
+    const letter = extractSurfaceToken(surfaceRaw);
+    if (letter === 0) {
+      // Pieza completa
+      engine.setDamage(tooth, damage, 0);
+      console.log(`✔ setDamage(${tooth}, ${damage}, 0) [pieza completa]`);
+      return true;
+    }
+
+    const constants = engine?.constants || null;
+    const tries = buildSurfaceCandidates(letter, constants);
+
+    // Probar varias variantes hasta que no lance error
+    for (const surface of tries) {
+      try {
+        engine.setDamage(tooth, damage, surface);
+        console.log(`✔ setDamage(${tooth}, ${damage}, ${JSON.stringify(surface)}) [surface variante aceptada]`);
+        return true;
+      } catch (e) {
+        // sigue probando
+      }
+    }
+
+    // Intento fallback: L ↔ P (palatina vs lingual), por si el motor usa la otra convención
+    if (letter === 'L') {
+      try { engine.setDamage(tooth, damage, 'P'); console.log(`✔ setDamage(${tooth}, ${damage}, "P") [fallback L→P]`); return true; } catch {}
+      try { engine.setDamage(tooth, damage, 6);   console.log(`✔ setDamage(${tooth}, ${damage}, 6) [fallback L→idx]`); return true; } catch {}
+    }
+    if (letter === 'P') {
+      try { engine.setDamage(tooth, damage, 'L'); console.log(`✔ setDamage(${tooth}, ${damage}, "L") [fallback P→L]`); return true; } catch {}
+      try { engine.setDamage(tooth, damage, 4);   console.log(`✔ setDamage(${tooth}, ${damage}, 4) [fallback P→idx]`); return true; } catch {}
+    }
+
+    console.warn('✖ Ninguna variante aceptada para superficie', { tooth, damage, letter, surfaceRaw, tried: tries });
+    return false;
+  }
+
+  // ======== PRE-CARGA (reemplaza tu forEach anterior por este) ========
+  (function precarga() {
+    const initialData = {{ odontograma_json_str|default:"[]"|safe }};
+    if (!Array.isArray(initialData) || !initialData.length) return;
+
+    let ok = 0, fail = 0;
+    for (const item of initialData) {
+      const tooth = Number(item.tooth);
+      const damage = Number(item.damage);
+      const applied = applyOneMark(engine, tooth, damage, item.surface);
+      applied ? ok++ : fail++;
+    }
+
+    // repintado
+    try { engine.update?.(); } catch {}
+    try { engine.render?.(); } catch {}
+    try { engine.draw?.(); } catch {}
+    console.log(`Precarga terminada. OK=${ok}, Fallidos=${fail}`);
+  })();
+</script>
+
+
+{% endblock %}

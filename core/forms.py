@@ -44,3 +44,15 @@ class PacienteCreateForm(forms.ModelForm):
         v = (self.cleaned_data.get('email') or '').strip()
         # El email es opcional; si viene, Django valida formato por EmailField
         return v or None
+
+
+from .models import Odontograma
+
+class OdontogramaForm(forms.ModelForm):
+    class Meta:
+        model = Odontograma
+        fields = ['datos']
+        widgets = {
+            # El engine escribirá aquí el JSON antes del submit
+            'datos': forms.Textarea(attrs={'id': 'odontograma-json', 'hidden': True}),
+        }

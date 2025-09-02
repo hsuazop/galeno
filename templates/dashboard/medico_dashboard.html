@@ -1,14 +1,30 @@
 {% extends 'base/dashboard.html' %}
 {% load static %}
 {% block content-body %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert
+                  {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}
+                  alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <!-- Row starts -->
     <div class="row gx-3">
         <div class="col-xxl-6 col-sm-12">
-            <div class="card mb-3 bg-3">
+            <div class="card mb-3   {% if request.user.medico.especialidad.nombre|lower == 'medico' %}bg-3
+                {% elif request.user.medico.especialidad.nombre|lower == 'odontologo' %}bg-4
+                {% elif request.user.medico.especialidad.nombre|lower == 'psicologo' %}bg-2
+                {% elif request.user.medico.especialidad.nombre|lower == 'nutricionista' %}bg-2
+                {% else %}bg-2{% endif %}">
                 <div class="card-body">
-                    <div class="mh-230" style="min-height: 170px">
+                    <div class="mh-230" style="min-height: 140px">
                         <div class=" text-white">
-                            <h6>Buenas,</h6>
+                            <h6>{{ request.user.medico.especialidad.nombre }}</h6>
                             <h2>Dr. {{ request.user.medico.nombre }} {{ request.user.medico.apellido }}</h2>
 
                             <div class="mt-4 d-flex gap-3">
@@ -59,43 +75,53 @@
                         <div class="table-responsive">
                             <table class="table truncate align-middle myTable">
                                 <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>imagen</th>
-                                        <th>DNI</th>
-                                        <th>Nombre</th>
-                                        <th>Apellido</th>
-                                        <th>Correo</th>
-                                        <th>Actions</th>
-                                    </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>imagen</th>
+                                    <th>DNI</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Correo</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                {% for paciente in pacientes %}
+                                {% for mp in pacientes %}
                                     <tr>
                                         <td>{{ forloop.counter }}</td>
                                         <td>
-                                            {% if paciente.genero == "M" %}
-                                                 <img src="{% static 'galeno/img/user4.png' %}" alt="Mujer" width="40">
-                                            {% elif paciente.genero == "F" %}
+                                            {% if mp.paciente.genero == "M" %}
+                                                <img src="{% static 'galeno/img/user4.png' %}" alt="Mujer" width="40">
+                                            {% elif mp.paciente.genero == "F" %}
                                                 <img src="{% static 'galeno/img/user2.png' %}" alt="Mujer" width="40">
                                             {% else %}
                                                 <img src="{% static 'img/default.png' %}" alt="Otro" width="40">
                                             {% endif %}
                                         </td>
 
-                                        <td>{{ paciente.dni }}</td>
-                                        <td>{{ paciente.nombre }}</td>
-                                        <td>{{ paciente.apellido }}</td>
-                                        <td>{{ paciente.email }}</td>
+                                        <td>{{ mp.paciente.dni }}</td>
+                                        <td>{{ mp.paciente.nombre }}</td>
+                                        <td>{{ mp.paciente.apellido }}</td>
+                                        <td>{{ mp.paciente.email }}</td>
                                         <td>
-                                            <a href="{% url 'dashboard:ver_historial_paciente' paciente.id %}" class="btn btn-sm btn-info">Ver historial</a>
-                                            <a href="{% url 'dashboard:crear_cita' paciente.id %}" class="btn btn-sm btn-success">Crear Consulta</a>
+                                            <a href="{% url 'dashboard:ver_historial_paciente' mp.paciente.id %}"
+                                               class="btn btn-sm btn-info">Historial</a>
+
                                         </td>
+                                    <td>
+                                         <form action="{% url 'dashboard:crear_cita_borrador' mp.paciente.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Crear cita
+                                                </button>
+                                            </form>
+                                    </td>
                                     </tr>
                                 {% empty %}
-{#                                   <tr>#}
-{#                                        <td colspan="7" class="text-center">No hay citas registradas.</td>#}
-{#                                    </tr>#}
+                                    {#                                   <tr>#}
+                                    {#                                        <td colspan="7" class="text-center">No hay citas registradas.</td>#}
+                                    {#                                    </tr>#}
                                 {% endfor %}
                                 </tbody>
                             </table>

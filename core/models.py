@@ -109,6 +109,7 @@ class Cita(models.Model):
 
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    odontograma = models.JSONField(null=True, blank=True)
     fecha_hora = models.DateTimeField(auto_now_add=True)
     motivo = models.TextField(blank=True)  # vacío al crear
     notas_medico = models.TextField(blank=True)
@@ -203,7 +204,28 @@ class RecetaMedicamento(models.Model):
         return f"{self.medicamento} - {self.dosis}"
 
 
-class Medico_Paciente(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+class MedicoPaciente(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='medicos_asignados')
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='pacientes_asignados')
     fecha_emision = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Asignación Médico-Paciente'
+        verbose_name_plural = 'Asignaciones Médico-Paciente'
+        unique_together = ('paciente', 'medico')  # evita duplicados
+
+    def __str__(self):
+        return f"{self.medico} → {self.paciente}"
+
+
+class Odontograma(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='odontogramas')
+    medico = models.ForeignKey(Medico, on_delete=models.SET_NULL, null=True, blank=True, related_name='odontogramas')
+    cita = models.ForeignKey(Cita, on_delete=models.CASCADE, related_name='odontogramas')
+    datos = models.JSONField(default=list)  # <- aquí guardamos el array del engine.getData()
+
+    creado_en = models.DateTimeField(auto_now_add=True)
+    actualizado_en = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Odontograma de {self.paciente}"

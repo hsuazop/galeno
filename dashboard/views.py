@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import logout
@@ -10,40 +11,48 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from datetime import date
 from core.forms import PacienteCreateForm
+from core.forms import OdontogramaForm
+
 
 def calcular_edad(fecha_nacimiento):
     if not fecha_nacimiento:
         return None
     today = date.today()
     return today.year - fecha_nacimiento.year - (
-        (today.month, today.day) < (fecha_nacimiento.month, fecha_nacimiento.day)
+            (today.month, today.day) < (fecha_nacimiento.month, fecha_nacimiento.day)
     )
+
 
 # Create your views here.
 def login(request):
     return render(request, "dashboard/login.html", {})
 
+
 @login_required
 def dashboard_paciente(request):
     return render(request, 'paciente_dashboard.html')
 
+
 @login_required
 def dashboard_medico(request):
     medico = request.user.medico  # gracias al related_name='medico'
-    pacientes = Paciente.objects.filter(cita__medico=request.user.medico).distinct()
-    # Total de pacientes registrados (con al menos una cita con este médico)
-    total_pacientes = Paciente.objects.filter(cita__medico=request.user.medico).distinct().count()
+
+    pacientes_relaciones = MedicoPaciente.objects.filter(medico=medico)
+
+    # Total de pacientes asignados
+    total_pacientes = pacientes_relaciones.count()
 
     # Total de citas asignadas a este médico
     total_citas = Cita.objects.filter(medico=request.user.medico).count()
 
+    return render(request, 'dashboard/medico_dashboard.html', {'total_pacientes': total_pacientes,
+                                                               'total_citas': total_citas, 'pacientes': pacientes_relaciones})
 
-    return render(request, 'dashboard/medico_dashboard.html', { 'total_pacientes': total_pacientes,
-        'total_citas': total_citas, 'pacientes': pacientes})
 
 @login_required
 def dashboard_asistente(request):
     return render(request, 'asistente_dashboard.html')
+
 
 def ver_historial_paciente(request, paciente_id):
     paciente = get_object_or_404(Paciente, id=paciente_id)
@@ -57,179 +66,127 @@ def ver_historial_paciente(request, paciente_id):
     })
 
 
-def crear_cita_paciente(request, paciente_id):
-    paciente = get_object_or_404(Paciente, id=paciente_id)
-    medico = request.user.medico  # Asegúrate que Medico esté vinculado al user
-
-    if request.method == 'POST':
-        motivo = request.POST.get('motivo', '').strip()
-
-        if not motivo:
-            messages.error(request, "El motivo de la cita es obligatorio.")
-            return redirect(request.path)
-
-        with transaction.atomic():
-            cita = Cita.objects.create(
-                paciente=paciente,
-                medico=medico,
-                fecha_hora=timezone.now(),
-                motivo=motivo,
-                notas_medico=request.POST.get('notas_medico', '').strip(),
-                estado='Completada'
-            )
-
-            # Evaluación física (solo si algún campo tiene valor)
-            if any([
-                request.POST.get('temperatura'),
-                request.POST.get('peso'),
-                request.POST.get('estatura'),
-                request.POST.get('presion_arterial'),
-                request.POST.get('frecuencia_cardiaca')
-            ]):
-                EvaluacionFisica.objects.create(
-                    cita=cita,
-                    temperatura=request.POST.get('temperatura', '').strip(),
-                    peso=request.POST.get('peso', '').strip(),
-                    estatura=request.POST.get('estatura', '').strip(),
-                    presion_arterial=request.POST.get('presion_arterial', '').strip(),
-                    frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', '').strip()
-                )
-
-            # Diagnóstico (opcional)
-            descripcion = request.POST.get('diagnostico', '').strip()
-            if descripcion:
-                Diagnostico.objects.create(
-                    cita=cita,
-                    descripcion=descripcion
-                )
-
-            # Receta y medicamentos (opcional)
-            medicamentos = request.POST.getlist('medicamento[]')
-            dosis_list = request.POST.getlist('dosis[]')
-            recomendaciones = request.POST.get('recomendaciones', '').strip()
-
-            if any(m.strip() for m in medicamentos):
-                receta = Receta.objects.create(
-                    cita=cita,
-                    recomendaciones_generales=recomendaciones
-                )
-                for nombre, dosis in zip(medicamentos, dosis_list):
-                    nombre = nombre.strip()
-                    dosis = dosis.strip()
-                    if nombre:
-                        RecetaMedicamento.objects.create(
-                            receta=receta,
-                            medicamento=nombre,  # CharField, ya no es FK
-                            dosis=dosis
-                        )
-
-        messages.success(
-            request,
-            f"Cita registrada para {paciente.nombre} {paciente.apellido} el {cita.fecha_hora.strftime('%d/%m/%Y a las %I:%M %p')}."
-        )
-        return redirect('ver_historial_paciente', paciente_id=paciente.id)
-
-    # Mostrar últimas citas
-    # citas = Cita.objects.filter(paciente=paciente).order_by('-fecha_hora')[:3]
-    return render(request, 'dashboard/consulta_paciente.html', {'paciente': paciente})
+# def crear_cita_paciente(request, paciente_id):
+#     paciente = get_object_or_404(Paciente, id=paciente_id)
+#     medico = request.user.medico  # Asegúrate que Medico esté vinculado al user
+#
+#     if request.method == 'POST':
+#         cita = Cita.objects.create(
+#             paciente=paciente,
+#             medico=medico,
+#             estado='Borrador'
+#         )
+#
+#         # 🔹 Mantengo EXACTO tu bloque de redirect por especialidad
+#         especialidad_nombre = (medico.especialidad.nombre if medico.especialidad else '').strip().lower()
+#
+#         if especialidad_nombre == 'medico':
+#             return redirect('dashboard:editar_cita_medico', paciente_id=paciente.id, cita_id=cita.id)
+#         elif especialidad_nombre == 'odontologo':
+#             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
+#         elif especialidad_nombre == 'psicologo':
+#             return redirect('dashboard:editar_cita_psicologo', paciente_id=paciente.id, cita_id=cita.id)
+#         elif especialidad_nombre == 'nutricionista':
+#             return redirect('dashboard:editar_cita_nutricionista', paciente_id=paciente.id, cita_id=cita.id)
+#         else:
+#             return redirect('dashboard:editar_cita', paciente_id=paciente.id, cita_id=cita.id)
 
 
-
-def crear_cita_con_paciente(request):
-    medico = request.user.medico  # Asegúrate que sea un médico autenticado
-
-    if request.method == 'POST':
-        dni = request.POST['dni'].strip()
-        email = request.POST['email'].strip()
-
-        with transaction.atomic():
-            # Verificar si el paciente ya existe
-            paciente = Paciente.objects.filter(dni=dni).first()
-            if not paciente:
-                # Crear usuario
-                username = email if email else dni
-                user = User.objects.create_user(
-                    username=username,
-                    email=email,
-                    first_name=request.POST['nombre'].strip(),
-                    last_name=request.POST['apellido'].strip()
-                )
-
-                # Crear paciente
-                paciente = Paciente.objects.create(
-                    user=user,
-                    nombre=request.POST['nombre'].strip(),
-                    apellido=request.POST['apellido'].strip(),
-                    fecha_nacimiento=request.POST.get('fecha_nacimiento'),
-                    genero=request.POST.get('genero'),
-                    dni=dni,
-                    telefono=request.POST.get('telefono', '').strip(),
-                    direccion=request.POST.get('direccion', '').strip(),
-                    email=email
-                )
-
-            # Crear cita
-            cita = Cita.objects.create(
-                paciente=paciente,
-                medico=medico,
-                fecha_hora=timezone.now(),
-                motivo=request.POST.get('motivo', '').strip(),
-                notas_medico=request.POST.get('notas_medico', '').strip(),
-                estado='Completada'
-            )
-
-            # Evaluación física (solo si se ingresó algo)
-            if any([
-                request.POST.get('temperatura'),
-                request.POST.get('peso'),
-                request.POST.get('estatura'),
-                request.POST.get('presion_arterial'),
-                request.POST.get('frecuencia_cardiaca')
-            ]):
-                EvaluacionFisica.objects.create(
-                    cita=cita,
-                    temperatura=request.POST.get('temperatura', '').strip(),
-                    peso=request.POST.get('peso', '').strip(),
-                    estatura=request.POST.get('estatura', '').strip(),
-                    presion_arterial=request.POST.get('presion_arterial', '').strip(),
-                    frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', '').strip()
-                )
-
-            # Diagnóstico (si se ingresó)
-            diagnostico_texto = request.POST.get('diagnostico', '').strip()
-            if diagnostico_texto:
-                Diagnostico.objects.create(
-                    cita=cita,
-                    descripcion=diagnostico_texto
-                )
-
-            # Receta y medicamentos
-            medicamentos = request.POST.getlist('medicamento')
-            dosis_list = request.POST.getlist('dosis')
-            recomendaciones = request.POST.get('recomendaciones', '').strip()
-
-            if any(nombre.strip() for nombre in medicamentos):
-                receta = Receta.objects.create(
-                    cita=cita,
-                    recomendaciones_generales=recomendaciones
-                )
-                for nombre, dosis in zip(medicamentos, dosis_list):
-                    nombre = nombre.strip()
-                    dosis = dosis.strip()
-                    if nombre:
-                        RecetaMedicamento.objects.create(
-                            receta=receta,
-                            medicamento=nombre,
-                            dosis=dosis
-                        )
-
-        messages.success(
-            request,
-            f"Cita registrada para {paciente.nombre} {paciente.apellido} el {cita.fecha_hora.strftime('%d/%m/%Y a las %I:%M %p')}."
-        )
-        return redirect('ver_historial_paciente', paciente_id=paciente.id)
-
-    return render(request, 'dashboard/crear_cita_con_paciente.html')
+# def crear_cita_con_paciente(request):
+#     medico = request.user.medico  # Asegúrate que sea un médico autenticado
+#
+#     if request.method == 'POST':
+#         dni = request.POST['dni'].strip()
+#         email = request.POST['email'].strip()
+#
+#         with transaction.atomic():
+#             # Verificar si el paciente ya existe
+#             paciente = Paciente.objects.filter(dni=dni).first()
+#             if not paciente:
+#                 # Crear usuario
+#                 username = email if email else dni
+#                 user = User.objects.create_user(
+#                     username=username,
+#                     email=email,
+#                     first_name=request.POST['nombre'].strip(),
+#                     last_name=request.POST['apellido'].strip()
+#                 )
+#
+#                 # Crear paciente
+#                 paciente = Paciente.objects.create(
+#                     user=user,
+#                     nombre=request.POST['nombre'].strip(),
+#                     apellido=request.POST['apellido'].strip(),
+#                     fecha_nacimiento=request.POST.get('fecha_nacimiento'),
+#                     genero=request.POST.get('genero'),
+#                     dni=dni,
+#                     telefono=request.POST.get('telefono', '').strip(),
+#                     direccion=request.POST.get('direccion', '').strip(),
+#                     email=email
+#                 )
+#
+#             # Crear cita
+#             cita = Cita.objects.create(
+#                 paciente=paciente,
+#                 medico=medico,
+#                 fecha_hora=timezone.now(),
+#                 motivo=request.POST.get('motivo', '').strip(),
+#                 notas_medico=request.POST.get('notas_medico', '').strip(),
+#                 estado='Completada'
+#             )
+#
+#             # Evaluación física (solo si se ingresó algo)
+#             if any([
+#                 request.POST.get('temperatura'),
+#                 request.POST.get('peso'),
+#                 request.POST.get('estatura'),
+#                 request.POST.get('presion_arterial'),
+#                 request.POST.get('frecuencia_cardiaca')
+#             ]):
+#                 EvaluacionFisica.objects.create(
+#                     cita=cita,
+#                     temperatura=request.POST.get('temperatura', '').strip(),
+#                     peso=request.POST.get('peso', '').strip(),
+#                     estatura=request.POST.get('estatura', '').strip(),
+#                     presion_arterial=request.POST.get('presion_arterial', '').strip(),
+#                     frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', '').strip()
+#                 )
+#
+#             # Diagnóstico (si se ingresó)
+#             diagnostico_texto = request.POST.get('diagnostico', '').strip()
+#             if diagnostico_texto:
+#                 Diagnostico.objects.create(
+#                     cita=cita,
+#                     descripcion=diagnostico_texto
+#                 )
+#
+#             # Receta y medicamentos
+#             medicamentos = request.POST.getlist('medicamento')
+#             dosis_list = request.POST.getlist('dosis')
+#             recomendaciones = request.POST.get('recomendaciones', '').strip()
+#
+#             if any(nombre.strip() for nombre in medicamentos):
+#                 receta = Receta.objects.create(
+#                     cita=cita,
+#                     recomendaciones_generales=recomendaciones
+#                 )
+#                 for nombre, dosis in zip(medicamentos, dosis_list):
+#                     nombre = nombre.strip()
+#                     dosis = dosis.strip()
+#                     if nombre:
+#                         RecetaMedicamento.objects.create(
+#                             receta=receta,
+#                             medicamento=nombre,
+#                             dosis=dosis
+#                         )
+#
+#         messages.success(
+#             request,
+#             f"Cita registrada para {paciente.nombre} {paciente.apellido} el {cita.fecha_hora.strftime('%d/%m/%Y a las %I:%M %p')}."
+#         )
+#         return redirect('ver_historial_paciente', paciente_id=paciente.id)
+#
+#     return render(request, 'dashboard/crear_cita_con_paciente.html')
 
 
 @login_required
@@ -264,6 +221,8 @@ def logout_view(request):
 
 
 from django.db.models import Count
+
+
 def estadisticas_galeno(request):
     # Totales
     total_pacientes = Paciente.objects.count()
@@ -304,6 +263,8 @@ def estadisticas_galeno(request):
 
 
 from django.urls import reverse
+from django.db import transaction, IntegrityError
+
 
 @login_required
 @transaction.atomic
@@ -314,15 +275,28 @@ def crear_paciente(request):
         form = PacienteCreateForm(request.POST)
         if form.is_valid():
             dni = form.cleaned_data['dni'].strip()
-            email = (form.cleaned_data.get('email') or '').lower() or ''
+            email = (form.cleaned_data.get('email') or '').lower()
 
-            # 1) Reutilizar paciente por DNI dentro del médico logueado
             paciente = Paciente.objects.filter(dni=dni).first()
             created_user = False
             temp_password = None
 
-            if not paciente:
-                # 2) Reutilizar o crear User con username = DNI
+            if paciente:
+                # Si ya existe el paciente, solo aseguro la relación con el médico
+                try:
+                    _, rel_creada = MedicoPaciente.objects.get_or_create(
+                        medico=medico, paciente=paciente
+                    )
+                    if rel_creada:
+                        messages.success(request, f'Paciente existente asignado al médico.')
+                    else:
+                        messages.info(request, f'El paciente (DNI {dni}) ya estaba asignado a este médico.')
+                except IntegrityError:
+                    # Carrera: relación ya creada por otra transacción
+                    pass
+
+            else:
+                # Crear User si no existe
                 user = User.objects.filter(username=dni).first()
                 if not user:
                     temp_password = User.objects.make_random_password()
@@ -335,11 +309,16 @@ def crear_paciente(request):
                     )
                     created_user = True
 
-                # 3) Crear Paciente ligado al médico logueado
+                # Crear Paciente
                 paciente = form.save(commit=False)
                 paciente.user = user
-                paciente.medico = medico
                 paciente.save()
+
+                # Crear relación MedicoPaciente (idempotente)
+                try:
+                    MedicoPaciente.objects.get_or_create(medico=medico, paciente=paciente)
+                except IntegrityError:
+                    pass
 
                 if created_user:
                     messages.success(
@@ -348,29 +327,15 @@ def crear_paciente(request):
                     )
                 else:
                     messages.info(request, f'Paciente creado usando usuario existente (DNI {dni}).')
-            else:
-                messages.info(request, f'Paciente existente reutilizado (DNI {dni}).')
 
-            # 4) Crear SIEMPRE una Cita en estado Borrador
+            # Crear SIEMPRE una cita en borrador
             cita = Cita.objects.create(
                 paciente=paciente,
                 medico=medico,
                 estado='Borrador'
             )
 
-            # # 5) Redirección según especialidad (incluye paciente y cita en la URL)
-            # especialidad_nombre = (medico.especialidad.nombre if medico.especialidad else '').strip().lower()
-            # route_by_spec = {
-            #     'medico': 'editar_cita_medico',
-            #     'odontologo': 'editar_cita_odontologo',
-            #     'psicologo': 'editar_cita_psicologo',
-            #     'nutricionista': 'editar_cita_nutricionista',
-            # }
-            # url_name = route_by_spec.get(especialidad_nombre, 'editar_cita')  # fallback
-            #
-            # return redirect(url_name, paciente_id=paciente.id, cita_id=cita.id)
-
-            # 5) Redirección por especialidad (usando kwargs en el path)
+            # 🔹 Mantengo EXACTO tu bloque de redirect por especialidad
             especialidad_nombre = (medico.especialidad.nombre if medico.especialidad else '').strip().lower()
 
             if especialidad_nombre == 'medico':
@@ -382,7 +347,6 @@ def crear_paciente(request):
             elif especialidad_nombre == 'nutricionista':
                 return redirect('dashboard:editar_cita_nutricionista', paciente_id=paciente.id, cita_id=cita.id)
             else:
-                # Fallback genérico
                 return redirect('dashboard:editar_cita', paciente_id=paciente.id, cita_id=cita.id)
 
     else:
@@ -470,79 +434,54 @@ def editar_cita_medico(request, paciente_id, cita_id):
 
 def editar_cita_odontologo(request, paciente_id, cita_id):
     paciente = get_object_or_404(Paciente, id=paciente_id)
-    medico = request.user.medico  # Asegúrate que Medico esté vinculado al user
+    cita = get_object_or_404(Cita, id=cita_id, paciente=paciente)
+    medico = getattr(request.user, 'medico', None)
+
+    # Para la lista que ya mostrabas
+    citas = Cita.objects.filter(paciente=paciente, medico=medico).order_by('-fecha_hora')
+
+    # Tomar el odontograma de ESA cita (si existe)
+    instance = Odontograma.objects.filter(paciente=paciente, cita=cita).order_by('-id').first()
 
     if request.method == 'POST':
-        motivo = request.POST.get('motivo', '').strip()
+        form = OdontogramaForm(request.POST, instance=instance)
+        if form.is_valid():
+            od = form.save(commit=False)
+            od.paciente = paciente
+            od.medico = medico
+            od.cita = cita
 
-        if not motivo:
-            messages.error(request, "El motivo de la cita es obligatorio.")
-            return redirect(request.path)
+            # Si llega como string (por Textarea) normalizamos a lista
+            if isinstance(od.datos, str):
+                try:
+                    od.datos = json.loads(od.datos)
+                except Exception:
+                    od.datos = []
 
-        with transaction.atomic():
-            cita = Cita.objects.create(
-                paciente=paciente,
-                medico=medico,
-                fecha_hora=timezone.now(),
-                motivo=motivo,
-                notas_medico=request.POST.get('notas_medico', '').strip(),
-                estado='Completada'
-            )
+            od.save()
+            messages.success(request, "✅ Odontograma guardado correctamente.")
+            return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
+        else:
+            messages.error(request, "❌ Revisa el formulario.")
+    else:
+        form = OdontogramaForm(instance=instance)
 
-            # Evaluación física (solo si algún campo tiene valor)
-            if any([
-                request.POST.get('temperatura'),
-                request.POST.get('peso'),
-                request.POST.get('estatura'),
-                request.POST.get('presion_arterial'),
-                request.POST.get('frecuencia_cardiaca')
-            ]):
-                EvaluacionFisica.objects.create(
-                    cita=cita,
-                    temperatura=request.POST.get('temperatura', '').strip(),
-                    peso=request.POST.get('peso', '').strip(),
-                    estatura=request.POST.get('estatura', '').strip(),
-                    presion_arterial=request.POST.get('presion_arterial', '').strip(),
-                    frecuencia_cardiaca=request.POST.get('frecuencia_cardiaca', '').strip()
-                )
+    # JSON existente para precargar en el engine (array literal en JS)
+    initial_data = instance.datos if instance else []
+    odontograma_json_str = json.dumps(initial_data)
+    print(odontograma_json_str)
 
-            # Diagnóstico (opcional)
-            descripcion = request.POST.get('diagnostico', '').strip()
-            if descripcion:
-                Diagnostico.objects.create(
-                    cita=cita,
-                    descripcion=descripcion
-                )
-
-            # Receta y medicamentos (opcional)
-            medicamentos = request.POST.getlist('medicamento[]')
-            dosis_list = request.POST.getlist('dosis[]')
-            recomendaciones = request.POST.get('recomendaciones', '').strip()
-
-            if any(m.strip() for m in medicamentos):
-                receta = Receta.objects.create(
-                    cita=cita,
-                    recomendaciones_generales=recomendaciones
-                )
-                for nombre, dosis in zip(medicamentos, dosis_list):
-                    nombre = nombre.strip()
-                    dosis = dosis.strip()
-                    if nombre:
-                        RecetaMedicamento.objects.create(
-                            receta=receta,
-                            medicamento=nombre,  # CharField, ya no es FK
-                            dosis=dosis
-                        )
-
-        messages.success(
-            request,
-            f"Cita registrada para {paciente.nombre} {paciente.apellido} el {cita.fecha_hora.strftime('%d/%m/%Y a las %I:%M %p')}."
-        )
-        return redirect('ver_historial_paciente', paciente_id=paciente.id)
-
-    # Mostrar últimas citas
-    # citas = Cita.objects.filter(paciente=paciente).order_by('-fecha_hora')[:3]
-    return render(request, 'dashboard/consulta_paciente.html', {'paciente': paciente})
+    return render(
+        request,
+        'dashboard/consulta_paciente_odontologo.html',
+        {
+            'paciente': paciente,
+            'citas': citas,
+            'form': form,
+            'odontograma_json_str': odontograma_json_str,
+            'cita': cita,
+        }
+    )
 
 
 def editar_cita_psicologo(request, paciente_id, cita_id):
@@ -697,3 +636,43 @@ def editar_cita_nutricionista(request, paciente_id, cita_id):
     # Mostrar últimas citas
     # citas = Cita.objects.filter(paciente=paciente).order_by('-fecha_hora')[:3]
     return render(request, 'dashboard/consulta_paciente.html', {'paciente': paciente})
+
+
+@login_required
+def crear_cita_borrador(request, paciente_id):
+    if request.method != 'POST':
+        return redirect('dashboard_medico')
+
+    medico = request.user.medico
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+
+    # Crea una cita mínima como borrador
+    cita = Cita.objects.create(
+        medico=medico,
+        paciente=paciente,
+        fecha_hora=timezone.now(),  # puedes poner None si tu modelo lo permite
+        motivo='(Borrador)',
+        # Variante A (si tienes choices de estado):
+        estado='BORRADOR',
+        # Variante B (si usas un booleano):
+        # es_borrador=True,
+    )
+
+    messages.success(request, 'Borrador de cita creado. Completa los datos para guardarla definitivamente.')
+
+    # Redirección al editor según la especialidad del médico
+    especialidad_nombre = (medico.especialidad.nombre if medico.especialidad else '').strip().lower()
+
+    if especialidad_nombre == 'medico':
+        return redirect('dashboard:editar_cita_medico', paciente_id=paciente.id, cita_id=cita.id)
+    elif especialidad_nombre == 'odontologo':
+        return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
+    elif especialidad_nombre == 'psicologo':
+        return redirect('dashboard:editar_cita_psicologo', paciente_id=paciente.id, cita_id=cita.id)
+    elif especialidad_nombre == 'nutricionista':
+        return redirect('dashboard:editar_cita_nutricionista', paciente_id=paciente.id, cita_id=cita.id)
+    else:
+        return redirect('dashboard:editar_cita', paciente_id=paciente.id, cita_id=cita.id)
+
+    # Fallback
+    return redirect('editar_cita_medico', paciente_id=paciente.id, cita_id=cita.id)

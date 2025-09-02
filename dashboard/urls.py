@@ -5,11 +5,11 @@ from dashboard.views import *
 urlpatterns = [
 
     path('paciente/', dashboard_paciente, name='dashboard_paciente'),
-    path('medico/', dashboard_medico, name='dashboard_medico'),
+    path('', dashboard_medico, name='dashboard_medico'),
     path('asistente/', dashboard_asistente, name='dashboard_asistente'),
     path('paciente/<int:paciente_id>/historial/', ver_historial_paciente, name='ver_historial_paciente'),
-    path('paciente/<int:paciente_id>/crear/', crear_cita_paciente, name='crear_cita'),
-    path('medico/crear-cita/', crear_cita_con_paciente, name='crear_cita_con_paciente'),
+    # path('paciente/<int:paciente_id>/crear/', crear_cita_paciente, name='crear_cita'),
+    # path('medico/crear-cita/', crear_cita_con_paciente, name='crear_cita_con_paciente'),
     path('medico/citas/', ver_citas_medico, name='ver_citas_medico'),
     path('logout/', logout_view, name='logout'),
     path('estadisticas/', estadisticas_galeno, name='estadisticas_galeno'),
@@ -24,6 +24,8 @@ urlpatterns = [
     path('citas/editar/odontologo/<int:paciente_id>/<int:cita_id>/', editar_cita_odontologo, name='editar_cita_odontologo'),
     path('citas/editar/psicologo/<int:paciente_id>/<int:cita_id>/', editar_cita_psicologo, name='editar_cita_psicologo'),
     path('citas/editar/nutricionista/<int:paciente_id>/<int:cita_id>/', editar_cita_nutricionista, name='editar_cita_nutricionista'),
+
+    path('citas/borrador/<int:paciente_id>/', crear_cita_borrador, name='crear_cita_borrador'),
 
 
 
