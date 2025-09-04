@@ -1594,12 +1594,12 @@ Engine.prototype.load = function (tooth, damage, surface, note) {
 
     } else {
 
+
         // the damage should be added to a surface of a tooth
-        var surfaceId = tooth + "_" + surface;
+        // var surfaceId = tooth + "_" + surface;
 
         var t = this.getToothById(tooth);
-        var surface = t.getSurfaceById(surfaceId);
-
+        var surface = t.getSurfaceById(surface);
         this.collisionHandler.handleCollisionCheckBox(surface, damage);
 
         this.setTextToTextBox(t.textBox, note);

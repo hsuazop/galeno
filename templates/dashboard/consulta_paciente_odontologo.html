@@ -300,47 +300,16 @@ window.addEventListener('DOMContentLoaded', () => {
   engine.setCanvas(canvas);
   engine.init();
 
+  const initialData = {{ odontograma_json_str|safe }};
+  console.log('Initial data:', initialData);
+
+
   // listeners opcionales
   canvas.addEventListener('mousedown',  e => engine.onMouseClick?.(e));
   canvas.addEventListener('mousemove',  e => engine.onMouseMove?.(e));
   window.addEventListener('keydown',    e => engine.onButtonClick?.(e));
 
-  // util: de "14_M" -> "M"; de "0" -> 0
-  const getSurfaceCode = (s) => {
-    if (s === undefined || s === null || s === '' || s === 0 || s === '0') return 0;
-    const parts = String(s).split('_');
-    return parts.length === 2 ? parts[1] : String(s);
-  };
-
-  // intentar vista adulto por si aplica
-  try { engine.changeView?.(0); } catch {}
-  try { engine.changeView?.('adult'); } catch {}
-
-  // --- PRECARGA: viene de la vista como array literal
-  const initialData = {{ odontograma_json_str|default:"[]"|safe }};
-
-  if (Array.isArray(initialData) && initialData.length) {
-    let ok = 0, fail = 0;
-    initialData.forEach(item => {
-      const tooth   = Number(item.tooth);
-      const damage  = Number(item.damage);
-      const surface = getSurfaceCode(item.surface);
-      try {
-        // firma que funcionó en tus pruebas
-        engine.setDamage(tooth, damage, surface);
-        ok++;
-        console.log(`✔ setDamage(${tooth}, ${damage}, ${surface})`);
-      } catch (err) {
-        console.warn('✖ No se pudo aplicar daño:', { tooth, damage, surface, raw: item }, err);
-        fail++;
-      }
-    });
-    // repintar
-    try { engine.update?.(); } catch {}
-    try { engine.render?.(); } catch {}
-    try { engine.draw?.(); } catch {}
-    console.log(`Precarga terminada. OK=${ok}, Fallidos=${fail}`);
-  }
+  initialData.forEach(item => {engine.load(item.tooth,item.damage,item.surface,item.note)})
 
   // --- GUARDAR: antes del submit mete el JSON en el textarea
   function exportJSON() {
@@ -358,129 +327,12 @@ window.addEventListener('DOMContentLoaded', () => {
     console.log('Objeto JS:', payload);
     try { console.log('JSON string:', JSON.stringify(payload)); } catch (e) {}
   });
+
 });
 </script>
 
-<script>
-  // === utilidades de superficie ===
-  function extractSurfaceToken(s) {
-    // "0" => 0 (pieza completa)
-    if (s === undefined || s === null || s === '' || s === 0 || s === '0') return 0;
-    const parts = String(s).split('_');
-    return parts.length === 2 ? parts[1] : String(s);  // "14_M" => "M", "M" => "M"
-  }
 
-  function buildSurfaceCandidates(letter, constants) {
-    // Mapeo común por si el engine usa índices
-    const defaultIndexMap = { M: 1, D: 2, V: 3, L: 4, O: 5, P: 6 };
 
-    // Si hay constantes en el engine, intenta aprovecharlas
-    const byConstants = [];
-    if (constants) {
-      // Busca propiedades tipo SURFACE_* o mapas conocidos
-      Object.keys(constants).forEach(k => {
-        if (k.toUpperCase().includes(letter)) byConstants.push(constants[k]);
-      });
-      // Mapas típicos
-      if (constants.SURFACES && constants.SURFACES[letter] != null) {
-        byConstants.push(constants.SURFACES[letter]);
-      }
-      if (constants.SURFACE && constants.SURFACE[letter] != null) {
-        byConstants.push(constants.SURFACE[letter]);
-      }
-      if (constants.Surface && constants.Surface[letter] != null) {
-        byConstants.push(constants.Surface[letter]);
-      }
-    }
-
-    // Candidatos en orden de prueba:
-    const names = {
-      M: ['M', 'MESIAL'],
-      D: ['D', 'DISTAL'],
-      V: ['V', 'VESTIBULAR', 'BUCAL', 'FACIAL'],
-      L: ['L', 'LINGUAL'],         // en superiores algunos engines usan P=PALATINA
-      O: ['O', 'OCLUSAL'],
-      P: ['P', 'PALATINA'],
-    };
-
-    const candidates = [];
-
-    // 1) Lo que venga de constants
-    candidates.push(...byConstants);
-
-    // 2) Letra tal cual y nombres largos
-    (names[letter] || [letter]).forEach(v => candidates.push(v));
-
-    // 3) Índice por defecto
-    if (defaultIndexMap[letter] != null) candidates.push(defaultIndexMap[letter]);
-
-    // Quitar undefined/duplicados conservando orden
-    const seen = new Set(); const out = [];
-    for (const c of candidates) {
-      if (c === undefined || c === null || c === '') continue;
-      const key = typeof c + '|' + String(c);
-      if (!seen.has(key)) { seen.add(key); out.push(c); }
-    }
-    return out;
-  }
-
-  function applyOneMark(engine, tooth, damage, surfaceRaw) {
-    const letter = extractSurfaceToken(surfaceRaw);
-    if (letter === 0) {
-      // Pieza completa
-      engine.setDamage(tooth, damage, 0);
-      console.log(`✔ setDamage(${tooth}, ${damage}, 0) [pieza completa]`);
-      return true;
-    }
-
-    const constants = engine?.constants || null;
-    const tries = buildSurfaceCandidates(letter, constants);
-
-    // Probar varias variantes hasta que no lance error
-    for (const surface of tries) {
-      try {
-        engine.setDamage(tooth, damage, surface);
-        console.log(`✔ setDamage(${tooth}, ${damage}, ${JSON.stringify(surface)}) [surface variante aceptada]`);
-        return true;
-      } catch (e) {
-        // sigue probando
-      }
-    }
-
-    // Intento fallback: L ↔ P (palatina vs lingual), por si el motor usa la otra convención
-    if (letter === 'L') {
-      try { engine.setDamage(tooth, damage, 'P'); console.log(`✔ setDamage(${tooth}, ${damage}, "P") [fallback L→P]`); return true; } catch {}
-      try { engine.setDamage(tooth, damage, 6);   console.log(`✔ setDamage(${tooth}, ${damage}, 6) [fallback L→idx]`); return true; } catch {}
-    }
-    if (letter === 'P') {
-      try { engine.setDamage(tooth, damage, 'L'); console.log(`✔ setDamage(${tooth}, ${damage}, "L") [fallback P→L]`); return true; } catch {}
-      try { engine.setDamage(tooth, damage, 4);   console.log(`✔ setDamage(${tooth}, ${damage}, 4) [fallback P→idx]`); return true; } catch {}
-    }
-
-    console.warn('✖ Ninguna variante aceptada para superficie', { tooth, damage, letter, surfaceRaw, tried: tries });
-    return false;
-  }
-
-  // ======== PRE-CARGA (reemplaza tu forEach anterior por este) ========
-  (function precarga() {
-    const initialData = {{ odontograma_json_str|default:"[]"|safe }};
-    if (!Array.isArray(initialData) || !initialData.length) return;
-
-    let ok = 0, fail = 0;
-    for (const item of initialData) {
-      const tooth = Number(item.tooth);
-      const damage = Number(item.damage);
-      const applied = applyOneMark(engine, tooth, damage, item.surface);
-      applied ? ok++ : fail++;
-    }
-
-    // repintado
-    try { engine.update?.(); } catch {}
-    try { engine.render?.(); } catch {}
-    try { engine.draw?.(); } catch {}
-    console.log(`Precarga terminada. OK=${ok}, Fallidos=${fail}`);
-  })();
-</script>
 
 
 {% endblock %}
