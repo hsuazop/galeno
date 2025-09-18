@@ -1,8 +1,8 @@
 asgiref==3.8.1
+backports.zoneinfo==0.2.1
 Django==4.1.8
-django-extensions==3.2.3
-psycopg-binary==3.2.9
-psycopg2-binary==2.9.10
+django-recaptcha==4.1.0
+psycopg2==2.8.6
 sqlparse==0.5.3
 typing_extensions==4.12.2
-uWSGI==2.0.28
+tzdata==2025.1

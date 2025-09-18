@@ -152,6 +152,15 @@
                             <div class="tab-pane fade" id="twoAA" role="tabpanel">
 
 
+                                <form id="form-odontograma" method="post">
+                                    {% csrf_token %}
+                                    <!-- campo oculto donde se guarda el JSON -->
+                                    <textarea id="odontograma-json" name="datos"
+                                              hidden>{{ odontograma.json|default:"" }}</textarea>
+                                    <button id="btn-odonto-guardar" type="submit">Guardar</button>
+                                </form>
+
+                                <canvas id="canvas" width="648" height="800" style="border:1px solid #ccc"></canvas>
                             </div>
                             <div class="tab-pane fade" id="threeAA" role="tabpanel">
                                 <form method="post">
@@ -207,14 +216,6 @@
 
 
 
-    <form id="form-odontograma" method="post">
-        {% csrf_token %}
-        <!-- campo oculto donde se guarda el JSON -->
-        <textarea id="odontograma-json" name="datos" hidden>{{ odontograma.json|default:"" }}</textarea>
-        <button id="btn-odonto-guardar" type="submit">Guardar</button>
-    </form>
-
-    <canvas id="canvas" width="648" height="800" style="border:1px solid #ccc"></canvas>
 
 
 
@@ -229,107 +230,61 @@
 {% block js %}
     <base href="{% static 'odontograma/' %}">
     <script src="{% static 'odontograma/js/engine.js' %}"></script>
-{#    <script>#}
-{#        document.addEventListener('DOMContentLoaded', function () {#}
-{#            const canvas = document.getElementById('canvas');#}
-{#            const form = document.getElementById('form-odontograma');#}
-{#            const outField = document.getElementById('odontograma-json');#}
-{##}
-{#            var engine = new Engine();#}
-{#            engine.setCanvas(canvas);#}
-{#            engine.init();#}
-{##}
-{#            // Eventos normales#}
-{#            canvas.addEventListener('mousedown', (e) => engine.onMouseClick(e));#}
-{#            canvas.addEventListener('mousemove', (e) => engine.onMouseMove(e));#}
-{#            window.addEventListener('keydown', (e) => engine.onButtonClick(e));#}
-{##}
-{#            // ===============================#}
-{#            // 👇 Precarga desde la vista#}
-{#            // ===============================#}
-{#            // Tu vista ya pasa odontograma_json_str como JSON válido#}
-{#            const initialData = {{ odontograma_json_str|safe }};#}
-{##}
-{#            if (Array.isArray(initialData) && initialData.length) {#}
-{#                let ok = 0, fail = 0;#}
-{##}
-{#                initialData.forEach(item => {#}
-{#                    const tooth = Number(item.tooth);#}
-{#                    const damage = Number(item.damage);#}
-{#                    const surface = (item.surface === undefined || item.surface === null || item.surface === "")#}
-{#                        ? 0#}
-{#                        : item.surface;#}
-{##}
-{#                    try {#}
-{#                        engine.setDamage(tooth, damage, surface);#}
-{#                        ok++;#}
-{#                    } catch (err) {#}
-{#                        console.warn("No se pudo aplicar daño:", item, err);#}
-{#                        fail++;#}
-{#                    }#}
-{#                });#}
-{##}
-{#                if (typeof engine.update === 'function') engine.update();#}
-{#                console.log(`Precarga terminada. OK=${ok}, Fallidos=${fail}`);#}
-{#            }#}
-{##}
-{#            // ===============================#}
-{#            // Guardar en el textarea antes del submit#}
-{#            // ===============================#}
-{#            function exportJSON() {#}
-{#                const payload = engine?.getData?.() ?? [];#}
-{#                if (outField) outField.value = JSON.stringify(payload);#}
-{#                return payload;#}
-{#            }#}
-{##}
-{#            form.addEventListener('submit', () => exportJSON());#}
-{#        });#}
-{#    </script>#}
-<script defer>
-window.addEventListener('DOMContentLoaded', () => {
-  // --- referencias DOM
-  const canvas   = document.getElementById('canvas');
-  const form     = document.getElementById('form-odontograma');
-  const outField = document.getElementById('odontograma-json');
-  const btnDump  = document.getElementById('btn-dump');
 
-  if (!canvas) { console.error('No se encontró #canvas'); return; }
+    <script defer>
+        window.addEventListener('DOMContentLoaded', () => {
+            // --- referencias DOM
+            const canvas = document.getElementById('canvas');
+            const form = document.getElementById('form-odontograma');
+            const outField = document.getElementById('odontograma-json');
+            const btnDump = document.getElementById('btn-dump');
 
-  // --- crear e inicializar engine ANTES de usarlo
-  const engine = new Engine();
-  engine.setCanvas(canvas);
-  engine.init();
+            if (!canvas) {
+                console.error('No se encontró #canvas');
+                return;
+            }
 
-  const initialData = {{ odontograma_json_str|safe }};
-  console.log('Initial data:', initialData);
+            // --- crear e inicializar engine ANTES de usarlo
+            const engine = new Engine();
+            engine.setCanvas(canvas);
+            engine.init();
+
+            const initialData = {{ odontograma_json_str|safe }};
+            console.log('Initial data:', initialData);
 
 
-  // listeners opcionales
-  canvas.addEventListener('mousedown',  e => engine.onMouseClick?.(e));
-  canvas.addEventListener('mousemove',  e => engine.onMouseMove?.(e));
-  window.addEventListener('keydown',    e => engine.onButtonClick?.(e));
+            // listeners opcionales
+            canvas.addEventListener('mousedown', e => engine.onMouseClick?.(e));
+            canvas.addEventListener('mousemove', e => engine.onMouseMove?.(e));
+            window.addEventListener('keydown', e => engine.onButtonClick?.(e));
 
-  initialData.forEach(item => {engine.load(item.tooth,item.damage,item.surface,item.note)})
+            initialData.forEach(item => {
+                engine.load(item.tooth, item.damage, item.surface, item.note)
+            })
 
-  // --- GUARDAR: antes del submit mete el JSON en el textarea
-  function exportJSON() {
-    const payload = engine?.getData?.() ?? [];
-    if (outField) outField.value = JSON.stringify(payload);
-    console.log('JSON listo para POST:', outField?.value);
-    return payload;
-  }
-  form?.addEventListener('submit', () => exportJSON());
+            // --- GUARDAR: antes del submit mete el JSON en el textarea
+            function exportJSON() {
+                const payload = engine?.getData?.() ?? [];
+                if (outField) outField.value = JSON.stringify(payload);
+                console.log('JSON listo para POST:', outField?.value);
+                return payload;
+            }
 
-  // --- botón de prueba
-  btnDump?.addEventListener('click', () => {
-    const payload = engine?.getData?.() ?? [];
-    console.log('----- ODONTOGRAMA DUMP -----');
-    console.log('Objeto JS:', payload);
-    try { console.log('JSON string:', JSON.stringify(payload)); } catch (e) {}
-  });
+            form?.addEventListener('submit', () => exportJSON());
 
-});
-</script>
+            // --- botón de prueba
+            btnDump?.addEventListener('click', () => {
+                const payload = engine?.getData?.() ?? [];
+                console.log('----- ODONTOGRAMA DUMP -----');
+                console.log('Objeto JS:', payload);
+                try {
+                    console.log('JSON string:', JSON.stringify(payload));
+                } catch (e) {
+                }
+            });
+
+        });
+    </script>
 
 
 
