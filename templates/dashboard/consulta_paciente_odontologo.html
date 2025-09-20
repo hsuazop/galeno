@@ -160,7 +160,7 @@
                                     <button id="btn-odonto-guardar" type="submit">Guardar</button>
                                 </form>
 
-                                <canvas id="canvas" width="648" height="800" style="border:1px solid #ccc"></canvas>
+                                <canvas id="canvas" width="800" height="800" style="border:1px solid #ccc"></canvas>
                             </div>
                             <div class="tab-pane fade" id="threeAA" role="tabpanel">
                                 <form method="post">
@@ -180,7 +180,7 @@
                                               placeholder="Recomendaciones generales (opcional)"></textarea>
 
                                     <div id="medicamentos">
-                                        <div class="row mb-2">
+                                        <div class="row mb-2" id="medicamento">
                                             <div class="col">
                                                 <input name="medicamento[]" class="form-control"
                                                        placeholder="Medicamento (opcional)">
@@ -230,6 +230,70 @@
 {% block js %}
     <base href="{% static 'odontograma/' %}">
     <script src="{% static 'odontograma/js/engine.js' %}"></script>
+
+    <script defer>
+        function addMedicamento() {
+            const container = document.getElementById('medicamentos');
+            const originalRow = document.getElementById('medicamento');
+
+            // valores originales
+            const medValue = originalRow.querySelector('input[name="medicamento[]"]').value;
+            const dosisValue = originalRow.querySelector('input[name="dosis[]"]').value;
+
+            // nueva fila
+            const row = document.createElement('div');
+            row.className = 'row mb-2';
+            row.innerHTML = `
+                <div class="col">
+                    <input name="medicamento[]" class="form-control" value="${medValue}" readonly>
+                </div>
+                <div class="col">
+                    <input name="dosis[]" class="form-control" value="${dosisValue}" readonly>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger" onclick="removeMedicamento(this)">X</button>
+                </div>
+            `;
+
+            container.appendChild(row);
+
+            // limpiar los originales
+            originalRow.querySelector('input[name="medicamento[]"]').value = '';
+            originalRow.querySelector('input[name="dosis[]"]').value = '';
+        }
+
+        function removeMedicamento(button) {
+            button.closest('.row').remove();
+        }
+    </script>
+
+    <script defer>
+
+        function addMedicamento1() {
+            // -- Agregar medicamento a la lista
+
+            const container = document.getElementById('medicamentos');
+            const row = document.createElement('div');
+            row.className = 'row mb-2';
+            row.innerHTML = `
+                <div class="col">
+                    <input name="medicamento[]" class="form-control" placeholder="Medicamento (opcional)">
+                </div>
+                <div class="col">
+                    <input name="dosis[]" class="form-control" placeholder="Dosis (opcional)">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger" onclick="removeMedicamento(this)">X</button>
+                </div>
+            `;
+            container.appendChild(row);
+        }
+        
+        function removeMedicamento(button) {
+            // -- Eliminar medicamento
+            button.closest('.row').remove();
+        }
+    </script>
 
     <script defer>
         window.addEventListener('DOMContentLoaded', () => {
