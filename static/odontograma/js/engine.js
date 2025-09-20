@@ -112,8 +112,8 @@ function Engine() {
  */
 Engine.prototype.setCanvas = function (canvas) {
     "use strict";
-    console.log("Engine: setting canvas: " + canvas);
-    console.log("Engine: canvas size (" + canvas.width + ", " + canvas.height + ")");
+    //console.log("Engine: setting canvas: " + canvas);
+    //console.log("Engine: canvas size (" + canvas.width + ", " + canvas.height + ")");
     this.canvas = canvas;
     this.renderer.init(this.canvas);
 };
@@ -245,7 +245,7 @@ Engine.prototype.removeHighlight = function () {
  */
 Engine.prototype.highlightMultiSelection = function (tooth) {
     "use strict";
-    console.log("Highlighting multiselection");
+    //console.log("Highlighting multiselection");
     try {
 
         // only highlight if we the selection is at least 1
@@ -298,7 +298,7 @@ Engine.prototype.highlightMultiSelection = function (tooth) {
         }
 
     } catch (error) {
-        console.log("Engine highlightMultiSelection e: " + error.message);
+        //console.log("Engine highlightMultiSelection e: " + error.message);
     }
 
 };
@@ -685,11 +685,11 @@ Engine.prototype.mouseClickTooth = function (event) {
                 this.getXpos(event),
                 this.getYpos(event))) {
 
-                console.log("Collision Checkbox : " + this.selectedDamage)
+                //console.log("Collision Checkbox : " + this.selectedDamage)
 
                 if (this.currentType === 0) {
 
-                    console.log("Collision Checkbox : " + this.selectedDamage)
+                    //console.log("Collision Checkbox : " + this.selectedDamage)
                     // handle collision with surface    
                     this.collisionHandler.handleCollisionCheckBox(
                         this.mouth[i].checkBoxes[j],
@@ -755,7 +755,7 @@ Engine.prototype.mouseClickMenu = function (event) {
             }
 
             this.setDamage(this.selectedDamage);
-            console.log("Mouse click. MenuItem: ");
+            //console.log("Mouse click. MenuItem: ");
 
 
             shouldUpdate = true;
@@ -784,7 +784,7 @@ Engine.prototype.mouseClickControls = function (event) {
         shouldUpdate = true;
 
         this.adultShowing = true;
-        console.log("Setting odontograma to adult");
+        //console.log("Setting odontograma to adult");
         this.mouth = this.odontAdult;
         this.spaces = this.odontSpacesAdult;
         this.update();
@@ -800,7 +800,7 @@ Engine.prototype.mouseClickControls = function (event) {
         shouldUpdate = true;
 
         this.adultShowing = false;
-        console.log("Setting odontograma to child");
+        //console.log("Setting odontograma to child");
         this.mouth = this.odontChild;
         this.spaces = this.odontSpacesChild;
         this.update();
@@ -830,7 +830,7 @@ Engine.prototype.mouseClickControls = function (event) {
 Engine.prototype.onMouseClick = function (event) {
     "use strict";
 
-    console.log("Mouse click. which: " + event.which);
+    //console.log("Mouse click. which: " + event.which);
 
     if (!this.preview) {
 
@@ -1330,7 +1330,7 @@ Engine.prototype.keyMapper = function (event) {
  */
 Engine.prototype.onButtonClick = function (event) {
     "use strict";
-    console.log("key " + event.key);
+    //--console.log("key " + event.key);
 
     if (event.key === "p") {
         this.print();
@@ -1341,13 +1341,13 @@ Engine.prototype.onButtonClick = function (event) {
 
         var data = this.getData();
 
-        console.log("Data length: " + data.length);
+        //console.log("Data length: " + data.length);
 
         for (var i = 0; i < data.length; i++) {
 
-            console.log("Data[" + i + "]: " + data[i].tooth + ", "
-                + data[i].damage + ", " + data[i].surface + ", "
-                + data[i].note);
+            //console.log("Data[" + i + "]: " + data[i].tooth + ", "
+            //    + data[i].damage + ", " + data[i].surface + ", "
+            //    + data[i].note);
 
         }
 
@@ -1401,7 +1401,7 @@ Engine.prototype.onButtonClick = function (event) {
             if (event.key === "ArrowLeft") {
 
                 this.adultShowing = true;
-                console.log("Setting odontograma to adult");
+                //console.log("Setting odontograma to adult");
                 this.mouth = this.odontAdult;
                 this.spaces = this.odontSpacesAdult;
                 this.update();
@@ -1411,7 +1411,7 @@ Engine.prototype.onButtonClick = function (event) {
             if (event.key === "ArrowRight") {
 
                 this.adultShowing = false;
-                console.log("Setting odontograma to child");
+                //console.log("Setting odontograma to child");
                 this.mouth = this.odontChild;
                 this.spaces = this.odontSpacesChild;
                 this.update();
@@ -1430,7 +1430,7 @@ Engine.prototype.setDamage = function (damage) {
     this.multiSelect = false;
     this.multiSelection.length = 0;
 
-    console.log("Engine setting damage: " + damage);
+    //--console.log(ssss"Engine setting damage: " + damage);
 
     this.selectedDamage = parseInt(damage, 10) || 0;
 
@@ -1631,7 +1631,7 @@ Engine.prototype.setDataSource = function (dataArray) {
 
 Engine.prototype.createDiagnostico = function (diagnostico) {
 
-    console.log("Diagnostico: " + JSON.stringify(diagnostico));
+    //console.log("Diagnostico: " + JSON.stringify(diagnostico));
 };
 
 /**
@@ -1659,7 +1659,7 @@ Engine.prototype.showPrintPreview = function () {
     // reset the size of the canvas
     this.renderer.setCanvasSize(this.renderer.width, 1420);
 
-    console.log("Print preview");
+    //console.log("Print preview");
 
     // reset positions
 
@@ -1727,7 +1727,7 @@ Engine.prototype.hidePrintPreview = function () {
     // update size of the canvas
     this.renderer.setCanvasSize(this.renderer.width, this.renderer.height);
 
-    console.log("Print preview");
+    //console.log("Print preview");
 
     // update the positions of all the data in the odontoram
 

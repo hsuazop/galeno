@@ -599,7 +599,7 @@ Tooth.prototype.createDamage = function (damageId) {
  */
 Tooth.prototype.toggleDamage = function (damageId) {
     "use strict";
-    console.log("Toggle damage for " + this.id + ", damage " + damageId);
+    //console.log("Toggle damage for " + this.id + ", damage " + damageId);
 
     // if there are no damages, then add.
     if (this.damages.length < 1) {
@@ -621,7 +621,7 @@ Tooth.prototype.toggleDamage = function (damageId) {
             // found this damage
             if (this.damages[i].id === damageId)
             {
-                console.log("Splicing array for tooth " + this.id);
+                //console.log("Splicing array for tooth " + this.id);
 
                 splicer = i;
                 exists = true;
