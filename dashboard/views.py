@@ -444,7 +444,12 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     instance = Odontograma.objects.filter(paciente=paciente, cita=cita).order_by('-id').first()
 
     if request.method == 'POST':
+
+        post_data = request.POST.copy()
+        post_data['datos'] = request.POST.get('odontograma_json', '[]')
+
         form = OdontogramaForm(request.POST, instance=instance)
+
         if form.is_valid():
             od = form.save(commit=False)
             od.paciente = paciente
@@ -459,6 +464,14 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
                     od.datos = []
 
             od.save()
+
+            # Guardar motivo de la cita si viene en POST
+            motivo = request.POST.get("motivo", "").strip()
+            if motivo:
+                cita.motivo = motivo
+                cita.notas_medico = request.POST.get("notas_medico", "").strip()
+                cita.save()
+
             messages.success(request, "✅ Odontograma guardado correctamente.")
             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
         else:
