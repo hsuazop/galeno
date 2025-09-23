@@ -163,7 +163,7 @@
                                 <canvas id="canvas" width="800" height="800" style="border:1px solid #ccc"></canvas>
                             </div>
                             <div class="tab-pane fade" id="threeAA" role="tabpanel">
-                                <form method="post">
+                                <form id="form-cita" method="post">
                                     {% csrf_token %}
                                     <h5>Motivo de la Cita</h5>
                                     <textarea name="motivo" class="form-control mb-2" required></textarea>
@@ -232,6 +232,80 @@
     <script src="{% static 'odontograma/js/engine.js' %}"></script>
 
     <script defer>
+        window.addEventListener('DOMContentLoaded', () => {
+            // --- referencias DOM
+            const canvas = document.getElementById('canvas');
+            const form = document.getElementById('form-odontograma');
+            const outField = document.getElementById('odontograma-json');
+            const btnDump = document.getElementById('btn-dump');
+            const formCita = document.getElementById('form-cita');
+
+
+            if (!canvas) {
+                console.error('No se encontró #canvas');
+                return;
+            }
+
+            // --- crear e inicializar engine ANTES de usarlo
+            const engine = new Engine();
+            engine.setCanvas(canvas);
+            engine.init();
+
+            const initialData = {{ odontograma_json_str|safe }};
+            console.log('Initial data:', initialData);
+
+
+            // listeners opcionales
+            canvas.addEventListener('mousedown', e => engine.onMouseClick?.(e));
+            canvas.addEventListener('mousemove', e => engine.onMouseMove?.(e));
+            window.addEventListener('keydown', e => engine.onButtonClick?.(e));
+
+            initialData.forEach(item => {
+                engine.load(item.tooth, item.damage, item.surface, item.note)
+            })        
+
+            //Enviar odontograma con el form de la cita
+            const odontoField = document.createElement('textarea');
+            odontoField.name = 'datos';
+            odontoField.hidden = true;
+            formCita.appendChild(odontoField);
+
+            formCita.addEventListener('submit', e => {
+                const payload = engine.getData?.() ?? [];
+                if (!payload.length) {
+                    e.preventDefault();
+                    alert("No hay datos en el odontograma.");
+                    return;
+                }
+                odontoField.value = JSON.stringify(payload);
+                console.log("Odontograma enviado con el form:", odontoField.value);
+            });
+
+            // --- GUARDAR: antes del submit mete el JSON en el textarea
+            function exportJSON() {
+                const payload = engine?.getData?.() ?? [];
+                if (outField) outField.value = JSON.stringify(payload);
+                console.log('JSON listo para POST:', outField?.value);
+                return payload;
+            }
+
+            form?.addEventListener('submit', () => exportJSON());
+
+            // --- botón de prueba
+            btnDump?.addEventListener('click', () => {
+                const payload = engine?.getData?.() ?? [];
+                console.log('----- ODONTOGRAMA DUMP -----');
+                console.log('Objeto JS:', payload);
+                try {
+                    console.log('JSON string:', JSON.stringify(payload));
+                } catch (e) {
+                }
+            });
+
+        });
+    </script>
+
+    <script defer>
         function addMedicamento() {
             const container = document.getElementById('medicamentos');
             const originalRow = document.getElementById('medicamento');
@@ -266,90 +340,6 @@
             button.closest('.row').remove();
         }
     </script>
-
-    <script defer>
-
-        function addMedicamento1() {
-            // -- Agregar medicamento a la lista
-
-            const container = document.getElementById('medicamentos');
-            const row = document.createElement('div');
-            row.className = 'row mb-2';
-            row.innerHTML = `
-                <div class="col">
-                    <input name="medicamento[]" class="form-control" placeholder="Medicamento (opcional)">
-                </div>
-                <div class="col">
-                    <input name="dosis[]" class="form-control" placeholder="Dosis (opcional)">
-                </div>
-                <div class="col-auto">
-                    <button type="button" class="btn btn-danger" onclick="removeMedicamento(this)">X</button>
-                </div>
-            `;
-            container.appendChild(row);
-        }
-        
-        function removeMedicamento(button) {
-            // -- Eliminar medicamento
-            button.closest('.row').remove();
-        }
-    </script>
-
-    <script defer>
-        window.addEventListener('DOMContentLoaded', () => {
-            // --- referencias DOM
-            const canvas = document.getElementById('canvas');
-            const form = document.getElementById('form-odontograma');
-            const outField = document.getElementById('odontograma-json');
-            const btnDump = document.getElementById('btn-dump');
-
-            if (!canvas) {
-                console.error('No se encontró #canvas');
-                return;
-            }
-
-            // --- crear e inicializar engine ANTES de usarlo
-            const engine = new Engine();
-            engine.setCanvas(canvas);
-            engine.init();
-
-            const initialData = {{ odontograma_json_str|safe }};
-            console.log('Initial data:', initialData);
-
-
-            // listeners opcionales
-            canvas.addEventListener('mousedown', e => engine.onMouseClick?.(e));
-            canvas.addEventListener('mousemove', e => engine.onMouseMove?.(e));
-            window.addEventListener('keydown', e => engine.onButtonClick?.(e));
-
-            initialData.forEach(item => {
-                engine.load(item.tooth, item.damage, item.surface, item.note)
-            })
-
-            // --- GUARDAR: antes del submit mete el JSON en el textarea
-            function exportJSON() {
-                const payload = engine?.getData?.() ?? [];
-                if (outField) outField.value = JSON.stringify(payload);
-                console.log('JSON listo para POST:', outField?.value);
-                return payload;
-            }
-
-            form?.addEventListener('submit', () => exportJSON());
-
-            // --- botón de prueba
-            btnDump?.addEventListener('click', () => {
-                const payload = engine?.getData?.() ?? [];
-                console.log('----- ODONTOGRAMA DUMP -----');
-                console.log('Objeto JS:', payload);
-                try {
-                    console.log('JSON string:', JSON.stringify(payload));
-                } catch (e) {
-                }
-            });
-
-        });
-    </script>
-
 
 
 
