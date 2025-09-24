@@ -437,6 +437,16 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, paciente=paciente)
     medico = getattr(request.user, 'medico', None)
 
+    diagnostico = getattr(cita, 'diagnostico', None)
+    if not diagnostico:
+        diagnostico = Diagnostico.objects.create(cita=cita, descripcion="")
+
+    receta = getattr(cita, 'receta', None)
+    if not receta:
+        receta = Receta.objects.create(cita=cita, recomendaciones_generales="")
+
+    
+
     # Para la lista que ya mostrabas
     citas = Cita.objects.filter(paciente=paciente, medico=medico).order_by('-fecha_hora')
 
@@ -444,6 +454,11 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     instance = Odontograma.objects.filter(paciente=paciente, cita=cita).order_by('-id').first()
 
     if request.method == 'POST':
+
+        print('------------------------------')
+        print(request.POST)
+        print('------------------------------')
+       
 
         post_data = request.POST.copy()
         post_data['datos'] = request.POST.get('odontograma_json', '[]')
@@ -470,7 +485,20 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
             if motivo:
                 cita.motivo = motivo
                 cita.notas_medico = request.POST.get("notas_medico", "").strip()
+                cita.estado = 'Programada'
                 cita.save()
+            
+            #Guardar diagnóstico si viene en POST
+            diagnostico_desc = request.POST.get("diagnostico", "").strip()
+            if diagnostico_desc:
+                diagnostico.descripcion = diagnostico_desc
+                diagnostico.save()
+
+            #Guardar recomendaciones en receta si viene en POST
+            recomendaciones = request.POST.get("recomendaciones", "").strip()
+            if recomendaciones:
+                receta.recomendaciones_generales = recomendaciones
+                receta.save()
 
             messages.success(request, "✅ Odontograma guardado correctamente.")
             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
