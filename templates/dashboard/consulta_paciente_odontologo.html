@@ -166,18 +166,18 @@
                                 <form id="form-cita" method="post">
                                     {% csrf_token %}
                                     <h5>Motivo de la Cita</h5>
-                                    <textarea name="motivo" class="form-control mb-2" required></textarea>
+                                    <textarea name="motivo" class="form-control mb-2" required>{{ cita.motivo }}</textarea>
                                     <textarea name="notas_medico" class="form-control mb-2"
-                                              placeholder="Notas médicas (opcional)"></textarea>
+                                              placeholder="Notas médicas (opcional)">{{ cita.notas_medico }}</textarea>
 
 
                                     <h5>Diagnóstico</h5>
                                     <textarea name="diagnostico" class="form-control mb-2"
-                                              placeholder="Diagnóstico (opcional)"></textarea>
+                                              placeholder="Diagnóstico (opcional)">{{ cita.diagnostico.descripcion }}</textarea>
 
                                     <h5>Receta</h5>
                                     <textarea name="recomendaciones" class="form-control mb-2"
-                                              placeholder="Recomendaciones generales (opcional)"></textarea>
+                                              placeholder="Recomendaciones generales (opcional)">{{ cita.receta.recomendaciones_generales }}</textarea>
 
                                     <div id="medicamentos">
                                         <div class="row mb-2" id="medicamento">
