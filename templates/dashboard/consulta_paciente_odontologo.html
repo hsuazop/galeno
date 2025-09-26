@@ -138,6 +138,11 @@
                                                                     <strong>Recomendaciones:</strong> {{ cita.receta.recomendaciones_generales }}
                                                                 </p>
                                                             {% endif %}
+                                                            <div>
+                                                                <a href="{% url 'dashboard:editar_cita_odontologo' paciente.id cita.id %}" class="btn btn-sm btn-success">
+                                                                Ver Cita
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

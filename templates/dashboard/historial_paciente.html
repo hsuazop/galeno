@@ -20,10 +20,6 @@
                 {% if edad %} &bull; Edad: {{ edad }} años{% endif %}
             </small>
         </div>
-        <div>
-            <a href="#" class="btn btn-sm btn-success">Crear Consulta</a>
-        </div>
-
     </div>
 
     <h5 class="mb-3">Historial Clínico</h5>
@@ -63,6 +59,12 @@
                             </ul>
                             <p><strong>Recomendaciones:</strong> {{ cita.receta.recomendaciones_generales }}</p>
                         {% endif %}
+
+                        <div>
+                            <a href="{% url 'dashboard:editar_cita_odontologo' paciente.id cita.id %}" class="btn btn-sm btn-success">
+                                Ver Cita
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
