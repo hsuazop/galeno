@@ -446,18 +446,18 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     if not receta:
         receta = Receta.objects.create(cita=cita, recomendaciones_generales="")
 
-    
+    medicamentos = medicamentos = receta.medicamentos.all()
 
     # Para la lista que ya mostrabas
     citas = Cita.objects.filter(paciente=paciente, medico=medico).order_by('-fecha_hora')
 
     # Tomar el odontograma de ESA cita (si existe)
-
-
     instance = Odontograma.objects.filter(paciente=paciente, cita=cita).order_by('-id').first()
 
     if not instance and cita_anterior:
         instance = Odontograma.objects.filter(paciente=paciente, cita=cita_anterior).order_by('-id').first()
+
+
 
     if request.method == 'POST':
 
@@ -501,6 +501,14 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
                 receta.recomendaciones_generales = recomendaciones
                 receta.save()
 
+            #guardar medicamentos en receta si vienen en POST
+            medicamentos_nombres = request.POST.getlist("medicamento[]")
+            medicamentos_dosis = request.POST.getlist("dosis[]")
+
+            for nombre, dosis in zip(medicamentos_nombres, medicamentos_dosis):
+                if nombre.strip():
+                    RecetaMedicamento.objects.create(receta=receta,medicamento=nombre.strip(),dosis=dosis.strip())
+
             messages.success(request, "✅ Odontograma guardado correctamente.")
             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
         else:
@@ -524,6 +532,7 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
             'form': form,
             'odontograma_json_str': odontograma_json_str,
             'cita': cita,
+            'medicamentos': medicamentos,
         }
     )
 

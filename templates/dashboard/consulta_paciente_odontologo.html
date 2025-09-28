@@ -185,16 +185,29 @@
                                               placeholder="Recomendaciones generales (opcional)">{{ cita.receta.recomendaciones_generales }}</textarea>
 
                                     <div id="medicamentos">
-                                        <div class="row mb-2" id="medicamento">
-                                            <div class="col">
-                                                <input name="medicamento[]" class="form-control"
-                                                       placeholder="Medicamento (opcional)">
-                                            </div>
-                                            <div class="col">
-                                                <input name="dosis[]" class="form-control"
-                                                       placeholder="Dosis (opcional)">
-                                            </div>
-                                        </div>
+                                            {% if cita.receta %}
+                                                {% for m in cita.receta.medicamentos.all %}
+                                                    <div class="row mb-2" id="medicamento">
+                                                        <div class="col">
+                                                            <input name="medicamento[]" class="form-control"
+                                                                placeholder="Medicamento (opcional)" value="{{ m.medicamento }}">
+                                                        </div>
+                                                        <div class="col">
+                                                            <input name="dosis[]" class="form-control"
+                                                                placeholder="Dosis (opcional)" value="{{ m.dosis }}">
+                                                        </div>
+                                                    </div>
+                                                    {% empty %}
+                                                        <div class="row mb-2" id="medicamento">
+                                                            <div class="col">
+                                                                <input name="medicamento[]" class="form-control" placeholder="Medicamento (opcional)">
+                                                            </div>
+                                                            <div class="col">
+                                                                <input name="dosis[]" class="form-control" placeholder="Dosis (opcional)">
+                                                            </div>
+                                                        </div>
+                                                {% endfor %}
+                                            {% endif %}
                                     </div>
 
                                     <div class="d-flex justify-content-between">
