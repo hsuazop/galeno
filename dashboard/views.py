@@ -435,6 +435,7 @@ def editar_cita_medico(request, paciente_id, cita_id):
 def editar_cita_odontologo(request, paciente_id, cita_id):
     paciente = get_object_or_404(Paciente, id=paciente_id)
     cita = get_object_or_404(Cita, id=cita_id, paciente=paciente)
+    cita_anterior = (Cita.objects.filter(paciente=cita.paciente, fecha_hora__lt=cita.fecha_hora).order_by('-fecha_hora').first())
     medico = getattr(request.user, 'medico', None)
 
     diagnostico = getattr(cita, 'diagnostico', None)
@@ -451,14 +452,14 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     citas = Cita.objects.filter(paciente=paciente, medico=medico).order_by('-fecha_hora')
 
     # Tomar el odontograma de ESA cita (si existe)
+
+
     instance = Odontograma.objects.filter(paciente=paciente, cita=cita).order_by('-id').first()
 
-    if request.method == 'POST':
+    if not instance and cita_anterior:
+        instance = Odontograma.objects.filter(paciente=paciente, cita=cita_anterior).order_by('-id').first()
 
-        print('------------------------------')
-        print(request.POST)
-        print('------------------------------')
-       
+    if request.method == 'POST':
 
         post_data = request.POST.copy()
         post_data['datos'] = request.POST.get('odontograma_json', '[]')
@@ -505,12 +506,14 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
         else:
             messages.error(request, "❌ Revisa el formulario.")
     else:
+        
         form = OdontogramaForm(instance=instance)
 
     # JSON existente para precargar en el engine (array literal en JS)
     initial_data = instance.datos if instance else []
     odontograma_json_str = json.dumps(initial_data)
-    print(odontograma_json_str)
+    
+    #print(odontograma_json_str)
 
     return render(
         request,
