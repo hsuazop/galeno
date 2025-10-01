@@ -466,6 +466,17 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
 
         form = OdontogramaForm(request.POST, instance=instance)
 
+        # Guardar documentos
+        docs = request.FILES.getlist("documentos")
+        nombre_doc = request.POST.get("nombre_documento", "").strip()
+        if docs:
+            for file in request.FILES.getlist("documentos"):
+                Documentos.objects.create(
+                    cita=cita,
+                    nombre=nombre_doc if nombre_doc else file.name,
+                    archivo=file
+                )
+
         if form.is_valid():
             od = form.save(commit=False)
             od.paciente = paciente
