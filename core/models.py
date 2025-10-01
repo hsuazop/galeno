@@ -229,3 +229,12 @@ class Odontograma(models.Model):
 
     def __str__(self):
         return f"Odontograma de {self.paciente}"
+    
+class Documentos(models.Model):
+    cita = models.ForeignKey(Cita, on_delete=models.CASCADE, related_name='documentos')
+    nombre = models.TextField(blank=True)
+    archivo = models.FileField(upload_to='static/documentos/')
+    fecha_subida = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nombre
