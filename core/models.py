@@ -233,7 +233,7 @@ class Odontograma(models.Model):
 class Documentos(models.Model):
     cita = models.ForeignKey(Cita, on_delete=models.CASCADE, related_name='documentos')
     nombre = models.TextField(blank=True)
-    archivo = models.FileField(upload_to='static/documentos/')
+    archivo = models.FileField(upload_to='documentos/')
     fecha_subida = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
