@@ -466,17 +466,19 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
 
         form = OdontogramaForm(request.POST, instance=instance)
 
-        # Guardar documentos
-        #!!!! Guarda por separado, validar si enviar todo junto o subir docs aparte
         docs = request.FILES.getlist("documentos")
         nombre_doc = request.POST.get("nombre_documento", "").strip()
-        # if docs:
-        #     for file in request.FILES.getlist("documentos"):
-        #         Documentos.objects.create(
-        #             cita=cita,
-        #             nombre=nombre_doc if nombre_doc else file.name,
-        #             archivo=file
-        #         )
+        if docs and nombre_doc:
+            for file in request.FILES.getlist("documentos"):
+                Documentos.objects.create(
+                    cita=cita,
+                    nombre=nombre_doc if nombre_doc else file.name,
+                    archivo=file
+                )
+            messages.success(request, f"✅ {len(docs)} documento(s) guardado(s) correctamente.")
+        else:
+            if request.FILES.get("documentos") and not nombre_doc:
+                messages.error(request, "❌ Debes ingresar un nombre para el/los documento(s).")
 
 
         if form.is_valid():
@@ -518,22 +520,28 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
             medicamentos_nombres = request.POST.getlist("medicamento[]")
             medicamentos_dosis = request.POST.getlist("dosis[]")
 
+            #Obtener medicametos actuales en la receta
+            Lista_Meds = set(
+                (m.medicamento.strip().lower(), m.dosis.strip().lower())
+                for m in receta.medicamentos.all()
+            )
+
             for nombre, dosis in zip(medicamentos_nombres, medicamentos_dosis):
-                if nombre.strip():
-                    RecetaMedicamento.objects.create(receta=receta,medicamento=nombre.strip(),dosis=dosis.strip())
+                nombre_limpio = nombre.strip()
+                dosis_limpia = dosis.strip()
+                if not nombre_limpio:
+                    continue
+                clave = (nombre_limpio.lower(), dosis_limpia.lower())
+                if clave not in Lista_Meds:
+                    RecetaMedicamento.objects.create(
+                        receta=receta,
+                        medicamento=nombre_limpio,
+                        dosis=dosis_limpia
+                    )
 
             messages.success(request, "✅ Odontograma guardado correctamente.")
             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
-        elif docs:
-            
-            for file in request.FILES.getlist("documentos"):
-                Documentos.objects.create(
-                    cita=cita,
-                    nombre=nombre_doc if nombre_doc else file.name,
-                    archivo=file
-                )
-            messages.success(request, f"✅ {len(docs)} documento(s) guardado(s) correctamente.")
-        else :
+        elif not docs:
             messages.error(request, "❌ Revisa el formulario.")
     else:
         
