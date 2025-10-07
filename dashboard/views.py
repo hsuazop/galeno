@@ -467,15 +467,17 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
         form = OdontogramaForm(request.POST, instance=instance)
 
         # Guardar documentos
+        #!!!! Guarda por separado, validar si enviar todo junto o subir docs aparte
         docs = request.FILES.getlist("documentos")
         nombre_doc = request.POST.get("nombre_documento", "").strip()
-        if docs:
-            for file in request.FILES.getlist("documentos"):
-                Documentos.objects.create(
-                    cita=cita,
-                    nombre=nombre_doc if nombre_doc else file.name,
-                    archivo=file
-                )
+        # if docs:
+        #     for file in request.FILES.getlist("documentos"):
+        #         Documentos.objects.create(
+        #             cita=cita,
+        #             nombre=nombre_doc if nombre_doc else file.name,
+        #             archivo=file
+        #         )
+
 
         if form.is_valid():
             od = form.save(commit=False)
@@ -522,7 +524,16 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
 
             messages.success(request, "✅ Odontograma guardado correctamente.")
             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
-        else:
+        elif docs:
+            
+            for file in request.FILES.getlist("documentos"):
+                Documentos.objects.create(
+                    cita=cita,
+                    nombre=nombre_doc if nombre_doc else file.name,
+                    archivo=file
+                )
+            messages.success(request, f"✅ {len(docs)} documento(s) guardado(s) correctamente.")
+        else :
             messages.error(request, "❌ Revisa el formulario.")
     else:
         
