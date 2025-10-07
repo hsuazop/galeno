@@ -81,6 +81,13 @@
                                     Diagnostico y Tratamiento
                                 </a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-fiveAA" data-bs-toggle="tab" href="#fiveAA" role="tab"
+                                   aria-controls="fiveAA" aria-selected="false" tabindex="-1"><i
+                                        class="ri-attachment-line me-2"></i>
+                                    Odontograma 2
+                                </a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="customTabContent3">
                             <div class="tab-pane fade show active" id="oneAA" role="tabpanel">
@@ -244,7 +251,6 @@
                                                 {% endfor %}
                                             {% endif %}
                                     </div>
-
                                     <div class="d-flex justify-content-between">
                                         <button type="button" class="btn btn-outline-secondary mb-3"
                                                 onclick="addMedicamento()">Agregar
@@ -254,8 +260,17 @@
                                         <button type="submit" class="btn btn-success">Guardar Cita</button>
                                     </div>
 
+
                                 </form>
                             </div>
+
+                            <!--    
+                            <div class="tab-pane fade" id="fiveAA" role="tabpanel">
+
+                                <h1>odontograma 2</h1>
+                                <canvas id="canvas2" width="800" height="800" style="border:1px solid #ccc"></canvas>
+                            </div> -->
+                                
                         </div>
                     </div>
                 </div>
@@ -284,6 +299,8 @@
     <base href="{% static 'odontograma/' %}">
     <script src="{% static 'odontograma/js/engine.js' %}"></script>
 
+    <!-- <script src="{% static 'odontograma2/public_html/js/odontCanvas/core/engine.js' %}"></script> -->
+
     <script defer>
         window.addEventListener('DOMContentLoaded', () => {
             // --- referencias DOM
@@ -307,15 +324,37 @@
             const initialData = {{ odontograma_json_str|safe }};
             console.log('Initial data:', initialData);
 
+            // Determinar modo del odontograma según los dientes en el json
+            const hasAdult = initialData.some(item => item.tooth >= 11 && item.tooth <= 48);
+            const hasChild = initialData.some(item => item.tooth >= 51 && item.tooth <= 75);
+
+            // Cargar odontograma adulto
+            if (hasAdult) {
+                engine.changeView("0");
+                console.log('Modo adulto activado automáticamente');
+                initialData.filter(item => item.tooth >= 11 && item.tooth <= 48)
+                    .forEach(item => {
+                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                    });
+            }
+            // Cargar odontograma niño
+            if (hasChild) {
+                engine.changeView("1");
+                console.log('Modo niño activado automáticamente');
+                initialData.filter(item => item.tooth >= 51 && item.tooth <= 75)
+                    .forEach(item => {
+                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                    });
+            }
+
+            if (!hasAdult && !hasChild) {
+                console.log('No se detectaron dientes válidos, modo por defecto (adulto)');
+            }
 
             // listeners opcionales
             canvas.addEventListener('mousedown', e => engine.onMouseClick?.(e));
             canvas.addEventListener('mousemove', e => engine.onMouseMove?.(e));
             window.addEventListener('keydown', e => engine.onButtonClick?.(e));
-
-            initialData.forEach(item => {
-                engine.load(item.tooth, item.damage, item.surface, item.note)
-            })        
 
             //Enviar odontograma con el form de la cita
             const odontoField = document.createElement('textarea');
@@ -357,6 +396,39 @@
 
         });
     </script>
+    <!--
+    <script defer>
+        /*
+        window.addEventListener('DOMContentLoaded', () => {
+            const canvas2 = document.getElementById('canvas2');
+            const form2 = document.getElementById('form-odontograma2');
+            const outField2 = document.getElementById('odontograma2-json');
+            const btnDump2 = document.getElementById('btn-dump2');
+
+            if (!canvas2) {
+                console.error('No se encontró #canvas2');
+            return;
+            }
+
+            const engine2 = new Engine();
+            engine2.setCanvas(canvas2);
+            engine2.init();
+
+            const initialData2 = {{ odontograma_json_str|safe }};
+            console.log('Initial data2:', initialData2);
+
+            initialData2.forEach(item => {
+                engine2.load(item.tooth, item.damage, item.surface, item.note);
+            });
+
+            canvas2.addEventListener('mousedown', e => engine2.onMouseClick?.(e));
+            canvas2.addEventListener('mousemove', e => engine2.onMouseMove?.(e));
+            window.addEventListener('keydown', e => engine2.onButtonClick?.(e));
+
+            engine2.update();
+        });
+        */
+    </script>-->
 
     <script defer>
         function addMedicamento() {
