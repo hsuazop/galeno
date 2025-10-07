@@ -468,7 +468,8 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
 
         docs = request.FILES.getlist("documentos")
         nombre_doc = request.POST.get("nombre_documento", "").strip()
-        if docs and nombre_doc:
+
+        if docs:
             for file in request.FILES.getlist("documentos"):
                 Documentos.objects.create(
                     cita=cita,
@@ -476,10 +477,6 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
                     archivo=file
                 )
             messages.success(request, f"✅ {len(docs)} documento(s) guardado(s) correctamente.")
-        else:
-            if request.FILES.get("documentos") and not nombre_doc:
-                messages.error(request, "❌ Debes ingresar un nombre para el/los documento(s).")
-
 
         if form.is_valid():
             od = form.save(commit=False)
@@ -541,7 +538,7 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
 
             messages.success(request, "✅ Odontograma guardado correctamente.")
             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
-        elif not docs:
+        else:
             messages.error(request, "❌ Revisa el formulario.")
     else:
         
@@ -551,7 +548,7 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     initial_data = instance.datos if instance else []
     odontograma_json_str = json.dumps(initial_data)
     
-    #print(odontograma_json_str)
+    print(odontograma_json_str)
 
     return render(
         request,
