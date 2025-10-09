@@ -180,11 +180,14 @@
                                     <!-- campo oculto donde se guarda el JSON -->
                                     <textarea id="odontograma-json" name="datos"
                                               hidden>{{ odontograma.json|default:"" }}</textarea>
-                                    <button id="btn-odonto-guardar" type="submit">Guardar</button>
+                                    <div class="d-flex justify-content-end">
+                                        <button id="btn-odonto-guardar" type="submit" class="btn btn-success">Guardar</button>
+                                    </div>
                                 </form>
+                                <div class="d-flex justify-content-center">
+                                    <canvas id="canvas" width="800" height="800" style="border:1px solid #ccc"></canvas>
+                                </div>
 
-                                <canvas id="canvas" width="800" height="800" style="border:1px solid #ccc"></canvas>
-                            </div>
 
 
                             <div class="tab-pane fade" id="fourAA" role="tabpanel">
