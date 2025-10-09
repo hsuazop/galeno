@@ -437,6 +437,7 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, paciente=paciente)
     cita_anterior = (Cita.objects.filter(paciente=cita.paciente, fecha_hora__lt=cita.fecha_hora).order_by('-fecha_hora').first())
     medico = getattr(request.user, 'medico', None)
+    docs_paciente = Documentos.objects.filter(cita__paciente=paciente)
 
     diagnostico = getattr(cita, 'diagnostico', None)
     if not diagnostico:
@@ -565,7 +566,7 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     #     }
     # )
 
-    #render para usar usar url del odontograma 2
+    #render para usar usar url del odontograma2
     template_name = 'dashboard/consulta_paciente_odontologo.html'
     if request.resolver_match.url_name == 'editar_cita_odontologo2':
         template_name = 'dashboard/consulta_paciente_odontologo2.html'
@@ -580,6 +581,7 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
             'odontograma_json_str': odontograma_json_str,
             'cita': cita,
             'medicamentos': medicamentos,
+            'docs_paciente':docs_paciente,
         }
     )
 
