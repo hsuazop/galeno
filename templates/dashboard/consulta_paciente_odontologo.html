@@ -466,7 +466,25 @@
         }
     </script>
 
+    <script defer>
+        // Guardar el tab activo al hacer clic
+        document.querySelectorAll('.nav-link[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('click', function () {
+                localStorage.setItem('activeTabId', this.getAttribute('href'));
+            });
+        });
 
+        // Restaurar el tab activo al cargar la página
+        window.addEventListener('DOMContentLoaded', function () {
+            const activeTabId = localStorage.getItem('activeTabId');
+            if (activeTabId) {
+                const tab = document.querySelector(`.nav-link[href="${activeTabId}"]`);
+                if (tab) {
+                    tab.click();
+                }
+            }
+        });
+    </script>
 
 
 {% endblock %}
