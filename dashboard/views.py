@@ -550,9 +550,29 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     
     print(odontograma_json_str)
 
+    #-- render para solo usar pantalla del odontograma original
+
+    # return render(
+    #     request,
+    #     'dashboard/consulta_paciente_odontologo.html',
+    #     {
+    #         'paciente': paciente,
+    #         'citas': citas,
+    #         'form': form,
+    #         'odontograma_json_str': odontograma_json_str,
+    #         'cita': cita,
+    #         'medicamentos': medicamentos,
+    #     }
+    # )
+
+    #render para usar usar url del odontograma 2
+    template_name = 'dashboard/consulta_paciente_odontologo.html'
+    if request.resolver_match.url_name == 'editar_cita_odontologo2':
+        template_name = 'dashboard/consulta_paciente_odontologo2.html'
+
     return render(
         request,
-        'dashboard/consulta_paciente_odontologo.html',
+        template_name,
         {
             'paciente': paciente,
             'citas': citas,
