@@ -145,6 +145,17 @@
                                                                     <strong>Recomendaciones:</strong> {{ cita.receta.recomendaciones_generales }}
                                                                 </p>
                                                             {% endif %}
+
+                                                            {% if cita.documentos.all %}
+                                                                <p><strong>Documentos:</strong></p>
+                                                                <ul>
+                                                                    {% for doc in cita.documentos.all %}
+                                                                        <li>
+                                                                            <a href="{{ doc.archivo.url }}" target="_blank">{{ doc.nombre }}</a>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
                                                             <div>
                                                                 <a href="{% url 'dashboard:editar_cita_odontologo' paciente.id cita.id %}" class="btn btn-sm btn-success">
                                                                 Ver Cita
@@ -193,10 +204,10 @@
                                 </form>
                                     <!-- Lista documentos existentes -->
                                     <h6 class="mt-3">Documentos existentes:</h6>
-                                    {% if cita.documentos.all %}
+                                    {% if docs_paciente %}
                                         
                                         <ul>
-                                            {% for doc in cita.documentos.all %}
+                                            {% for doc in docs_paciente %}
                                                 <li>
                                                     <a href="{{ doc.archivo.url }}" target="_blank">{{ doc.nombre }}</a>
                                                 </li>
