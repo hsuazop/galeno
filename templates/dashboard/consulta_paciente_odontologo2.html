@@ -1,0 +1,491 @@
+{% extends 'base/dashboard.html' %}
+{% load static %}
+{% block content-body %}
+
+
+    <h5 class="mb-3">Datos del Paciente</h5>
+    <div class="p-4 bg-light rounded border">
+        <div class="row">
+            <div class="col-2 mb-3">
+                {#                    http://localhost:9000/dashboard/citas/editar/odontologo/16/44/#}
+                <img src="{% static "galeno/img/f587a50d-79f4-4ee8-b28e-c18343a4f822.png" %}" class="img-fluid" alt="">
+            </div>
+            <!-- Columna 1 -->
+            <div class="col-md-5 mb-3">
+                <p><strong>Nombre:</strong> {{ paciente.nombre }} {{ paciente.apellido }}</p>
+                <p><strong>DNI:</strong> {{ paciente.dni|default:"No registrado" }}</p>
+                {% if paciente.edad %}
+                    <p><strong>Edad:</strong> {{ paciente.edad }} años</p>
+                {% endif %}
+                {% if paciente.fecha_nacimiento %}
+                    <p><strong>Fecha de nacimiento:</strong> {{ paciente.fecha_nacimiento|date:"d/m/Y" }}</p>
+                {% endif %}
+                <p><strong>Género:</strong> {{ paciente.get_genero_display }}</p>
+            </div>
+
+            <!-- Columna 2 -->
+            <div class="col-md-5 mb-3">
+
+                <p><strong>Teléfono:</strong> {{ paciente.telefono|default:"No registrado" }}</p>
+                <p><strong>Correo electrónico:</strong> {{ paciente.email|default:"No registrado" }}</p>
+                <p><strong>Dirección:</strong> {{ paciente.direccion|default:"No registrada" }}</p>
+            </div>
+        </div>
+
+        <div class="text-muted text-end">
+            <small>Registrado el {{ paciente.fecha_registro|date:"d/m/Y H:i" }}</small>
+        </div>
+    </div>
+    <br>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="custom-tabs-container">
+                        <ul class="nav nav-tabs" id="customTab3" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-oneAA" data-bs-toggle="tab" href="#oneAA" role="tab"
+                                   aria-controls="oneAA" aria-selected="false" tabindex="-1"><i class="ri-tent-line me-2"></i>
+                                    Historial
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="tab-twoAA" data-bs-toggle="tab" href="#twoAA" role="tab"
+                                   aria-controls="twoAA" aria-selected="true"><i
+                                        class="ri-ancient-gate-line me-2"></i>
+                                    Odontograma
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-fourAA" data-bs-toggle="tab" href="#fourAA" role="tab"
+                                   aria-controls="fourAA" aria-selected="false" tabindex="-1"><i
+                                        class="ri-attachment-line me-2"></i>
+                                    RX y Documento
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-threeAA" data-bs-toggle="tab" href="#threeAA" role="tab"
+                                   aria-controls="threeAA" aria-selected="false" tabindex="-1"><i
+                                        class="ri-attachment-line me-2"></i>
+                                    Diagnostico y Tratamiento
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-fiveAA" data-bs-toggle="tab" href="#fiveAA" role="tab"
+                                   aria-controls="fiveAA" aria-selected="false" tabindex="-1"><i
+                                        class="ri-attachment-line me-2"></i>
+                                    Odontograma 2
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="customTabContent3">
+                            <div class="tab-pane fade" id="oneAA" role="tabpanel">
+                                <!-- Row starts -->
+                                <div class="row gx-3">
+                                    <div class="col-12">
+                                        <div class="accordion" id="historialCitas">
+                                            {% for cita in citas %}
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapse{{ forloop.counter }}">
+                                                            Cita del {{ cita.fecha_hora|date:"d/m/Y H:i" }}
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapse{{ forloop.counter }}"
+                                                         class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                                                        <div class="accordion-body">
+                                                            <p><strong>Motivo:</strong> {{ cita.motivo }}</p>
+                                                            <p><strong>Notas:</strong> {{ cita.notas_medico }}</p>
+                                                            {% if cita.evaluacionfisica %}
+                                                                <p>
+                                                                    <strong>Temperatura:</strong> {{ cita.evaluacionfisica.temperatura }}
+                                                                    °C</p>
+                                                                <p>
+                                                                    <strong>Peso:</strong> {{ cita.evaluacionfisica.peso }}
+                                                                    kg</p>
+                                                                <p>
+                                                                    <strong>Estatura:</strong> {{ cita.evaluacionfisica.estatura }}
+                                                                    m</p>
+                                                                <p><strong>Presión
+                                                                    arterial:</strong> {{ cita.evaluacionfisica.presion_arterial }}
+                                                                </p>
+                                                                <p><strong>Frecuencia
+                                                                    cardiaca:</strong> {{ cita.evaluacionfisica.frecuencia_cardiaca }}
+                                                                    bpm
+                                                                </p>
+                                                            {% endif %}
+                                                            {% if cita.diagnostico %}
+                                                                <p>
+                                                                    <strong>Diagnóstico:</strong> {{ cita.diagnostico.descripcion }}
+                                                                </p>
+                                                            {% endif %}
+                                                            {% if cita.receta %}
+                                                                <p><strong>Receta:</strong></p>
+                                                                <ul>
+                                                                    {% for rm in cita.receta.medicamentos.all %}
+                                                                        <li>{{ rm.medicamento.nombre }}
+                                                                            – {{ rm.dosis }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                                <p>
+                                                                    <strong>Recomendaciones:</strong> {{ cita.receta.recomendaciones_generales }}
+                                                                </p>
+                                                            {% endif %}
+                                                            <div>
+                                                                <a href="{% url 'dashboard:editar_cita_odontologo' paciente.id cita.id %}" class="btn btn-sm btn-success">
+                                                                Ver Cita
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% empty %}
+                                                <p>No hay citas registradas aún.</p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Row ends -->
+                            </div>
+                            <div class="tab-pane fade show active" id="twoAA" role="tabpanel">
+
+
+                                <form id="form-odontograma" method="post">
+                                    {% csrf_token %}
+                                    <!-- campo oculto donde se guarda el JSON -->
+                                    <textarea id="odontograma-json" name="datos"
+                                              hidden>{{ odontograma.json|default:"" }}</textarea>
+                                    <button id="btn-odonto-guardar" type="submit">Guardar</button>
+                                </form>
+
+                                <canvas id="canvas" width="800" height="800" style="border:1px solid #ccc"></canvas>
+                            </div>
+
+
+                            <div class="tab-pane fade" id="fourAA" role="tabpanel">
+                                <!--Tab documentos-->
+
+                                <!-- Form para cargar documentos -->
+                                <form id="form-documentos" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <h5>Subir documentos</h5>
+                                        <div class="mb-3">
+                                            <input type="text" name="nombre_documento" class="form-control" placeholder="Nombre del documento (ej. Radiografía01)">
+                                        </div>
+                                    <div class="mb-3">
+                                        <input type="file" name="documentos" multiple class="form-control">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Subir</button>
+                                </form>
+                                    <!-- Lista documentos existentes -->
+                                    <h6 class="mt-3">Documentos existentes:</h6>
+                                    {% if cita.documentos.all %}
+                                        
+                                        <ul>
+                                            {% for doc in cita.documentos.all %}
+                                                <li>
+                                                    <a href="{{ doc.archivo.url }}" target="_blank">{{ doc.nombre }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="mt-3">No se encontraron documentos.</p>
+                                    {% endif %}
+
+                                
+                            </div>
+
+                            <div class="tab-pane fade" id="threeAA" role="tabpanel">
+                                <form id="form-cita" method="post">
+                                    {% csrf_token %}
+                                    <h5>Motivo de la Cita</h5>
+                                    <textarea name="motivo" class="form-control mb-2" required>{{ cita.motivo }}</textarea>
+                                    <textarea name="notas_medico" class="form-control mb-2"
+                                              placeholder="Notas médicas (opcional)">{{ cita.notas_medico }}</textarea>
+
+
+                                    <h5>Diagnóstico</h5>
+                                    <textarea name="diagnostico" class="form-control mb-2"
+                                              placeholder="Diagnóstico (opcional)">{{ cita.diagnostico.descripcion }}</textarea>
+
+                                    <h5>Receta</h5>
+                                    <textarea name="recomendaciones" class="form-control mb-2"
+                                              placeholder="Recomendaciones generales (opcional)">{{ cita.receta.recomendaciones_generales }}</textarea>
+
+                                    <div id="medicamentos">
+                                            {% if cita.receta %}
+                                                {% for m in cita.receta.medicamentos.all %}
+                                                    <div class="row mb-2" id="medicamento">
+                                                        <div class="col">
+                                                            <input name="medicamento[]" class="form-control"
+                                                                placeholder="Medicamento (opcional)" value="{{ m.medicamento }}">
+                                                        </div>
+                                                        <div class="col">
+                                                            <input name="dosis[]" class="form-control"
+                                                                placeholder="Dosis (opcional)" value="{{ m.dosis }}">
+                                                        </div>
+                                                    </div>
+                                                    {% empty %}
+                                                        <div class="row mb-2" id="medicamento">
+                                                            <div class="col">
+                                                                <input name="medicamento[]" class="form-control" placeholder="Medicamento (opcional)">
+                                                            </div>
+                                                            <div class="col">
+                                                                <input name="dosis[]" class="form-control" placeholder="Dosis (opcional)">
+                                                            </div>
+                                                        </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary mb-3"
+                                                onclick="addMedicamento()">Agregar
+                                            medicamento
+                                        </button>
+
+                                        <button type="submit" class="btn btn-success">Guardar Cita</button>
+                                    </div>
+
+
+                                </form>
+                            </div>
+
+                            <!--    
+                            <div class="tab-pane fade" id="fiveAA" role="tabpanel">
+
+                                <h1>odontograma 2</h1>
+                                <canvas id="canvas2" width="800" height="800" style="border:1px solid #ccc"></canvas>
+                            </div> -->
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {#    probando#}
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+    <base href="{% static 'odontograma2/public_html/' %}">
+    <!-- <script src="{% static 'odontograma/js/engine.js' %}"></script> -->
+    <script src="{% static 'odontograma2/public_html/js/odontCanvas/core/engine.js' %}"></script>
+
+    <script defer>
+        window.addEventListener('DOMContentLoaded', () => {
+            // --- referencias DOM
+            const canvas = document.getElementById('canvas');
+            const form = document.getElementById('form-odontograma');
+            const outField = document.getElementById('odontograma-json');
+            const btnDump = document.getElementById('btn-dump');
+            const formCita = document.getElementById('form-cita');
+
+
+            if (!canvas) {
+                console.error('No se encontró #canvas');
+                return;
+            }
+
+            // --- crear e inicializar engine ANTES de usarlo
+            const engine = new Engine();
+            engine.setCanvas(canvas);
+            engine.init();
+
+            const initialData = {{ odontograma_json_str|safe }};
+            console.log('Initial data:', initialData);
+
+            // Determinar modo del odontograma según los dientes en el json
+            const hasAdult = initialData.some(item => item.tooth >= 11 && item.tooth <= 48);
+            const hasChild = initialData.some(item => item.tooth >= 51 && item.tooth <= 75);
+
+            // Cargar odontograma adulto
+            if (hasAdult) {
+                engine.changeView("0");
+                console.log('Modo adulto activado automáticamente');
+                initialData.filter(item => item.tooth >= 11 && item.tooth <= 48)
+                    .forEach(item => {
+                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                    });
+            }
+            // Cargar odontograma niño
+            if (hasChild) {
+                engine.changeView("1");
+                console.log('Modo niño activado automáticamente');
+                initialData.filter(item => item.tooth >= 51 && item.tooth <= 75)
+                    .forEach(item => {
+                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                    });
+            }
+
+            if (!hasAdult && !hasChild) {
+                console.log('No se detectaron dientes válidos, modo por defecto (adulto)');
+            }
+
+            // listeners opcionales
+            canvas.addEventListener('mousedown', e => engine.onMouseClick?.(e));
+            canvas.addEventListener('mousemove', e => engine.onMouseMove?.(e));
+            window.addEventListener('keydown', e => engine.onButtonClick?.(e));
+
+            //Enviar odontograma con el form de la cita
+            const odontoField = document.createElement('textarea');
+            odontoField.name = 'datos';
+            odontoField.hidden = true;
+            formCita.appendChild(odontoField);
+
+            formCita.addEventListener('submit', e => {
+                const payload = engine.getData?.() ?? [];
+                if (!payload.length) {
+                    e.preventDefault();
+                    alert("No hay datos en el odontograma.");
+                    return;
+                }
+                odontoField.value = JSON.stringify(payload);
+                console.log("Odontograma enviado con el form:", odontoField.value);
+            });
+
+            // --- GUARDAR: antes del submit mete el JSON en el textarea
+            function exportJSON() {
+                const payload = engine?.getData?.() ?? [];
+                if (outField) outField.value = JSON.stringify(payload);
+                console.log('JSON listo para POST:', outField?.value);
+                return payload;
+            }
+
+            form?.addEventListener('submit', () => exportJSON());
+
+            // --- botón de prueba
+            btnDump?.addEventListener('click', () => {
+                const payload = engine?.getData?.() ?? [];
+                console.log('----- ODONTOGRAMA DUMP -----');
+                console.log('Objeto JS:', payload);
+                try {
+                    console.log('JSON string:', JSON.stringify(payload));
+                } catch (e) {
+                }
+            });
+
+        });
+    </script>
+    
+    
+    <!--
+    <script defer>
+        /*
+        window.addEventListener('DOMContentLoaded', () => {
+            const canvas2 = document.getElementById('canvas2');
+            const form2 = document.getElementById('form-odontograma2');
+            const outField2 = document.getElementById('odontograma2-json');
+            const btnDump2 = document.getElementById('btn-dump2');
+
+            if (!canvas2) {
+                console.error('No se encontró #canvas2');
+            return;
+            }
+
+            const engine2 = new Engine();
+            engine2.setCanvas(canvas2);
+            engine2.init();
+
+            const initialData2 = {{ odontograma_json_str|safe }};
+            console.log('Initial data2:', initialData2);
+
+            initialData2.forEach(item => {
+                engine2.load(item.tooth, item.damage, item.surface, item.note);
+            });
+
+            canvas2.addEventListener('mousedown', e => engine2.onMouseClick?.(e));
+            canvas2.addEventListener('mousemove', e => engine2.onMouseMove?.(e));
+            window.addEventListener('keydown', e => engine2.onButtonClick?.(e));
+
+            engine2.update();
+        });
+        */
+    </script>-->
+
+    <script defer>
+        function addMedicamento() {
+            const container = document.getElementById('medicamentos');
+            const originalRow = document.getElementById('medicamento');
+
+            // valores originales
+            const medValue = originalRow.querySelector('input[name="medicamento[]"]').value;
+            const dosisValue = originalRow.querySelector('input[name="dosis[]"]').value;
+
+            // nueva fila
+            const row = document.createElement('div');
+            row.className = 'row mb-2';
+            row.innerHTML = `
+                <div class="col">
+                    <input name="medicamento[]" class="form-control" value="${medValue}" readonly>
+                </div>
+                <div class="col">
+                    <input name="dosis[]" class="form-control" value="${dosisValue}" readonly>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger" onclick="removeMedicamento(this)">X</button>
+                </div>
+            `;
+
+            container.appendChild(row);
+
+            // limpiar los originales
+            originalRow.querySelector('input[name="medicamento[]"]').value = '';
+            originalRow.querySelector('input[name="dosis[]"]').value = '';
+        }
+
+        function removeMedicamento(button) {
+            button.closest('.row').remove();
+        }
+    </script>
+
+    <script defer>
+        // Guardar el tab activo al hacer clic
+        document.querySelectorAll('.nav-link[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('click', function () {
+                localStorage.setItem('activeTabId', this.getAttribute('href'));
+            });
+        });
+
+        // Restaurar el tab activo al cargar la página
+        window.addEventListener('DOMContentLoaded', function () {
+            const activeTabId = localStorage.getItem('activeTabId');
+            if (activeTabId) {
+                const tab = document.querySelector(`.nav-link[href="${activeTabId}"]`);
+                if (tab) {
+                    tab.click();
+                }
+            }
+        });
+    </script>
+
+
+{% endblock %}
