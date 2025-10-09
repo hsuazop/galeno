@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('citas/editar/medico/<int:paciente_id>/<int:cita_id>/', editar_cita_medico, name='editar_cita_medico'),
     path('citas/editar/odontologo/<int:paciente_id>/<int:cita_id>/', editar_cita_odontologo, name='editar_cita_odontologo'),
+    path('citas/editar/odontologo2/<int:paciente_id>/<int:cita_id>/', editar_cita_odontologo, name='editar_cita_odontologo2'),     #--> path para mostrar odontograma2
     path('citas/editar/psicologo/<int:paciente_id>/<int:cita_id>/', editar_cita_psicologo, name='editar_cita_psicologo'),
     path('citas/editar/nutricionista/<int:paciente_id>/<int:cita_id>/', editar_cita_nutricionista, name='editar_cita_nutricionista'),
 
