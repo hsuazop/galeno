@@ -1332,9 +1332,9 @@ Engine.prototype.onButtonClick = function (event) {
     "use strict";
     //--console.log("key " + event.key);
 
-    if (event.key === "p") {
-        this.print();
-    }
+    // if (event.key === "p") {
+    //     this.print();
+    // }
 
 
     if (event.key === "v") {
