@@ -339,21 +339,22 @@
             // Determinar modo del odontograma según los dientes en el json
             const hasAdult = initialData.some(item => item.tooth >= 11 && item.tooth <= 48);
             const hasChild = initialData.some(item => item.tooth >= 51 && item.tooth <= 75);
+            
+            // Cargar odontograma niño
+            if (hasChild) {
+                engine.changeView("1");
+                console.log('Modo niño activado automáticamente');
+                initialData.filter(item => item.tooth >= 51 && item.tooth <= 75)
+                    .forEach(item => {
+                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                    });
+            }
 
             // Cargar odontograma adulto
             if (hasAdult) {
                 engine.changeView("0");
                 console.log('Modo adulto activado automáticamente');
                 initialData.filter(item => item.tooth >= 11 && item.tooth <= 48)
-                    .forEach(item => {
-                        engine.load(item.tooth, item.damage, item.surface, item.note)
-                    });
-            }
-            // Cargar odontograma niño
-            if (hasChild) {
-                engine.changeView("1");
-                console.log('Modo niño activado automáticamente');
-                initialData.filter(item => item.tooth >= 51 && item.tooth <= 75)
                     .forEach(item => {
                         engine.load(item.tooth, item.damage, item.surface, item.note)
                     });
@@ -368,21 +369,26 @@
             canvas.addEventListener('mousemove', e => engine.onMouseMove?.(e));
             window.addEventListener('keydown', e => engine.onButtonClick?.(e));
 
-            //Enviar odontograma con el form de la cita
+
+            // Guardar odontograma automáticamente al enviar el form de la cita
             const odontoField = document.createElement('textarea');
             odontoField.name = 'datos';
             odontoField.hidden = true;
             formCita.appendChild(odontoField);
 
             formCita.addEventListener('submit', e => {
+
+                // Guardar el odontograma junto con el form de la cita
                 const payload = engine.getData?.() ?? [];
-                if (!payload.length) {
-                    e.preventDefault();
-                    alert("No hay datos en el odontograma.");
-                    return;
-                }
                 odontoField.value = JSON.stringify(payload);
+
                 console.log("Odontograma enviado con el form:", odontoField.value);
+                // Validar si el odontograma no está vacío:
+                // if (!payload.length) {
+                //     e.preventDefault();
+                //     alert("No hay datos en el odontograma.");
+                //     return;
+                // }
             });
 
             // --- GUARDAR: antes del submit mete el JSON en el textarea
