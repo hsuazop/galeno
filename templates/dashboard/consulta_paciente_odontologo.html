@@ -187,8 +187,7 @@
                                 <div class="d-flex justify-content-center">
                                     <canvas id="canvas" width="800" height="800" style="border:1px solid #ccc"></canvas>
                                 </div>
-
-
+                            </div> <!-- end twoAA -->
 
                             <div class="tab-pane fade" id="fourAA" role="tabpanel">
                                 <!--Tab documentos-->
@@ -335,7 +334,7 @@
             engine.setCanvas(canvas);
             engine.init();
 
-            const initialData = {{ odontograma_json_str|safe }};
+            const initialData = JSON.parse('{{ odontograma_json_str|escapejs }}');
             console.log('Initial data:', initialData);
 
             // Determinar modo del odontograma según los dientes en el json
