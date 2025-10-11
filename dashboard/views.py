@@ -461,23 +461,24 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
 
 
     if request.method == 'POST':
-
-        post_data = request.POST.copy()
-        post_data['datos'] = request.POST.get('odontograma_json', '[]')
-
-        form = OdontogramaForm(request.POST, instance=instance)
-
         docs = request.FILES.getlist("documentos")
         nombre_doc = request.POST.get("nombre_documento", "").strip()
 
+        # form documentos
         if docs:
-            for file in request.FILES.getlist("documentos"):
+            for file in docs:
                 Documentos.objects.create(
                     cita=cita,
                     nombre=nombre_doc if nombre_doc else file.name,
                     archivo=file
                 )
             messages.success(request, f"✅ {len(docs)} documento(s) guardado(s) correctamente.")
+            return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
+
+        # Si no hay documentos, procesar el form principal
+        post_data = request.POST.copy()
+        post_data['datos'] = request.POST.get('odontograma_json', '[]')
+        form = OdontogramaForm(request.POST, instance=instance)
 
         if form.is_valid():
             od = form.save(commit=False)
