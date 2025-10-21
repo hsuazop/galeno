@@ -435,8 +435,8 @@ def editar_cita_medico(request, paciente_id, cita_id):
 def editar_cita_odontologo(request, paciente_id, cita_id):
     paciente = get_object_or_404(Paciente, id=paciente_id)
     cita = get_object_or_404(Cita, id=cita_id, paciente=paciente)
-    cita_anterior = (Cita.objects.filter(paciente=cita.paciente, fecha_hora__lt=cita.fecha_hora).order_by('-fecha_hora').first())
     medico = getattr(request.user, 'medico', None)
+    
     docs_paciente = Documentos.objects.filter(cita__paciente=paciente)
 
     diagnostico = getattr(cita, 'diagnostico', None)
@@ -452,11 +452,25 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     # Para la lista que ya mostrabas
     citas = Cita.objects.filter(paciente=paciente, medico=medico).order_by('-fecha_hora')
 
-    # Tomar el odontograma de ESA cita (si existe)
+
     instance = Odontograma.objects.filter(paciente=paciente, cita=cita).order_by('-id').first()
 
-    if not instance and cita_anterior:
-        instance = Odontograma.objects.filter(paciente=paciente, cita=cita_anterior).order_by('-id').first()
+    # buscar el de la cita anterior
+    if not instance:
+        # Buscar la cita anterior completada (excluir la actual y borradores)
+        cita_anterior = (Cita.objects.filter(paciente=paciente, medico=medico).exclude(id=cita.id).order_by('-fecha_hora').first())
+        
+        if cita_anterior:
+            # Buscar odontograma de la cita anterior
+            instance = Odontograma.objects.filter(paciente=paciente, cita=cita_anterior).order_by('-id').first()
+            if instance:
+                print(f"✅ Cargando odontograma de cita anterior ID: {cita_anterior.id}")
+            else:
+                print(f"⚠️ Cita anterior ID {cita_anterior.id} encontrada, pero sin odontograma")
+        else:
+            print("ℹ️ No hay citas anteriores para este paciente")
+    else:
+        print(f"✅ Usando odontograma existente de la cita actual ID: {cita.id}")
 
 
 
@@ -550,7 +564,16 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     initial_data = instance.datos if instance else []
     odontograma_json_str = json.dumps(initial_data)
     
-    print(odontograma_json_str)
+    # Debug final: mostrar qué se está enviando al template
+    print(f"\n{'='*60}")
+    print(f"🔍 DEBUG FINAL - Cita ID: {cita.id}")
+    print(f"📊 JSON enviado al frontend: {odontograma_json_str}")
+    print(f"📝 Total de dientes en odontograma: {len(initial_data)}")
+    if instance:
+        print(f"✅ Odontograma ID: {instance.id} (de Cita ID: {instance.cita.id})")
+    else:
+        print("⚠️ No hay odontograma (se enviará array vacío)")
+    print(f"{'='*60}\n")
 
     #-- render para solo usar pantalla del odontograma original
 
