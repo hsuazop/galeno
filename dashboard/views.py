@@ -463,16 +463,6 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
         if cita_anterior:
             # Buscar odontograma de la cita anterior
             instance = Odontograma.objects.filter(paciente=paciente, cita=cita_anterior).order_by('-id').first()
-            if instance:
-                print(f"✅ Cargando odontograma de cita anterior ID: {cita_anterior.id}")
-            else:
-                print(f"⚠️ Cita anterior ID {cita_anterior.id} encontrada, pero sin odontograma")
-        else:
-            print("ℹ️ No hay citas anteriores para este paciente")
-    else:
-        print(f"✅ Usando odontograma existente de la cita actual ID: {cita.id}")
-
-
 
     if request.method == 'POST':
         docs = request.FILES.getlist("documentos")
@@ -563,17 +553,6 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     # JSON existente para precargar en el engine (array literal en JS)
     initial_data = instance.datos if instance else []
     odontograma_json_str = json.dumps(initial_data)
-    
-    # Debug final: mostrar qué se está enviando al template
-    print(f"\n{'='*60}")
-    print(f"🔍 DEBUG FINAL - Cita ID: {cita.id}")
-    print(f"📊 JSON enviado al frontend: {odontograma_json_str}")
-    print(f"📝 Total de dientes en odontograma: {len(initial_data)}")
-    if instance:
-        print(f"✅ Odontograma ID: {instance.id} (de Cita ID: {instance.cita.id})")
-    else:
-        print("⚠️ No hay odontograma (se enviará array vacío)")
-    print(f"{'='*60}\n")
 
     #-- render para solo usar pantalla del odontograma original
 
