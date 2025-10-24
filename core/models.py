@@ -241,7 +241,7 @@ class Documentos(models.Model):
     
 class PacienteOdontograma(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_odontogramas')
-    odontograma = models.ForeignKey(Odontograma, on_delete=models.CASCADE, related_name='paciente_odontogramas')
+    odontograma =  models.JSONField(default=list)
     fecha_asignacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
