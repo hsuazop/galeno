@@ -550,6 +550,18 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
         
         form = OdontogramaForm(instance=instance)
 
+    # Al cargar, clona el odontograma anterior y lo asigna a la cita actual
+    if request.method != 'POST' and not Odontograma.objects.filter(paciente=paciente, cita=cita).exists():
+        source_data = instance.datos if instance else []
+        if source_data:
+            instance = Odontograma.objects.create(
+                paciente=paciente,
+                medico=medico,
+                cita=cita,
+                datos=source_data
+            )
+            form = OdontogramaForm(instance=instance)
+
     # JSON existente para precargar en el engine (array literal en JS)
     initial_data = instance.datos if instance else []
     odontograma_json_str = json.dumps(initial_data)
