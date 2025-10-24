@@ -238,3 +238,11 @@ class Documentos(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+class PacienteOdontograma(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paciente_odontogramas')
+    odontograma = models.ForeignKey(Odontograma, on_delete=models.CASCADE, related_name='paciente_odontogramas')
+    fecha_asignacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Odontograma asignado a {self.paciente}"
