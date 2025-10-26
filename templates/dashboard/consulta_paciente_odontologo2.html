@@ -164,7 +164,7 @@
                             <div class="tab-pane fade show active" id="twoAA" role="tabpanel">
 
 
-                                <form id="form-odontograma" method="post">
+                                <form id="form-odontograma" method="post" action="{{ request.path }}">
                                     {% csrf_token %}
                                     <!-- campo oculto donde se guarda el JSON -->
                                     <textarea id="odontograma-json" name="datos"

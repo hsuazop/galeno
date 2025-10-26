@@ -452,17 +452,8 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
     # Para la lista que ya mostrabas
     citas = Cita.objects.filter(paciente=paciente, medico=medico).order_by('-fecha_hora')
 
-
+    # Siempre intenta obtener el odontograma de la cita actual
     instance = Odontograma.objects.filter(paciente=paciente, cita=cita).order_by('-id').first()
-
-    # buscar el de la cita anterior
-    if not instance:
-        # Buscar la cita anterior completada (excluir la actual y borradores)
-        cita_anterior = (Cita.objects.filter(paciente=paciente, medico=medico).exclude(id=cita.id).order_by('-fecha_hora').first())
-        
-        if cita_anterior:
-            # Buscar odontograma de la cita anterior
-            instance = Odontograma.objects.filter(paciente=paciente, cita=cita_anterior).order_by('-id').first()
 
     if request.method == 'POST':
         docs = request.FILES.getlist("documentos")
@@ -480,9 +471,14 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
             return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
 
         # Si no hay documentos, procesar el form principal
+        # Asegurar que el campo 'datos' esté presente (soporta 'datos' o legado 'odontograma_json')
         post_data = request.POST.copy()
-        post_data['datos'] = request.POST.get('odontograma_json', '[]')
-        form = OdontogramaForm(request.POST, instance=instance)
+        if 'datos' not in post_data:
+            post_data['datos'] = request.POST.get('odontograma_json', '[]')
+
+        # IMPORTANTE: en POST no usar fallback al odontograma de otra cita como instance.
+        # Si la cita actual aún no tiene, el ModelForm creará uno nuevo con commit=False.
+        form = OdontogramaForm(post_data, instance=instance)
 
         if form.is_valid():
             od = form.save(commit=False)
@@ -543,16 +539,35 @@ def editar_cita_odontologo(request, paciente_id, cita_id):
                     )
 
             messages.success(request, "✅ Odontograma guardado correctamente.")
-            return redirect('dashboard:editar_cita_odontologo', paciente_id=paciente.id, cita_id=cita.id)
+            # Mantener la misma vista en la que estamos (odontologo u odontologo2)
+            current_url_name = request.resolver_match.url_name
+            next_view = 'dashboard:editar_cita_odontologo2' if current_url_name == 'editar_cita_odontologo2' else 'dashboard:editar_cita_odontologo'
+            return redirect(next_view, paciente_id=paciente.id, cita_id=cita.id)
         else:
             messages.error(request, "❌ Revisa el formulario.")
     else:
         
         form = OdontogramaForm(instance=instance)
 
-    # Al cargar, clona el odontograma anterior y lo asigna a la cita actual
+    # Al cargar (GET), clona el odontograma anterior y lo asigna a la cita actual
     if request.method != 'POST' and not Odontograma.objects.filter(paciente=paciente, cita=cita).exists():
-        source_data = instance.datos if instance else []
+        # Buscar el de la cita anterior SOLO en GET para prellenar
+        cita_anterior = (
+            Cita.objects.filter(paciente=paciente, medico=medico)
+            .exclude(id=cita.id)
+            .order_by('-fecha_hora')
+            .first()
+        )
+        if cita_anterior:
+            anterior = (
+                Odontograma.objects.filter(paciente=paciente, cita=cita_anterior)
+                .order_by('-id')
+                .first()
+            )
+        else:
+            anterior = None
+
+        source_data = (anterior.datos if anterior else [])
         if source_data:
             instance = Odontograma.objects.create(
                 paciente=paciente,
