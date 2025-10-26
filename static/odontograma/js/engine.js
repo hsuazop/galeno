@@ -1956,11 +1956,11 @@ Engine.prototype.createMenu = function () {
 
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Obturación", 11);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Prótesis (Remo)", 12);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Prótesis Removible", 12);
     posX = posX + xSeparator;
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Migración", 13);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Rotación", 14);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Giroversión", 14);
     posX = posX + xSeparator;
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Fusión", 15);
     posX = posX + xSeparator;
@@ -1969,17 +1969,17 @@ Engine.prototype.createMenu = function () {
     posY = posY + buttonHeight + ySeparator;
     posX = startX;
 
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Erupción", 24);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Diente en Erupción", 24);
     posX = posX + xSeparator;
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Transposición", 25);
     posX = posX + xSeparator;
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Supernumerario", 27);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Pulpa", 20);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Tratamiento Pulpar", 28);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Prótesis", 29);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Prótesis Total", 29);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Perno", 30);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Perno Muñón", 30);
 
     posY = posY + buttonHeight + ySeparator;
     posX = startX;
@@ -1992,33 +1992,33 @@ Engine.prototype.createMenu = function () {
     posX = posX + xSeparator;
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Macrodoncia", 17);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Microdoncia", 10);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Microdoncia", 18);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Discrómico", 22);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Diente Discrómico", 22);
 
     posY = posY + buttonHeight + ySeparator;
     posX = startX;
 
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Desgastado", 37);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Superficie Desgastada", 37);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Semierupcionado", 30);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Semi-impactación", 38);
     posX = posX + xSeparator;
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Intrusión", 20);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Edentulismo", 31);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Edéntulo Total", 31);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Ectópico", 21);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Diente Ectópico", 21);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Impactado", 19);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Impactación", 19);
 
     posY = posY + buttonHeight + ySeparator;
     posX = startX;
 
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Ortodoncia (Remo)", 23);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Ortod. Removible", 23);
     posX = posX + xSeparator;
     this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Extrusión", 9);
     posX = posX + xSeparator;
-    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Poste", 10);
+    this.createMenuButton(posX, posY, buttonWidth, buttonHeight, "Clavija", 10);
 
 }
 
