@@ -400,7 +400,7 @@ Tooth.prototype.drawId = function (context) {
 
     if (this.type === 0) {
 
-        console.log("Drawing id border at: " + (this.y + this.rect.height + space + 10));
+    // console.log("Drawing id border at: " + (this.y + this.rect.height + space + 10));
         // draw id
         context.fillText("" + this.id, this.rect.x + this.rect.width / 2,
                 this.y + this.rect.height + space + 10);
@@ -418,7 +418,7 @@ Tooth.prototype.drawId = function (context) {
                 this.y + this.rect.height + space);
     } else {
 
-        console.log("Drawing id border at: " + (this.rect.y + this.rect.height + space + 10));
+    // console.log("Drawing id border at: " + (this.rect.y + this.rect.height + space + 10));
 
         // draw id
         context.fillText("" + this.id, this.rect.x + this.rect.width / 2,
@@ -602,7 +602,7 @@ Tooth.prototype.createDamage = function (damageId) {
  */
 Tooth.prototype.toggleDamage = function (damageId) {
     "use strict";
-    console.log("Toggle damage for " + this.id + ", damage " + damageId);
+    // console.log("Toggle damage for " + this.id + ", damage " + damageId);
 
     // if there are no damages, then add.
     if (this.damages.length < 1) {
@@ -624,7 +624,7 @@ Tooth.prototype.toggleDamage = function (damageId) {
             // found this damage
             if (this.damages[i].id === damageId)
             {
-                console.log("Splicing array for tooth " + this.id);
+                // console.log("Splicing array for tooth " + this.id);
 
                 splicer = i;
                 exists = true;
