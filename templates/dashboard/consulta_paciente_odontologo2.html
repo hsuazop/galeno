@@ -438,85 +438,85 @@
 
     <!-- Script para funcionalidad de impresión -->
     <script defer>
-        window.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('canvas');
+        window.addEventListener('DOMContentLoaded', function() {
+            var canvas = document.getElementById('canvas');
             
             // Botón para imprimir odontograma completo
-            document.getElementById('btn-imprimir')?.addEventListener('click', () => {
+            document.getElementById('btn-imprimir').addEventListener('click', function() {
                 // Obtener imagen del canvas actual
-                const dataUrl = canvas.toDataURL('image/png');
+                var dataUrl = canvas.toDataURL('image/png');
                 
                 // Crear ventana de impresión
-                const printWindow = window.open('', '_blank', 'width=800,height=600');
+                var printWindow = window.open('', '_blank', 'width=900,height=700');
                 
-                if (printWindow) {
-                    printWindow.document.write(`
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <meta charset="utf-8">
-                            <title>Odontograma - {{ paciente.nombre }} {{ paciente.apellido }}</title>
-                            <style>
-                                body { 
-                                    margin: 0; 
-                                    padding: 20px;
-                                    font-family: Arial, sans-serif;
-                                }
-                                .header {
-                                    margin-bottom: 20px;
-                                    border-bottom: 2px solid #333;
-                                    padding-bottom: 10px;
-                                }
-                                .info-row {
-                                    display: flex;
-                                    justify-content: space-between;
-                                    margin-bottom: 5px;
-                                }
-                                .info-label {
-                                    font-weight: bold;
-                                }
-                                img {
-                                    max-width: 100%;
-                                    height: auto;
-                                    display: block;
-                                    margin: 20px auto;
-                                }
-                                @media print {
-                                    body { margin: 0; padding: 10px; }
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="header">
-                                <h2 style="margin: 0 0 10px 0;">Odontograma</h2>
-                                <div class="info-row">
-                                    <div><span class="info-label">Paciente:</span> {{ paciente.nombre }} {{ paciente.apellido }}</div>
-                                    <div><span class="info-label">DNI:</span> {{ paciente.dni }}</div>
-                                </div>
-                                <div class="info-row">
-                                    <div><span class="info-label">Fecha:</span> {{ cita.fecha_hora|date:"d/m/Y" }}</div>
-                                    <div><span class="info-label">Odontólogo:</span> {{ medico.nombre }} {{ medico.apellido }}</div>
-                                </div>
-                                ${`{{ cita.motivo }}` ? `<div class="info-row"><div><span class="info-label">Motivo:</span> {{ cita.motivo }}</div></div>` : ''}
-                            </div>
-                            <img src="${dataUrl}" alt="Odontograma">
-                            ${`{{ cita.notas_medico }}` ? `<div style="margin-top: 20px;"><div class="info-label">Observaciones:</div><p>{{ cita.notas_medico }}</p></div>` : ''}
-                        </body>
-                        </html>
-                    `);
-                    
-                    printWindow.document.close();
-                    
-                    // Esperar a que la imagen cargue antes de imprimir
-                    setTimeout(() => {
-                        printWindow.focus();
-                        printWindow.print();
-                        // No cerrar automáticamente para que el usuario pueda ver la vista previa
-                        // printWindow.close();
-                    }, 500);
-                } else {
+                if (!printWindow) {
                     alert('Por favor permite las ventanas emergentes para imprimir.');
+                    return;
                 }
+
+                // Cargar el contenido de la leyenda desde el DOM actual
+                var legendElement = document.querySelector('.mt-3.p-3.bg-light.rounded');
+                var legendHTML = legendElement ? legendElement.outerHTML : '';
+
+                // Construir el documento de impresión usando concatenación
+                var printHTML = '<!DOCTYPE html><html><head><meta charset="utf-8">';
+                printHTML += '<title>Odontograma - {{ paciente.nombre }} {{ paciente.apellido }}</title>';
+                printHTML += '<style>';
+                printHTML += 'body { margin: 0; padding: 12px; font-family: Arial, sans-serif; }';
+                printHTML += '.header { margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 6px; }';
+                printHTML += '.info-row { display: flex; justify-content: space-between; margin-bottom: 5px; }';
+                printHTML += '.info-label { font-weight: bold; }';
+                printHTML += 'img.odontograma-img { max-width: 100%; height: auto; display: block; margin: 8px auto 10px; }';
+                printHTML += '.mt-3 { margin-top: 8px !important; }';
+                printHTML += '.p-3 { padding: 8px !important; }';
+                printHTML += '.bg-light { background: #f8f9fa !important; }';
+                printHTML += '.rounded { border-radius: 6px !important; border: 1px solid #e5e5e5; }';
+                printHTML += '.mb-3 { margin-bottom: 8px !important; }';
+                printHTML += '.row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px 10px; }';
+                printHTML += '.col-md-4 { display: flex; align-items: center; line-height: 1; }';
+                printHTML += '.d-flex { display: flex; }';
+                printHTML += '.align-items-center { align-items: center; }';
+                printHTML += 'small { font-size: 10px; }';
+                printHTML += 'strong { font-weight: bold; }';
+                printHTML += 'h6 strong { font-size: 12px; }';
+                printHTML += '.legend-icon { border: 1px solid #ddd; margin-right: 6px; width: 18px; height: 18px; }';
+                printHTML += '.text-muted { color: #6c757d; font-size: 10.5px; }';
+                printHTML += '.g-2 { gap: 4px 10px; }';
+                printHTML += '@media print { @page { size: A4 portrait; margin: 8mm; } body { margin: 0; padding: 6mm; zoom: 0.90; } .bg-light, .rounded { -webkit-print-color-adjust: exact; print-color-adjust: exact; } img.odontograma-img { max-height: 50vh; } .mt-3, .p-3, .row, .col-md-4 { page-break-inside: avoid; break-inside: avoid; } }';
+                printHTML += '</style></head><body>';
+                printHTML += '<div class="header"><h2 style="margin: 0 0 10px 0;">Odontograma</h2>';
+                printHTML += '<div class="info-row"><div><span class="info-label">Paciente:</span> {{ paciente.nombre }} {{ paciente.apellido }}</div>';
+                printHTML += '<div><span class="info-label">DNI:</span> {{ paciente.dni }}</div></div>';
+                printHTML += '<div class="info-row"><div><span class="info-label">Fecha:</span> {{ cita.fecha_hora|date:"d/m/Y" }}</div>';
+                printHTML += '<div><span class="info-label">Odontólogo:</span> {{ medico.nombre }} {{ medico.apellido }}</div></div>';
+                {% if cita.motivo %}
+                printHTML += '<div class="info-row"><div><span class="info-label">Motivo:</span> {{ cita.motivo }}</div></div>';
+                {% endif %}
+                printHTML += '</div>';
+                printHTML += '<img class="odontograma-img" src="' + dataUrl + '" alt="Odontograma">';
+                printHTML += legendHTML;
+                {% if cita.notas_medico %}
+                printHTML += '<div style="margin-top: 20px;"><div class="info-label">Observaciones:</div><p>{{ cita.notas_medico }}</p></div>';
+                {% endif %}
+                printHTML += '<script>';
+                // Inyectar la función con nombre
+                printHTML += 'function drawLegendIcon' + window.drawLegendIcon.toString().substring(8);
+                printHTML += 'window.addEventListener("load", function() {';
+                printHTML += 'var canvases = document.querySelectorAll(".legend-icon");';
+                printHTML += 'canvases.forEach(function(canvas) {';
+                printHTML += 'var damageId = parseInt(canvas.getAttribute("data-damage"));';
+                printHTML += 'if (damageId) { drawLegendIcon(canvas, damageId); }';
+                printHTML += '});});';
+                printHTML += '<\/script></body></html>';
+                
+                printWindow.document.write(printHTML);
+                printWindow.document.close();
+                
+                // Esperar a que carguen imagen y leyenda antes de imprimir
+                setTimeout(function() {
+                    printWindow.focus();
+                    printWindow.print();
+                }, 800);
             });
         });
     </script>
