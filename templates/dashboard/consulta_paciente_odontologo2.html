@@ -2,7 +2,6 @@
 {% load static %}
 {% block content-body %}
 
-
     <h5 class="mb-3">Datos del Paciente</h5>
     <div class="p-4 bg-light rounded border">
         <div class="row">
@@ -79,13 +78,6 @@
                                    aria-controls="threeAA" aria-selected="false" tabindex="-1"><i
                                         class="ri-attachment-line me-2"></i>
                                     Diagnostico y Tratamiento
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="tab-fiveAA" data-bs-toggle="tab" href="#fiveAA" role="tab"
-                                   aria-controls="fiveAA" aria-selected="false" tabindex="-1"><i
-                                        class="ri-attachment-line me-2"></i>
-                                    Odontograma 2
                                 </a>
                             </li>
                         </ul>
@@ -186,8 +178,17 @@
                                         </div>
                                     </div>
                                 </form>
-                                <div class="d-flex justify-content-center">
-                                    <canvas id="canvas" width="650" height="420" style="border:1px solid #ccc"></canvas>
+                                
+                                <!-- Panel de herramientas y canvas del odontograma -->
+                                <div class="row">
+                                    {% include 'dashboard/partials/odontograma_panel_herramientas.html' %}
+
+                                    <!-- Canvas principal -->
+                                    <div class="col-md-9">
+                                        <div class="d-flex justify-content-center">
+                                            <canvas id="canvas" width="650" height="420" style="border:1px solid #ccc"></canvas>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 {% include 'dashboard/partials/odontograma_leyenda.html' %}
@@ -391,6 +392,18 @@
             form?.addEventListener('submit', () => exportJSON());
 
         });
+    </script>
+
+    <!-- Script para panel de herramientas de daños -->
+    <script defer>
+        window.addEventListener('DOMContentLoaded', () => {
+            const engine = window.odontogramaEngine;
+            
+            if (!engine) {
+                console.error('Engine no está disponible');
+                return;
+            }
+
     </script>
 
     <!-- Script para funcionalidades de cambio de vista y descarga -->
