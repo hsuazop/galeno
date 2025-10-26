@@ -1,0 +1,222 @@
+<style>
+    /* Estilos para panel de herramientas del odontograma */
+    .damage-btn.active {
+        background-color: var(--bs-primary) !important;
+        color: white !important;
+        border-color: var(--bs-primary) !important;
+    }
+    
+    .odonto-tools-card .card-body::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .odonto-tools-card .card-body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    .odonto-tools-card .card-body::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    
+    .odonto-tools-card .card-body::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    
+    #selected-damage-name {
+        font-size: 0.9rem;
+        color: #0d6efd;
+    }
+</style>
+
+<!-- Panel de herramientas lateral -->
+<div class="col-md-3">
+    <div class="card odonto-tools-card">
+        <div class="card-header bg-primary text-white">
+            <h6 class="mb-0">Herramientas</h6>
+        </div>
+        <div class="card-body p-2" style="max-height: 500px; overflow-y: auto;">
+            
+            <!-- Daño seleccionado -->
+            <div class="alert alert-info alert-sm mb-2 p-2">
+                <small><strong>Seleccionado:</strong></small>
+                <div id="selected-damage-name" class="fw-bold">Ninguno</div>
+            </div>
+
+            <!-- Categoría: Patologías -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Patologías</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-danger damage-btn" data-damage="1" data-name="Caries">Caries</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning damage-btn" data-damage="5" data-name="Fractura">Fractura</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary damage-btn" data-damage="16" data-name="Remanente Radicular">Rem. Radicular</button>
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="28" data-name="Pulpar">Pulpar</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Tratamientos -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Tratamientos</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-success damage-btn" data-damage="11" data-name="Obturación">Obturación</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary damage-btn" data-damage="2" data-name="Corona Definitiva">Corona Def.</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary damage-btn" data-damage="3" data-name="Corona Temporal">Corona Temp.</button>
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="30" data-name="Perno Muñón">Perno Muñón</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning damage-btn" data-damage="6" data-name="Implante">Implante</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Prótesis -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Prótesis</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-primary damage-btn" data-damage="34" data-name="Prótesis Fija">Prótesis Fija</button>
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="12" data-name="Prótesis Removible">Prót. Removible</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary damage-btn" data-damage="29" data-name="Prótesis Total">Prót. Total</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Ausencias -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Ausencias</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-dark damage-btn" data-damage="4" data-name="Diente Ausente">Ausente</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary damage-btn" data-damage="31" data-name="Edéntulo Total">Edéntulo Total</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Ortodoncia -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Ortodoncia</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-primary damage-btn" data-damage="32" data-name="Ortodóntico Fijo">Ortod. Fijo</button>
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="23" data-name="Ortodóntico Removible">Ortod. Removible</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Anomalías Posición -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Posición</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-warning damage-btn" data-damage="9" data-name="Extruido">Extruido</button>
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="20" data-name="Intruido">Intruido</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary damage-btn" data-damage="13" data-name="Migración">Migración</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary damage-btn" data-damage="14" data-name="Giroversión">Giroversión</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger damage-btn" data-damage="25" data-name="Transposición">Transposición</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning damage-btn" data-damage="21" data-name="Ectópico">Ectópico</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Anomalías Forma/Tamaño -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Forma/Tamaño</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="10" data-name="En Clavija">En Clavija</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary damage-btn" data-damage="15" data-name="Fusión">Fusión</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning damage-btn" data-damage="17" data-name="Macrodoncia">Macrodoncia</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary damage-btn" data-damage="18" data-name="Microdoncia">Microdoncia</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Anomalías Número -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Número</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-success damage-btn" data-damage="27" data-name="Supernumerario">Supernumerario</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Erupción -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Erupción</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="24" data-name="En Erupción">En Erupción</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning damage-btn" data-damage="19" data-name="Impactación">Impactación</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary damage-btn" data-damage="38" data-name="Semi-Impactación">Semi-Impactación</button>
+                </div>
+            </div>
+
+            <!-- Categoría: Otros -->
+            <div class="mb-3">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Otros</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-primary damage-btn" data-damage="8" data-name="Diastema">Diastema</button>
+                    <button type="button" class="btn btn-sm btn-outline-info damage-btn" data-damage="22" data-name="Discrómico">Discrómico</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning damage-btn" data-damage="37" data-name="Superficie Desgastada">Sup. Desgastada</button>
+                </div>
+            </div>
+
+            <!-- Herramientas -->
+            <div class="mb-2">
+                <h6 class="text-muted mb-2" style="font-size: 0.85rem;">Acciones</h6>
+                <div class="d-grid gap-1">
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="btn-reset-selection">
+                        <i class="ri-eraser-line"></i> Limpiar Selección
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para panel de herramientas de daños -->
+<script>
+    (function() {
+        'use strict';
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            const engine = window.odontogramaEngine;
+            
+            if (!engine) {
+                console.error('Engine no está disponible para panel de herramientas');
+                return;
+            }
+
+            const selectedDamageName = document.getElementById('selected-damage-name');
+            const damageButtons = document.querySelectorAll('.damage-btn');
+            const resetBtn = document.getElementById('btn-reset-selection');
+
+            // Función para actualizar UI de botón seleccionado
+            function updateSelectedButton(button) {
+                // Remover clase active de todos
+                damageButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Agregar active al seleccionado
+                if (button) {
+                    button.classList.add('active');
+                    const damageName = button.getAttribute('data-name');
+                    selectedDamageName.textContent = damageName;
+                } else {
+                    selectedDamageName.textContent = 'Ninguno';
+                }
+            }
+
+            // Event listeners para cada botón de daño
+            damageButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const damageId = button.getAttribute('data-damage');
+                    console.log('Seleccionando daño:', damageId);
+                    
+                    // Llamar al método del engine para establecer el daño
+                    engine.setDamage(damageId);
+                    
+                    // Actualizar UI
+                    updateSelectedButton(button);
+                });
+            });
+
+            // Botón de reset
+            resetBtn?.addEventListener('click', () => {
+                engine.setDamage(0);
+                engine.selectedHallazgo = 0;
+                updateSelectedButton(null);
+                console.log('Selección limpiada');
+            });
+
+            // Inicializar sin selección
+            updateSelectedButton(null);
+        });
+    })();
+</script>
