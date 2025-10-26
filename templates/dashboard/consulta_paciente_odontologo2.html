@@ -169,10 +169,157 @@
                                     <!-- campo oculto donde se guarda el JSON -->
                                     <textarea id="odontograma-json" name="datos"
                                               hidden>{{ odontograma.json|default:"" }}</textarea>
-                                    <button id="btn-odonto-guardar" type="submit">Guardar</button>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h3>Template 2 - Odontograma Avanzado</h3>
+                                        <div class="btn-group" role="group">
+                                            <button id="btn-cambiar-adulto" type="button" class="btn btn-outline-primary">Adulto</button>
+                                            <button id="btn-cambiar-nino" type="button" class="btn btn-outline-primary">Niño</button>
+                                            <button id="btn-imprimir" type="button" class="btn btn-outline-info">
+                                                <i class="ri-printer-line"></i> Imprimir
+                                            </button>
+                                            <button id="btn-descargar-png" type="button" class="btn btn-outline-secondary">
+                                                <i class="ri-download-line"></i> Descargar PNG
+                                            </button>
+                                            <button id="btn-odonto-guardar" type="submit" class="btn btn-success">
+                                                <i class="ri-save-line"></i> Guardar
+                                            </button>
+                                        </div>
+                                    </div>
                                 </form>
-
-                                <canvas id="canvas" width="800" height="800" style="border:1px solid #ccc"></canvas>
+                                <div class="d-flex justify-content-center">
+                                    <canvas id="canvas" width="650" height="420" style="border:1px solid #ccc"></canvas>
+                                </div>
+                                
+                                <!-- Leyenda de daños -->
+                                <div class="mt-3 p-3 bg-light rounded">
+                                    <h6 class="mb-3"><strong>Leyenda de Hallazgos Odontológicos (símbolos)</strong></h6>
+                                    <div class="row g-2">
+                                        <!-- Símbolos visuales (todos los dibujables) -->
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="1" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>1 -</strong> Caries (cuadro rojo)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="11" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>11 -</strong> Curación (cuadro azul)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="2" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>2 -</strong> Corona Definitiva (círculo azul)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="3" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>3 -</strong> Corona Temporal (círculo rojo)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="4" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>4 -</strong> Diente Ausente (X azul)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="5" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>5 -</strong> Fractura (línea roja)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="8" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>8 -</strong> Diastema (dos arcos)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="9" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>9 -</strong> Diente Extruido (flecha afuera)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="10" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>10 -</strong> Diente en Clavija (triángulo)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="12" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>12 -</strong> Prótesis Removible (doble línea)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="13" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>13 -</strong> Migración (flecha)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="14" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>14 -</strong> Giroversión (semicírculo)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="15" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>15 -</strong> Fusión (elipse)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="16" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>16 -</strong> Rem. Radicular (RR)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="20" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>20 -</strong> Diente Intruido (flecha adentro)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="23" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>23 -</strong> Ortod. Removible (zig-zag)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="24" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>24 -</strong> Diente en Erupción (V + zig-zag)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="25" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>25 -</strong> Transposición Izq.</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="26" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>26 -</strong> Transposición Der.</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="27" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>27 -</strong> Supernumerario (S)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="28" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>28 -</strong> Pulpar (línea vertical)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="29" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>29 -</strong> Prótesis Total (doble línea)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="30" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>30 -</strong> Perno Muñón</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="31" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>31 -</strong> Edéntulo Total (línea)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="32" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>32 -</strong> Ortod. Fijo (extremo)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="33" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>33 -</strong> Ortod. Fijo (centro)</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="34" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>34 -</strong> Prótesis Fija Izq.</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="35" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>35 -</strong> Prótesis Fija Centro</small>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <canvas class="legend-icon" data-damage="36" width="30" height="30" style="border:1px solid #ddd; margin-right:8px;"></canvas>
+                                            <small><strong>36 -</strong> Prótesis Fija Der.</small>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 p-2 bg-white rounded border">
+                                        <small class="text-muted">
+                                            <strong>Referencias representadas con texto:</strong><br>
+                                            • 6-IMP (Implante) | 17-MAC (Macrodoncia) | 18-MIC (Microdoncia) | 19-I (Impactación)<br>
+                                            • 21-E (Diente Ectópico) | 22-DIS (Diente Discrómico) | 37-DES (Superficie Desgastada) | 38-SI (Semi-Impactación)
+                                        </small>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -191,12 +338,11 @@
                                     </div>
                                     <button type="submit" class="btn btn-success">Subir</button>
                                 </form>
-                                    <!-- Lista documentos existentes -->
-                                    <h6 class="mt-3">Documentos existentes:</h6>
-                                    {% if cita.documentos.all %}
-                                        
+                                    <!-- Lista de todos los documentos del paciente -->
+                                    <h6 class="mt-3">Todos los documentos del paciente:</h6>
+                                    {% if docs_paciente %}
                                         <ul>
-                                            {% for doc in cita.documentos.all %}
+                                            {% for doc in docs_paciente %}
                                                 <li>
                                                     <a href="{{ doc.archivo.url }}" target="_blank">{{ doc.nombre }}</a>
                                                 </li>
@@ -298,8 +444,10 @@
 {% block js %}
     <base href="{% static 'odontograma2/public_html/' %}">
     <!-- <script src="{% static 'odontograma/js/engine.js' %}"></script> -->
-    <script src="{% static 'odontograma2/public_html/js/odontCanvas/core/engine.js' %}"></script>
+    <script src="js/odontCanvas/core/engine.js"></script>
 
+
+    <!-- Script para guardar y cargar el odontograma-->
     <script defer>
         window.addEventListener('DOMContentLoaded', () => {
             // --- referencias DOM
@@ -317,45 +465,41 @@
 
             // --- crear e inicializar engine ANTES de usarlo
             const engine = new Engine();
+            window.odontogramaEngine = engine; // Hacer el engine accesible globalmente
             engine.setCanvas(canvas);
             engine.init();
 
-            const initialData = {{ odontograma_json_str|safe }};
-            console.log('Initial data:', initialData);
+            const initialData = JSON.parse('{{ odontograma_json_str|escapejs }}');
 
             // Determinar modo del odontograma según los dientes en el json
             const hasAdult = initialData.some(item => item.tooth >= 11 && item.tooth <= 48);
             const hasChild = initialData.some(item => item.tooth >= 51 && item.tooth <= 75);
 
-            // Cargar odontograma adulto
-            if (hasAdult) {
-                engine.changeView("0");
-                console.log('Modo adulto activado automáticamente');
-                initialData.filter(item => item.tooth >= 11 && item.tooth <= 48)
-                    .forEach(item => {
-                        engine.load(item.tooth, item.damage, item.surface, item.note)
-                    });
-            }
             // Cargar odontograma niño
             if (hasChild) {
                 engine.changeView("1");
-                console.log('Modo niño activado automáticamente');
                 initialData.filter(item => item.tooth >= 51 && item.tooth <= 75)
                     .forEach(item => {
                         engine.load(item.tooth, item.damage, item.surface, item.note)
                     });
             }
-
-            if (!hasAdult && !hasChild) {
-                console.log('No se detectaron dientes válidos, modo por defecto (adulto)');
+            // Cargar odontograma adulto
+            if (hasAdult) {
+                engine.changeView("0");
+                initialData.filter(item => item.tooth >= 11 && item.tooth <= 48)
+                    .forEach(item => {
+                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                    });
             }
+
+            // Si no hay datos, se mantiene el modo por defecto (adulto)
 
             // listeners opcionales
             canvas.addEventListener('mousedown', e => engine.onMouseClick?.(e));
             canvas.addEventListener('mousemove', e => engine.onMouseMove?.(e));
             window.addEventListener('keydown', e => engine.onButtonClick?.(e));
 
-            //Enviar odontograma con el form de la cita
+            // Enviar odontograma con el form de la cita
             const odontoField = document.createElement('textarea');
             odontoField.name = 'datos';
             odontoField.hidden = true;
@@ -363,40 +507,148 @@
 
             formCita.addEventListener('submit', e => {
                 const payload = engine.getData?.() ?? [];
-                if (!payload.length) {
-                    e.preventDefault();
-                    alert("No hay datos en el odontograma.");
-                    return;
-                }
                 odontoField.value = JSON.stringify(payload);
-                console.log("Odontograma enviado con el form:", odontoField.value);
             });
 
             // --- GUARDAR: antes del submit mete el JSON en el textarea
             function exportJSON() {
                 const payload = engine?.getData?.() ?? [];
                 if (outField) outField.value = JSON.stringify(payload);
-                console.log('JSON listo para POST:', outField?.value);
                 return payload;
             }
 
             form?.addEventListener('submit', () => exportJSON());
 
-            // --- botón de prueba
-            btnDump?.addEventListener('click', () => {
-                const payload = engine?.getData?.() ?? [];
-                console.log('----- ODONTOGRAMA DUMP -----');
-                console.log('Objeto JS:', payload);
-                try {
-                    console.log('JSON string:', JSON.stringify(payload));
-                } catch (e) {
-                }
-            });
-
         });
     </script>
-    
-    
+
+    <!-- Script para funcionalidades de cambio de vista y descarga -->
+    <script defer>
+        window.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('canvas');
+            const engine = window.odontogramaEngine;
+            
+            if (!engine) {
+                console.error('Engine no está disponible');
+                return;
+            }
+            
+            // Botón para cambiar a vista de adulto
+            document.getElementById('btn-cambiar-adulto')?.addEventListener('click', () => {
+                engine.changeView("0");
+                // Mantener tamaño del canvas
+                canvas.width = 650;
+                canvas.height = 420;
+                engine.renderer.init(canvas);
+                engine.update();
+            });
+
+            // Botón para cambiar a vista de niño
+            document.getElementById('btn-cambiar-nino')?.addEventListener('click', () => {
+                engine.changeView("1");
+                // Mantener tamaño del canvas
+                canvas.width = 650;
+                canvas.height = 420;
+                engine.renderer.init(canvas);
+                engine.update();
+            });
+
+            // Botón para descargar como PNG
+            document.getElementById('btn-descargar-png')?.addEventListener('click', () => {
+                // Crear link de descarga manual
+                const link = document.createElement('a');
+                const timestamp = new Date().getTime();
+                link.download = `odontograma_${timestamp}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+    </script>
+
+    <!-- Script para funcionalidad de impresión -->
+    <script defer>
+        window.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('canvas');
+            
+            // Botón para imprimir odontograma completo
+            document.getElementById('btn-imprimir')?.addEventListener('click', () => {
+                // Obtener imagen del canvas actual
+                const dataUrl = canvas.toDataURL('image/png');
+                
+                // Crear ventana de impresión
+                const printWindow = window.open('', '_blank', 'width=800,height=600');
+                
+                if (printWindow) {
+                    printWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <title>Odontograma - {{ paciente.nombre }} {{ paciente.apellido }}</title>
+                            <style>
+                                body { 
+                                    margin: 0; 
+                                    padding: 20px;
+                                    font-family: Arial, sans-serif;
+                                }
+                                .header {
+                                    margin-bottom: 20px;
+                                    border-bottom: 2px solid #333;
+                                    padding-bottom: 10px;
+                                }
+                                .info-row {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    margin-bottom: 5px;
+                                }
+                                .info-label {
+                                    font-weight: bold;
+                                }
+                                img {
+                                    max-width: 100%;
+                                    height: auto;
+                                    display: block;
+                                    margin: 20px auto;
+                                }
+                                @media print {
+                                    body { margin: 0; padding: 10px; }
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="header">
+                                <h2 style="margin: 0 0 10px 0;">Odontograma</h2>
+                                <div class="info-row">
+                                    <div><span class="info-label">Paciente:</span> {{ paciente.nombre }} {{ paciente.apellido }}</div>
+                                    <div><span class="info-label">DNI:</span> {{ paciente.dni }}</div>
+                                </div>
+                                <div class="info-row">
+                                    <div><span class="info-label">Fecha:</span> {{ cita.fecha_hora|date:"d/m/Y" }}</div>
+                                    <div><span class="info-label">Odontólogo:</span> {{ medico.nombre }} {{ medico.apellido }}</div>
+                                </div>
+                                ${`{{ cita.motivo }}` ? `<div class="info-row"><div><span class="info-label">Motivo:</span> {{ cita.motivo }}</div></div>` : ''}
+                            </div>
+                            <img src="${dataUrl}" alt="Odontograma">
+                            ${`{{ cita.notas_medico }}` ? `<div style="margin-top: 20px;"><div class="info-label">Observaciones:</div><p>{{ cita.notas_medico }}</p></div>` : ''}
+                        </body>
+                        </html>
+                    `);
+                    
+                    printWindow.document.close();
+                    
+                    // Esperar a que la imagen cargue antes de imprimir
+                    setTimeout(() => {
+                        printWindow.focus();
+                        printWindow.print();
+                        // No cerrar automáticamente para que el usuario pueda ver la vista previa
+                        // printWindow.close();
+                    }, 500);
+                } else {
+                    alert('Por favor permite las ventanas emergentes para imprimir.');
+                }
+            });
+        });
+    </script>
     <!--
     <script defer>
         /*
@@ -468,22 +720,341 @@
     </script>
 
     <script defer>
-        // Guardar el tab activo al hacer clic
-        document.querySelectorAll('.nav-link[data-bs-toggle="tab"]').forEach(tab => {
-            tab.addEventListener('click', function () {
-                localStorage.setItem('activeTabId', this.getAttribute('href'));
-            });
-        });
-
-        // Restaurar el tab activo al cargar la página
+        // Forzar mostrar siempre el tab de Odontograma al entrar
         window.addEventListener('DOMContentLoaded', function () {
-            const activeTabId = localStorage.getItem('activeTabId');
-            if (activeTabId) {
-                const tab = document.querySelector(`.nav-link[href="${activeTabId}"]`);
-                if (tab) {
-                    tab.click();
+            document.getElementById('tab-twoAA')?.click();
+        });
+    </script>
+
+    <!-- Script para dibujar iconos en la leyenda -->
+    <script defer>
+        window.addEventListener('DOMContentLoaded', function () {
+            // Función para dibujar símbolos en mini-canvas
+            function drawLegendIcon(canvas, damageId) {
+                const ctx = canvas.getContext('2d');
+                const w = canvas.width;
+                const h = canvas.height;
+                const cx = w / 2;
+                const cy = h / 2;
+                
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, w, h);
+                
+                switch(damageId) {
+                    case 1: // Caries - cuadro rojo
+                        ctx.fillStyle = '#FF0000';
+                        ctx.fillRect(cx - 8, cy - 8, 16, 16);
+                        break;
+                        
+                    case 2: // Corona definitiva - círculo azul
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+                        ctx.stroke();
+                        break;
+                        
+                    case 3: // Corona temporal - círculo rojo
+                        ctx.strokeStyle = '#FF0000';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+                        ctx.stroke();
+                        break;
+                        
+                    case 4: // Diente ausente - X azul
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(5, 5);
+                        ctx.lineTo(w - 5, h - 5);
+                        ctx.moveTo(w - 5, 5);
+                        ctx.lineTo(5, h - 5);
+                        ctx.stroke();
+                        break;
+                        
+                    case 5: // Fractura - línea roja diagonal
+                        ctx.strokeStyle = '#FF0000';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(5, h - 5);
+                        ctx.lineTo(w - 5, 5);
+                        ctx.stroke();
+                        break;
+                        
+                    case 8: // Diastema - dos arcos
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(cx + 7, cy + 4, 6, Math.PI * 0.5, Math.PI * 1.5);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.arc(cx - 7, cy + 4, 6, Math.PI * 0.5, Math.PI * 1.5, true);
+                        ctx.stroke();
+                        break;
+
+                    case 9: // Diente Extruido - flecha afuera (arriba)
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, 6);
+                        ctx.lineTo(cx, 16);
+                        ctx.moveTo(cx - 6, 10);
+                        ctx.lineTo(cx, 4);
+                        ctx.lineTo(cx + 6, 10);
+                        ctx.stroke();
+                        break;
+
+                    case 10: // Diente en Clavija - triángulo
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(6, h - 6);
+                        ctx.lineTo(cx, 8);
+                        ctx.lineTo(w - 6, h - 6);
+                        ctx.closePath();
+                        ctx.stroke();
+                        break;
+
+                    case 11: // Curación - cuadro azul
+                        ctx.fillStyle = '#0000FF';
+                        ctx.fillRect(cx - 8, cy - 8, 16, 16);
+                        break;
+
+                    case 12: // Prótesis removible - doble línea
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(4, cy - 3);
+                        ctx.lineTo(w - 4, cy - 3);
+                        ctx.moveTo(4, cy + 3);
+                        ctx.lineTo(w - 4, cy + 3);
+                        ctx.stroke();
+                        break;
+                        
+                    case 13: // Migración - flecha azul
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(5, cy);
+                        ctx.lineTo(w - 5, cy);
+                        ctx.lineTo(w - 10, cy - 5);
+                        ctx.moveTo(w - 5, cy);
+                        ctx.lineTo(w - 10, cy + 5);
+                        ctx.stroke();
+                        break;
+                        
+                    case 14: // Giroversión - círculo con flecha curva
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 8, Math.PI, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(cx + 8, cy);
+                        ctx.lineTo(cx + 3, cy);
+                        ctx.moveTo(cx + 8, cy);
+                        ctx.lineTo(cx + 8, cy - 5);
+                        ctx.stroke();
+                        break;
+                        
+                    case 15: // Fusión - elipse
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        if (ctx.ellipse) {
+                            ctx.beginPath();
+                            ctx.ellipse(cx, cy, 12, 6, 0, 0, Math.PI * 2);
+                            ctx.stroke();
+                        } else {
+                            ctx.beginPath();
+                            ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                        break;
+
+                    case 16: // Remanente radicular - texto RR en rojo
+                        ctx.fillStyle = '#FF0000';
+                        ctx.font = 'bold 12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('RR', cx, cy);
+                        break;
+                        
+                    case 28: // Pulpar - línea vertical azul
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, 5);
+                        ctx.lineTo(cx, h - 5);
+                        ctx.stroke();
+                        break;
+                        
+                    case 29: // Prótesis total - dos líneas cercanas
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(4, h - 8);
+                        ctx.lineTo(w - 4, h - 8);
+                        ctx.moveTo(4, h - 12);
+                        ctx.lineTo(w - 4, h - 12);
+                        ctx.stroke();
+                        break;
+
+                    case 30: // Perno muñón - cuadrado con línea
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.rect(cx - 6, cy - 6, 12, 12);
+                        ctx.moveTo(cx, cy + 6);
+                        ctx.lineTo(cx, h - 4);
+                        ctx.stroke();
+                        break;
+
+                    case 31: // Edéntulo total - línea única
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.moveTo(4, cy);
+                        ctx.lineTo(w - 4, cy);
+                        ctx.stroke();
+                        break;
+
+                    case 20: // Diente Intruido - flecha hacia adentro (abajo)
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, h - 6);
+                        ctx.lineTo(cx, h - 16);
+                        ctx.moveTo(cx - 6, h - 10);
+                        ctx.lineTo(cx, h - 4);
+                        ctx.lineTo(cx + 6, h - 10);
+                        ctx.stroke();
+                        break;
+
+                    case 23: // Ortod. Removible - zig-zag
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(4, cy);
+                        ctx.lineTo(cx, cy - 6);
+                        ctx.lineTo(w - 4, cy);
+                        ctx.stroke();
+                        break;
+
+                    case 24: // Diente en erupción - V + zig-zag
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(6, h - 10);
+                        ctx.lineTo(cx, h - 4);
+                        ctx.lineTo(w - 6, h - 10);
+                        ctx.moveTo(cx, h - 4);
+                        ctx.lineTo(cx, h - 10);
+                        ctx.lineTo(8, h - 16);
+                        ctx.lineTo(w - 8, h - 22);
+                        ctx.lineTo(8, h - 28);
+                        ctx.stroke();
+                        break;
+
+                    case 25: // Transposición Izq. - semicírculo + marca derecha
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.ellipse(cx + 6, 6, 12, 4, 0, Math.PI, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(w - 6, 6);
+                        ctx.lineTo(w - 6, 2);
+                        ctx.moveTo(w - 6, 6);
+                        ctx.lineTo(w - 10, 6);
+                        ctx.stroke();
+                        break;
+
+                    case 26: // Transposición Der. - semicírculo + marca izquierda
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.ellipse(cx - 6, 6, 12, 4, 0, Math.PI, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(6, 6);
+                        ctx.lineTo(6, 2);
+                        ctx.moveTo(6, 6);
+                        ctx.lineTo(10, 6);
+                        ctx.stroke();
+                        break;
+
+                    case 27: // Supernumerario - círculo con S
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.fillStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.font = 'bold 12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('S', cx, cy);
+                        break;
+
+                    case 32: // Ortod. fijo (extremo)
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.rect(6, 6, w - 12, h - 12);
+                        ctx.moveTo(cx, 6);
+                        ctx.lineTo(cx, h - 6);
+                        ctx.moveTo(8, cy);
+                        ctx.lineTo(w - 8, cy);
+                        ctx.stroke();
+                        break;
+
+                    case 33: // Ortod. fijo (centro)
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(4, cy);
+                        ctx.lineTo(w - 4, cy);
+                        ctx.stroke();
+                        break;
+
+                    case 34: // Prótesis fija izq.
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, 6);
+                        ctx.lineTo(cx, 14);
+                        ctx.lineTo(6, 14);
+                        ctx.stroke();
+                        break;
+
+                    case 35: // Prótesis fija centro
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(6, 14);
+                        ctx.lineTo(w - 6, 14);
+                        ctx.stroke();
+                        break;
+
+                    case 36: // Prótesis fija der.
+                        ctx.strokeStyle = '#0000FF';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, 6);
+                        ctx.lineTo(cx, 14);
+                        ctx.lineTo(w - 6, 14);
+                        ctx.stroke();
+                        break;
                 }
             }
+            
+            // Dibujar todos los iconos de la leyenda
+            document.querySelectorAll('.legend-icon').forEach(canvas => {
+                const damageId = parseInt(canvas.getAttribute('data-damage'));
+                drawLegendIcon(canvas, damageId);
+            });
         });
     </script>
 
