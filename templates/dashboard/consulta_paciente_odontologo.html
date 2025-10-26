@@ -332,7 +332,8 @@
 
             // --- crear e inicializar engine ANTES de usarlo
             const engine = new Engine();
-            engine.setCanvas(canvas);
+                window.odontogramaEngine = engine; // Variable global para compatibilidad con panel de herramientas
+                engine.setCanvas(canvas);
             engine.init();
 
             const initialData = JSON.parse('{{ odontograma_json_str|escapejs }}');
