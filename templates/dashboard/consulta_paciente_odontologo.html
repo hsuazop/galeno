@@ -336,6 +336,13 @@
                 engine.setCanvas(canvas);
             engine.init();
 
+            // Notificar a los listeners que el engine está listo
+            try {
+                window.dispatchEvent(new CustomEvent('odontograma-engine-ready', { detail: engine }));
+            } catch (e) {
+                console.warn('No se pudo despachar evento odontograma-engine-ready', e);
+            }
+
             const initialData = JSON.parse('{{ odontograma_json_str|escapejs }}');
             console.log('Initial data:', initialData);
 
