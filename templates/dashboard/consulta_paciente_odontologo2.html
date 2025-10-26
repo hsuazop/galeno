@@ -341,6 +341,13 @@
             engine.setCanvas(canvas);
             engine.init();
 
+            // Notificar a los listeners que el engine está listo
+            try {
+                window.dispatchEvent(new CustomEvent('odontograma-engine-ready', { detail: engine }));
+            } catch (e) {
+                console.warn('No se pudo despachar evento odontograma-engine-ready', e);
+            }
+
             const initialData = JSON.parse('{{ odontograma_json_str|escapejs }}');
 
             // Determinar modo del odontograma según los dientes en el json
@@ -350,21 +357,81 @@
             // Cargar odontograma niño
             if (hasChild) {
                 engine.changeView("1");
-                initialData.filter(item => item.tooth >= 51 && item.tooth <= 75)
+                initialData
+                    .filter(item => Number(item.tooth) >= 51 && Number(item.tooth) <= 75)
                     .forEach(item => {
-                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                        const tooth = Number(item.tooth);
+                        const damage = Number(item.damage) || 0;
+                        let surface;
+                        if (item.surface === 0 || item.surface === "0" || item.surface == null) {
+                            surface = "0";
+                        } else {
+                            surface = String(item.surface);
+                            if (surface.includes("_")) {
+                                const parts = surface.split("_");
+                                surface = parts[parts.length - 1];
+                            }
+                        }
+                        const note = item.note || "";
+                        try {
+                            engine.load(tooth, damage, surface, note);
+                        } catch (e) {
+                            console.warn('Error cargando dato de odontograma niño', { item, e });
+                        }
                     });
             }
             // Cargar odontograma adulto
             if (hasAdult) {
                 engine.changeView("0");
-                initialData.filter(item => item.tooth >= 11 && item.tooth <= 48)
+                initialData
+                    .filter(item => Number(item.tooth) >= 11 && Number(item.tooth) <= 48)
                     .forEach(item => {
-                        engine.load(item.tooth, item.damage, item.surface, item.note)
+                        const tooth = Number(item.tooth);
+                        const damage = Number(item.damage) || 0;
+                        let surface;
+                        if (item.surface === 0 || item.surface === "0" || item.surface == null) {
+                            surface = "0";
+                        } else {
+                            surface = String(item.surface);
+                            if (surface.includes("_")) {
+                                const parts = surface.split("_");
+                                surface = parts[parts.length - 1];
+                            }
+                        }
+                        const note = item.note || "";
+                        try {
+                            engine.load(tooth, damage, surface, note);
+                        } catch (e) {
+                            console.warn('Error cargando dato de odontograma adulto', { item, e });
+                        }
                     });
             }
 
             // Si no hay datos, se mantiene el modo por defecto (adulto)
+
+            // Cargar daños en espacios (IDs >= 1000), si existieran
+            initialData
+                .filter(item => Number(item.tooth) >= 1000)
+                .forEach(item => {
+                    const tooth = Number(item.tooth);
+                    const damage = Number(item.damage) || 0;
+                    let surface;
+                    if (item.surface === 0 || item.surface === "0" || item.surface == null) {
+                        surface = "0";
+                    } else {
+                        surface = String(item.surface);
+                        if (surface.includes("_")) {
+                            const parts = surface.split("_");
+                            surface = parts[parts.length - 1];
+                        }
+                    }
+                    const note = item.note || "";
+                    try {
+                        engine.load(tooth, damage, surface, note);
+                    } catch (e) {
+                        console.warn('Error cargando dato de odontograma (espacio)', { item, e });
+                    }
+                });
 
             // listeners opcionales
             canvas.addEventListener('mousedown', e => engine.onMouseClick?.(e));
@@ -394,17 +461,7 @@
         });
     </script>
 
-    <!-- Script para panel de herramientas de daños -->
-    <script defer>
-        window.addEventListener('DOMContentLoaded', () => {
-            const engine = window.odontogramaEngine;
-            
-            if (!engine) {
-                console.error('Engine no está disponible');
-                return;
-            }
-
-    </script>
+    <!-- Script para panel de herramientas de daños: manejado en el parcial 'odontograma_panel_herramientas.html' -->
 
     <!-- Script para funcionalidades de cambio de vista y descarga -->
     <script defer>

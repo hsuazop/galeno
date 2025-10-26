@@ -163,27 +163,16 @@
 <script>
     (function() {
         'use strict';
-        
-        window.addEventListener('DOMContentLoaded', () => {
-            const engine = window.odontogramaEngine;
-            
-            if (!engine) {
-                console.error('Engine no está disponible para panel de herramientas');
-                return;
-            }
+
+        function initPanel(engine) {
+            if (!engine) return;
 
             const selectedDamageName = document.getElementById('selected-damage-name');
             const damageButtons = document.querySelectorAll('.damage-btn');
             const resetBtn = document.getElementById('btn-reset-selection');
 
-            // Función para actualizar UI de botón seleccionado
             function updateSelectedButton(button) {
-                // Remover clase active de todos
-                damageButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                // Agregar active al seleccionado
+                damageButtons.forEach(btn => btn.classList.remove('active'));
                 if (button) {
                     button.classList.add('active');
                     const damageName = button.getAttribute('data-name');
@@ -193,30 +182,39 @@
                 }
             }
 
-            // Event listeners para cada botón de daño
             damageButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    const damageId = button.getAttribute('data-damage');
-                    console.log('Seleccionando daño:', damageId);
-                    
-                    // Llamar al método del engine para establecer el daño
+                    const damageAttr = button.getAttribute('data-damage');
+                    const damageId = parseInt(damageAttr, 10) || 0;
                     engine.setDamage(damageId);
-                    
-                    // Actualizar UI
                     updateSelectedButton(button);
                 });
             });
 
-            // Botón de reset
             resetBtn?.addEventListener('click', () => {
                 engine.setDamage(0);
-                engine.selectedHallazgo = 0;
                 updateSelectedButton(null);
-                console.log('Selección limpiada');
             });
 
-            // Inicializar sin selección
             updateSelectedButton(null);
-        });
+        }
+
+        function tryInit() {
+            const existing = window.odontogramaEngine;
+            if (existing) {
+                initPanel(existing);
+            } else {
+                // Esperar a que el engine esté listo
+                window.addEventListener('odontograma-engine-ready', (e) => {
+                    initPanel(e.detail || window.odontogramaEngine);
+                }, { once: true });
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', tryInit, { once: true });
+        } else {
+            tryInit();
+        }
     })();
 </script>
